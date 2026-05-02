@@ -25,7 +25,6 @@
 		59BA60639CE894516CE31D7A /* CoreMLLLM in Frameworks */ = {isa = PBXBuildFile; productRef = E5271977FC951DC7C5EA72BD /* CoreMLLLM */; };
 		627A387DE07972B42C553A87 /* llama.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B39105E2687FD536226E700E /* llama.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6832D123E545F399E40D2315 /* kernels_quantized in Frameworks */ = {isa = PBXBuildFile; productRef = E083290449B341AB7921F544 /* kernels_quantized */; };
-		711A88600D12B677A8F17B91 /* Vendored in Resources */ = {isa = PBXBuildFile; fileRef = 60B78173D16E912EEB2EA1E7 /* Vendored */; };
 		735A14E6E09D3E68F1C50E4F /* ResultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7B6B97C8F1331B7F122CF4 /* ResultStore.swift */; };
 		7D5DFD2C5ADA523317036D0C /* EnergyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8646DFD32712FBAAEB72156D /* EnergyMonitor.swift */; };
 		7EDA3E9184B29B3565D7AA0A /* MemoryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51351D8E4737B395636E0DB4 /* MemoryMonitor.swift */; };
@@ -88,7 +87,6 @@
 		5883E0764831A0D390331F81 /* ModelCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalog.swift; sourceTree = "<group>"; };
 		59D10CD171A7FE9EF1BB369F /* BenchmarkTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenchmarkTask.swift; sourceTree = "<group>"; };
 		5E26E6FC4D7741AF3A2EC137 /* anemll-swift-cli */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "anemll-swift-cli"; path = "Vendored/Anemll/anemll-swift-cli"; sourceTree = SOURCE_ROOT; };
-		60B78173D16E912EEB2EA1E7 /* Vendored */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Vendored; sourceTree = SOURCE_ROOT; };
 		6978D6BB9139052EA83F5605 /* DeviceSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSnapshot.swift; sourceTree = "<group>"; };
 		8646DFD32712FBAAEB72156D /* EnergyMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyMonitor.swift; sourceTree = "<group>"; };
 		8A1FDA1BD8CFFB6E92798B22 /* ExecuTorchRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuTorchRuntime.swift; sourceTree = "<group>"; };
@@ -204,7 +202,6 @@
 		C0F8CB4D76AD73BE399F6DEA = {
 			isa = PBXGroup;
 			children = (
-				60B78173D16E912EEB2EA1E7 /* Vendored */,
 				ABFC6F14C1F48FC1603B0D4B /* Packages */,
 				56D8CF71830F92F55D511138 /* Sources */,
 				48DCBE35C783F3731505CB3A /* Frameworks */,
@@ -334,7 +331,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				112E2A29A4EEA42B9F7D6444 /* Assets.xcassets in Resources */,
-				711A88600D12B677A8F17B91 /* Vendored in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

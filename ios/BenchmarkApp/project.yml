@@ -40,9 +40,6 @@ targets:
     deploymentTarget: "18.0"
     sources:
       - path: Sources
-      - path: Vendored
-        optional: true
-        type: folder
     info:
       path: Sources/Info.plist
       properties:
