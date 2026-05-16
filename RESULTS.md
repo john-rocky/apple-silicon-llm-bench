@@ -20,9 +20,9 @@ On-device / on-Mac measurements. Each row is a `(runtime, model, device, task, b
 
 - **Devices** (1): Mac M4 Max
 - **Runtimes** (3): coreml-llm, llama.cpp, mlx-swift
-- **Models** (14): bartowski/Llama-3.2-1B-Instruct-GGUF/Q4_K_M, bartowski/Qwen2.5-0.5B-Instruct-GGUF/Q4_K_M, bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M, coreml-llm/gemma4-e2b, coreml-llm/lfm2.5-350m, coreml-llm/qwen2.5-0.5b, mlx-community/Qwen2.5-0.5B-Instruct-4bit, mlx-community/Qwen3.5-0.8B-MLX-4bit, mlx-community/Qwen3.5-2B-MLX-4bit, mlx-community/gemma-4-e2b-it-4bit, mlx-community/gemma-4-e4b-it-4bit, unsloth/Qwen3.5-2B-GGUF/Q4_K_M, unsloth/gemma-4-E2B-it-GGUF/Q4_K_M, unsloth/gemma-4-E4B-it-GGUF/Q4_K_M
+- **Models** (16): bartowski/Llama-3.2-1B-Instruct-GGUF/Q4_K_M, bartowski/Qwen2.5-0.5B-Instruct-GGUF/Q4_K_M, bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M, coreml-llm/gemma4-e2b, coreml-llm/lfm2.5-350m, coreml-llm/qwen2.5-0.5b, coreml-llm/qwen3.5-0.8b, coreml-llm/qwen3.5-2b, mlx-community/Qwen2.5-0.5B-Instruct-4bit, mlx-community/Qwen3.5-0.8B-MLX-4bit, mlx-community/Qwen3.5-2B-MLX-4bit, mlx-community/gemma-4-e2b-it-4bit, mlx-community/gemma-4-e4b-it-4bit, unsloth/Qwen3.5-2B-GGUF/Q4_K_M, unsloth/gemma-4-E2B-it-GGUF/Q4_K_M, unsloth/gemma-4-E4B-it-GGUF/Q4_K_M
 - **Tasks** (1): short-chat
-- **Total runs**: 34
+- **Total runs**: 40
 
 
 ## At-a-glance
@@ -78,6 +78,7 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 
 | Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
+| coreml-llm | `coreml-llm/qwen3.5-0.8b` | INT8 | 3 | 11.6 | 415 | 55.4 | 57.5 | 206 |
 | llama.cpp | `bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M` | Q4_K_M | 3 | 0.5 | 26 | 2464.1 | 192.0 | 754 |
 | mlx-swift | `mlx-community/Qwen3.5-0.8B-MLX-4bit` | Q4 | 3 | 1.7 | 52 | 557.7 | 81.3 | 618 |
 
@@ -85,6 +86,7 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 
 | Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
+| coreml-llm | `coreml-llm/qwen3.5-2b` | INT8 | 3 | 19.1 | 673 | 34.2 | 34.9 | 215 |
 | llama.cpp | `unsloth/Qwen3.5-2B-GGUF/Q4_K_M` | Q4_K_M | 3 | 0.6 | 31 | 2394.4 | 132.9 | 1445 |
 | mlx-swift | `mlx-community/Qwen3.5-2B-MLX-4bit` | Q4 | 3 | 1.7 | 50 | 576.1 | 79.9 | 1243 |
 
@@ -98,7 +100,9 @@ Each sub-table fixes the runtime and varies the model, so you can see how a sing
 |---|---:|---|---:|---:|---:|---:|
 | LFM 2.5 350M (CoreML, ANE) | 0.35 | INT8 | 1 | 383 | 58.9 | 98 |
 | Qwen 2.5 0.5B (CoreML, text) | 0.5 | FP16 | 3 | 171 | 180.7 | 959 |
+| Qwen 3.5 0.8B (CoreML, ANE) | 0.8 | INT8 | 3 | 415 | 57.5 | 206 |
 | Gemma 4 E2B (CoreML, ANE) | 2 | INT4 palettized | 3 | 616 | 32.9 | 1055 |
+| Qwen 3.5 2B (CoreML, ANE) | 2 | INT8 | 3 | 673 | 34.9 | 215 |
 
 ### `llama.cpp`  (Mac M4 Max, short-chat)
 
@@ -134,6 +138,12 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 | coreml-llm | Qwen 2.5 0.5B (CoreML, text) | FP16 | 1 | 63.8 | 171 | — | 180.2 | 959 | `m4max-coreml-qwen2.5-0.5b-short-chat-run1.jsonl` |
 | coreml-llm | Qwen 2.5 0.5B (CoreML, text) | FP16 | 2 | 14.7 | 170 | — | 180.7 | 959 | `m4max-coreml-qwen2.5-0.5b-short-chat-run2.jsonl` |
 | coreml-llm | Qwen 2.5 0.5B (CoreML, text) | FP16 | 3 | 14.7 | 171 | — | 181.6 | 956 | `m4max-coreml-qwen2.5-0.5b-short-chat-run3.jsonl` |
+| coreml-llm | Qwen 3.5 0.8B (CoreML, ANE) | INT8 | 1 | 12.6 | 425 | 54.1 | 56.8 | 218 | `m4max-coreml-llm-qwen3.5-0.8b-short-chat-run1.jsonl` |
+| coreml-llm | Qwen 3.5 0.8B (CoreML, ANE) | INT8 | 2 | 11.6 | 415 | 55.4 | 57.5 | 206 | `m4max-coreml-llm-qwen3.5-0.8b-short-chat-run2.jsonl` |
+| coreml-llm | Qwen 3.5 0.8B (CoreML, ANE) | INT8 | 3 | 11.6 | 415 | 55.4 | 57.6 | 206 | `m4max-coreml-llm-qwen3.5-0.8b-short-chat-run3.jsonl` |
+| coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 1 | 379.1 | 661 | 34.8 | 34.9 | 225 | `m4max-coreml-llm-qwen3.5-2b-short-chat-run1.jsonl` |
+| coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 2 | 19.1 | 673 | 34.2 | 34.9 | 215 | `m4max-coreml-llm-qwen3.5-2b-short-chat-run2.jsonl` |
+| coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 3 | 18.9 | 674 | 34.1 | 35.0 | 206 | `m4max-coreml-llm-qwen3.5-2b-short-chat-run3.jsonl` |
 | llama.cpp | Llama 3.2 1B Q4_K_M (GGUF) | Q4_K_M | 1 | 91.1 | 92 | 163.4 | 303.1 | 1019 | `m4max-llama-cpp-llama-3.2-1b-short-chat-run1.jsonl` |
 | llama.cpp | Llama 3.2 1B Q4_K_M (GGUF) | Q4_K_M | 2 | 0.4 | 22 | 3657.4 | 285.9 | 1022 | `m4max-llama-cpp-llama-3.2-1b-short-chat-run2.jsonl` |
 | llama.cpp | Llama 3.2 1B Q4_K_M (GGUF) | Q4_K_M | 3 | 0.4 | 25 | 3724.4 | 269.5 | 1023 | `m4max-llama-cpp-llama-3.2-1b-short-chat-run3.jsonl` |

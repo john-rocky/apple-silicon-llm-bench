@@ -17,8 +17,8 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 | Logical model | Params | n | mlx-swift (Q4) | llama.cpp (Q4_K_M) | coreml-llm |
 |---|---:|---:|---:|---:|---:|
 | Qwen 2.5 0.5B | 0.5 B | 3 | 116.8 | **292.3** | 180.7 (FP16) |
-| Qwen 3.5 0.8B | 0.8 B | 3 | 81.3 | **192.0** | _chunked layout — upstream blocker_ |
-| Qwen 3.5 2B   | 2 B   | 3 | 79.9 | **132.9** | _not run_ |
+| Qwen 3.5 0.8B | 0.8 B | 3 | 81.3 | **192.0** | 57.5 (INT8) |
+| Qwen 3.5 2B   | 2 B   | 3 | 79.9 | **132.9** | 34.9 (INT8) |
 | Gemma 4 E2B   | 2 B   | 3 | 56.6 | **119.6** | 32.9 (INT4 palettized) |
 | Gemma 4 E4B   | 4 B   | 1 | **45.1** | 40.7 | _not run_ |
 
@@ -31,11 +31,12 @@ The decode-tok/s table above hides the memory side. Same models, looking at peak
 | Logical model | Params | mlx-swift | llama.cpp | coreml-llm |
 |---|---:|---:|---:|---:|
 | Qwen 2.5 0.5B | 0.5 B | **413** | 543 | 959 |
-| Qwen 3.5 0.8B | 0.8 B | **618** | 754 | — |
+| Qwen 3.5 0.8B | 0.8 B | **618** | 754 | 206 (INT8) |
+| Qwen 3.5 2B   | 2 B   | 1243 | 1445 | **215** (INT8) |
 | Gemma 4 E2B   | 2 B   | 2834 | 3182 | **1055** |
 | Gemma 4 E4B   | 4 B   | **4417** | 5093 | — |
 
-→ **"CoreML/ANE wins memory" is only true at the larger end** of this range. At 0.5 B params, MLX-Swift's working set (413 MB) is less than half of CoreML's (959 MB). The crossover where ANE residency starts paying off sits between 0.5 B and 2 B params on this device.
+→ **"CoreML/ANE wins memory" is true once the chunked MLKV layout kicks in.** At 0.5 B params MLX-Swift is still smaller (413 MB vs CoreML's 959 MB monolithic FP16); from 0.8 B onward, CoreML's chunked MLKV path (`Qwen35MLKVGenerator`: mmap'd embed sidecar + on-demand ANE chunks) holds the process RSS roughly flat — 206 MB at 0.8 B, 215 MB at 2 B — while MLX and llama.cpp scale linearly with parameter count.
 
 ### Per-runtime model scaling
 
@@ -64,11 +65,13 @@ The decode-tok/s table above hides the memory side. Same models, looking at peak
 
 | Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
 |---|---:|---:|---:|---:|---:|
-| LFM 2.5 350M | 0.35 B | 1 | 383 | 58.9 | **98** |
-| Qwen 2.5 0.5B | 0.5 B | 3 | 171 | 180.7 | 959 |
-| Gemma 4 E2B  | 2 B    | 3 | 616 | 32.9 | **1055** |
+| LFM 2.5 350M  | 0.35 B | 1 | 383 | 58.9  | **98**  |
+| Qwen 2.5 0.5B | 0.5 B  | 3 | 171 | 180.7 | 959     |
+| Qwen 3.5 0.8B | 0.8 B  | 3 | 415 | 57.5  | **206** |
+| Qwen 3.5 2B   | 2 B    | 3 | 673 | 34.9  | **215** |
+| Gemma 4 E2B   | 2 B    | 3 | 616 | 32.9  | 1055    |
 
-→ CoreML/ANE trades throughput for memory: ~3× less peak working set than MLX-Swift at the same model size, at ~half the decode tok/s. **Lowest** per-byte footprint of any backend on this device.
+→ CoreML/ANE trades throughput for memory: 3-8× less peak working set than MLX-Swift / llama.cpp at the same model size, at ~half the decode tok/s. The Qwen 3.5 0.8B / 2B numbers come from the dedicated `Qwen35MLKVGenerator` (ANE chunked decode, KV in `MLState` — public API since CoreML-LLM `v1.9.0`), not the generic `CoreMLLLM.load(from:)` path.
 
 **[Full results — by model, by runtime, full per-run audit trail →](RESULTS.md)**
 

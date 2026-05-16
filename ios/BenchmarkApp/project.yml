@@ -32,7 +32,7 @@ packages:
     path: Vendored/Anemll/anemll-swift-cli
   CoreML-LLM:
     url: https://github.com/john-rocky/CoreML-LLM
-    from: "1.4.0"
+    from: "1.9.0"
 
 targets:
   BenchmarkApp:
