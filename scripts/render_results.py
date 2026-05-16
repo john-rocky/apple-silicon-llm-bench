@@ -123,6 +123,11 @@ LOGICAL_MODELS: list[tuple[str, str]] = [
     # Qwen 3
     ("qwen3-1.7b",      "Qwen 3 1.7B"),
     ("qwen3-0.6b",      "Qwen 3 0.6B"),
+    # Qwen 2.5
+    ("qwen2.5-0.5b",    "Qwen 2.5 0.5B"),
+    ("qwen2.5-1.5b",    "Qwen 2.5 1.5B"),
+    ("qwen2.5-3b",      "Qwen 2.5 3B"),
+    ("qwen2.5-7b",      "Qwen 2.5 7B"),
     # LFM / Llama / others
     ("lfm2.5-350m",     "LFM 2.5 350M"),
     ("lfm-2.5-350m",    "LFM 2.5 350M"),

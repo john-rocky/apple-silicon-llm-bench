@@ -172,6 +172,36 @@ public enum ModelCatalog {
             hfFilePatterns: ["Qwen2.5-0.5B-Instruct-Q4_K_M.gguf"],
             primaryFile: "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf"
         ),
+        ModelInfo(
+            id: "bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M",
+            displayName: "Qwen 3.5 0.8B Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 0.8,
+            onDiskSizeMB: 560,
+            hfRepoId: "bartowski/Qwen_Qwen3.5-0.8B-GGUF",
+            hfFilePatterns: ["Qwen_Qwen3.5-0.8B-Q4_K_M.gguf"],
+            primaryFile: "Qwen_Qwen3.5-0.8B-Q4_K_M.gguf"
+        ),
+        ModelInfo(
+            id: "unsloth/Qwen3.5-2B-GGUF/Q4_K_M",
+            displayName: "Qwen 3.5 2B Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 2.0,
+            onDiskSizeMB: 1300,
+            hfRepoId: "unsloth/Qwen3.5-2B-GGUF",
+            hfFilePatterns: ["Qwen3.5-2B-Q4_K_M.gguf"],
+            primaryFile: "Qwen3.5-2B-Q4_K_M.gguf"
+        ),
+        ModelInfo(
+            id: "unsloth/Qwen3.5-9B-GGUF/Q4_K_M",
+            displayName: "Qwen 3.5 9B Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 9.0,
+            onDiskSizeMB: 5500,
+            hfRepoId: "unsloth/Qwen3.5-9B-GGUF",
+            hfFilePatterns: ["Qwen3.5-9B-Q4_K_M.gguf"],
+            primaryFile: "Qwen3.5-9B-Q4_K_M.gguf"
+        ),
     ]
 
     /// Models the MediaPipe / LiteRT-LM adapter can load.

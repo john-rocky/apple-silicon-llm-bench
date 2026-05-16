@@ -8,17 +8,53 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 ---
 
-## 📊 Latest numbers — Gemma 4 E2B on Apple M4 Max, short-chat (n = 3 median)
+## 📊 Latest numbers — Apple M4 Max, short-chat (128 tokens, decode tok/s, median)
 
-| Runtime | Quant | TTFT (ms) | Decode tok/s | Prefill tok/s | Peak Mem (MB) |
-|---|---|---:|---:|---:|---:|
-| coreml-llm | INT4 palettized | 616 | 32.9 | — | **1052** |
-| **llama.cpp** | **Q4_K_M** | **43** | **119.6** | **1465.4** | 3182 |
-| mlx-swift | Q4 | 100 | 56.6 | 306.4 | 2834 |
+> One device, three runtimes, multiple models. Decode tok/s is the primary headline number; the full table (prefill, TTFT, peak memory, per-run audit trail) lives in [`RESULTS.md`](RESULTS.md). Read the [Headline observations](RESULTS.md#headline-observations-read-this-after-the-tables) section before drawing conclusions — the runtime ranking is **model-size-dependent**.
 
-→ At this model size on this device, **llama.cpp Metal wins decode by ~2.1×** over MLX-Swift and ~3.6× over CoreML/ANE. **CoreML/ANE wins peak memory by ~2.7×** over MLX-Swift. **Don't extrapolate**: the ranking inverts at Gemma 4 E4B — see the [E4B row in RESULTS.md](RESULTS.md#gemma-4-e4b-mac-m4-max-short-chat) and the [Headline observations](RESULTS.md#headline-observations-read-this-after-the-tables).
+### Cross-runtime — same logical model, different backends
 
-**[Full results — by model, by runtime, full per-run dump →](RESULTS.md)**
+| Logical model | Params | n | mlx-swift (Q4) | llama.cpp (Q4_K_M) | coreml-llm |
+|---|---:|---:|---:|---:|---:|
+| Qwen 3.5 0.8B | 0.8 B | 3 | 81.3 | **192.0** | _chunked layout — upstream blocker_ |
+| Qwen 3.5 2B   | 2 B   | 3 | 79.9 | **132.9** | _not run_ |
+| Gemma 4 E2B   | 2 B   | 3 | 56.6 | **119.6** | 32.9 (INT4 palettized) |
+| Gemma 4 E4B   | 4 B   | 1 | **45.1** | 40.7 | _not run_ |
+
+→ llama.cpp Metal wins decode on every cell at or below 2 B params (1.7×–2.4× over MLX-Swift). At 4 B params (Gemma 4 E4B) **MLX-Swift overtakes llama.cpp**. The ranking is not a property of the runtime; it's a property of `(runtime, model, device)`.
+
+### Per-runtime model scaling
+
+<sub>**llama.cpp** (Q4_K_M GGUF, M4 Max, short-chat)</sub>
+
+| Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
+|---|---:|---:|---:|---:|---:|
+| Qwen 2.5 0.5B | 0.5 B | 1 | 120 | 292.3 | 543 |
+| Qwen 3.5 0.8B | 0.8 B | 3 | 26  | 192.0 | 754 |
+| Llama 3.2 1B  | 1.0 B | 3 | 25  | **285.9** | 1022 |
+| Qwen 3.5 2B   | 2 B   | 3 | 31  | 132.9 | 1445 |
+| Gemma 4 E2B   | 2 B   | 3 | 43  | 119.6 | 3182 |
+| Gemma 4 E4B   | 4 B   | 1 | 162 | 40.7  | 5093 |
+
+<sub>**mlx-swift** (Q4 / MLX, M4 Max, short-chat)</sub>
+
+| Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
+|---|---:|---:|---:|---:|---:|
+| Qwen 3.5 0.8B | 0.8 B | 3 | 52 | 81.3 | 618 |
+| Qwen 3.5 2B   | 2 B   | 3 | 50 | 79.9 | 1243 |
+| Gemma 4 E2B   | 2 B   | 3 | 100 | 56.6 | 2834 |
+| Gemma 4 E4B   | 4 B   | 1 | 114 | 45.1 | 4417 |
+
+<sub>**coreml-llm** (CoreML / ANE, M4 Max, short-chat)</sub>
+
+| Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
+|---|---:|---:|---:|---:|---:|
+| LFM 2.5 350M | 0.35 B | 1 | 383 | 58.9 | **98** |
+| Gemma 4 E2B  | 2 B    | 3 | 616 | 32.9 | **1055** |
+
+→ CoreML/ANE trades throughput for memory: ~3× less peak working set than MLX-Swift at the same model size, at ~half the decode tok/s. **Lowest** per-byte footprint of any backend on this device.
+
+**[Full results — by model, by runtime, full per-run audit trail →](RESULTS.md)**
 
 ---
 
