@@ -6,6 +6,53 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 > Originally `ios-llm-benchmark`. Renamed in May 2026 once the harness grew to cover Mac as a first-class target alongside iPhone / iPad.
 
+---
+
+## 📊 Latest numbers — Gemma 4 E2B on Apple M4 Max, short-chat (n = 3 median)
+
+| Runtime | Quant | TTFT (ms) | Decode tok/s | Prefill tok/s | Peak Mem (MB) |
+|---|---|---:|---:|---:|---:|
+| coreml-llm | INT4 palettized | 616 | 32.9 | — | **1052** |
+| **llama.cpp** | **Q4_K_M** | **43** | **119.6** | **1465.4** | 3182 |
+| mlx-swift | Q4 | 100 | 56.6 | 306.4 | 2834 |
+
+→ At this model size on this device, **llama.cpp Metal wins decode by ~2.1×** over MLX-Swift and ~3.6× over CoreML/ANE. **CoreML/ANE wins peak memory by ~2.7×** over MLX-Swift. **Don't extrapolate**: the ranking inverts at Gemma 4 E4B — see the [E4B row in RESULTS.md](RESULTS.md#gemma-4-e4b-mac-m4-max-short-chat) and the [Headline observations](RESULTS.md#headline-observations-read-this-after-the-tables).
+
+**[Full results — by model, by runtime, full per-run dump →](RESULTS.md)**
+
+---
+
+## 🙋 Contributing a row
+
+This table is the repo. **The easiest possible contribution is one new row.** All three of these are equally valuable:
+
+1. **A new device.** Run the existing models on your iPhone / iPad / Mac. Tooling in [`Yardstick_USER_RUNS.md`](../Yardstick_USER_RUNS.md). The "Devices wanted" list at the bottom of [`RESULTS.md`](RESULTS.md#devices-wanted) is the shortlist.
+2. **A new model.** Drop the model id into the [`ModelCatalog`](ios/BenchmarkApp/Sources/Models/ModelCatalog.swift) for the runtime that can load it.
+3. **A new runtime.** Wire it up in [`ios/BenchmarkApp/Sources/Runtimes/`](ios/BenchmarkApp/Sources/Runtimes/) following the `LLMRuntime` protocol; the harness will pick it up.
+
+Workflow once you have the build set up:
+
+```sh
+# 1. Run 3 times to get a stable median:
+for run in 1 2 3; do
+  yardstick run --task short-chat \
+                --runtime mlx-swift \
+                --model <id-or-hf-repo> \
+                --output results/raw/<device>-<runtime>-<model>-short-chat-run${run}.jsonl
+done
+
+# 2. Regenerate the tables — they're auto-built from JSONL:
+python scripts/render_results.py
+
+# 3. Commit the JSONLs + the updated RESULTS.md, open a PR.
+```
+
+CI runs `python scripts/render_results.py --check` on every PR — it fails if the JSONLs and the tables disagree, so the human-edited section of RESULTS.md cannot drift out of sync with the raw data.
+
+Full step-by-step (build, model picker, device-specific gotchas) lives in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+---
+
 ## What gets measured
 
 Per `(runtime, model, device, build)` tuple:

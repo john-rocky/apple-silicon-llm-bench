@@ -1,0 +1,26 @@
+name: RESULTS.md is rendered
+
+on:
+  pull_request:
+    paths:
+      - "results/raw/**"
+      - "scripts/render_results.py"
+      - "RESULTS.md"
+  push:
+    branches: [main]
+    paths:
+      - "results/raw/**"
+      - "scripts/render_results.py"
+      - "RESULTS.md"
+
+jobs:
+  render-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: render_results.py --check
+        run: |
+          python scripts/render_results.py --check
