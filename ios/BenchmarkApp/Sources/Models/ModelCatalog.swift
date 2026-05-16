@@ -50,6 +50,14 @@ public enum ModelCatalog {
     public static let mlx: [ModelInfo] = [
         // --- Tiny — fits any device, including iPhone with headroom ---
         ModelInfo(
+            id: "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+            displayName: "Qwen 2.5 0.5B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 0.5,
+            onDiskSizeMB: 300,
+            hfRepoId: "mlx-community/Qwen2.5-0.5B-Instruct-4bit"
+        ),
+        ModelInfo(
             id: "mlx-community/Qwen3.5-0.8B-MLX-4bit",
             displayName: "Qwen 3.5 0.8B (4-bit)",
             quantization: "Q4",

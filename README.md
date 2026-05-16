@@ -12,16 +12,30 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 > One device, three runtimes, multiple models. Decode tok/s is the primary headline number; the full table (prefill, TTFT, peak memory, per-run audit trail) lives in [`RESULTS.md`](RESULTS.md). Read the [Headline observations](RESULTS.md#headline-observations-read-this-after-the-tables) section before drawing conclusions — the runtime ranking is **model-size-dependent**.
 
-### Cross-runtime — same logical model, different backends
+### Cross-runtime — same logical model, different backends (decode tok/s, median)
 
 | Logical model | Params | n | mlx-swift (Q4) | llama.cpp (Q4_K_M) | coreml-llm |
 |---|---:|---:|---:|---:|---:|
+| Qwen 2.5 0.5B | 0.5 B | 3 | 116.8 | **292.3** | 180.7 (FP16) |
 | Qwen 3.5 0.8B | 0.8 B | 3 | 81.3 | **192.0** | _chunked layout — upstream blocker_ |
 | Qwen 3.5 2B   | 2 B   | 3 | 79.9 | **132.9** | _not run_ |
 | Gemma 4 E2B   | 2 B   | 3 | 56.6 | **119.6** | 32.9 (INT4 palettized) |
 | Gemma 4 E4B   | 4 B   | 1 | **45.1** | 40.7 | _not run_ |
 
-→ llama.cpp Metal wins decode on every cell at or below 2 B params (1.7×–2.4× over MLX-Swift). At 4 B params (Gemma 4 E4B) **MLX-Swift overtakes llama.cpp**. The ranking is not a property of the runtime; it's a property of `(runtime, model, device)`.
+→ llama.cpp Metal wins decode on every cell at or below 2 B params (1.7×–2.5× over MLX-Swift). At 4 B params (Gemma 4 E4B) **MLX-Swift overtakes llama.cpp**. The ranking is not a property of the runtime; it's a property of `(runtime, model, device)`.
+
+### Cross-runtime — peak memory (MB, median)
+
+The decode-tok/s table above hides the memory side. Same models, looking at peak working-set instead:
+
+| Logical model | Params | mlx-swift | llama.cpp | coreml-llm |
+|---|---:|---:|---:|---:|
+| Qwen 2.5 0.5B | 0.5 B | **413** | 543 | 959 |
+| Qwen 3.5 0.8B | 0.8 B | **618** | 754 | — |
+| Gemma 4 E2B   | 2 B   | 2834 | 3182 | **1055** |
+| Gemma 4 E4B   | 4 B   | **4417** | 5093 | — |
+
+→ **"CoreML/ANE wins memory" is only true at the larger end** of this range. At 0.5 B params, MLX-Swift's working set (413 MB) is less than half of CoreML's (959 MB). The crossover where ANE residency starts paying off sits between 0.5 B and 2 B params on this device.
 
 ### Per-runtime model scaling
 
@@ -40,6 +54,7 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 | Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
 |---|---:|---:|---:|---:|---:|
+| Qwen 2.5 0.5B | 0.5 B | 3 | 32 | 116.8 | 413 |
 | Qwen 3.5 0.8B | 0.8 B | 3 | 52 | 81.3 | 618 |
 | Qwen 3.5 2B   | 2 B   | 3 | 50 | 79.9 | 1243 |
 | Gemma 4 E2B   | 2 B   | 3 | 100 | 56.6 | 2834 |
@@ -50,6 +65,7 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 | Model | Params | n | TTFT (ms) | Decode tok/s | Peak Mem (MB) |
 |---|---:|---:|---:|---:|---:|
 | LFM 2.5 350M | 0.35 B | 1 | 383 | 58.9 | **98** |
+| Qwen 2.5 0.5B | 0.5 B | 3 | 171 | 180.7 | 959 |
 | Gemma 4 E2B  | 2 B    | 3 | 616 | 32.9 | **1055** |
 
 → CoreML/ANE trades throughput for memory: ~3× less peak working set than MLX-Swift at the same model size, at ~half the decode tok/s. **Lowest** per-byte footprint of any backend on this device.
