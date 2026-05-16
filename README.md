@@ -102,12 +102,25 @@ Devices we'd love numbers for:
 - Mac Studio Ultra (M2 Ultra / M3 Ultra)
 - Mac mini M2 / M4
 
+## Backend status on Mac
+
+| Backend | Build on Mac | Run on Mac | Notes |
+|---|:---:|:---:|---|
+| MLX Swift LM | ✅ | ✅ | Native SPM macOS. The Xcode-built tool target sidesteps mlx-swift#349. |
+| llama.cpp | ✅ | ✅ | `macos-arm64_x86_64` slice in `Vendored/llama.xcframework`. CLI uses `LD_RUNPATH_SEARCH_PATHS` to resolve the framework at runtime. |
+| CoreML (CoreMLLLM) | ✅ | ✅ (some models) | macOS 15+. Models with the single-top-level `.mlpackage` layout (e.g. LFM 2.5 350M) auto-download from HF and run; the chunked / multi-`.mlpackage` repos (e.g. `mlboydaisuke/qwen3.5-0.8B-CoreML`) need upstream `CoreMLLLM` work to load. |
+| ExecuTorch | ✅ | ⏸ | Build path is clean; current ET-community models ship SentencePiece `tokenizer.model` but ET's `hf_tokenizer.cpp` expects HF-format `tokenizer.json`. Needs a model with HF tokenizer or an ET-side SentencePiece adapter. |
+| ANEMLL | ✅ | ⏸ | Build path is clean; `swift-huggingface.HFDownloader` fails on `.mlmodelc/` directory-shaped HF repos. Needs upstream downloader work. |
+| MediaPipe / LiteRT-LM | ⛔ | ⛔ | `paescebu/SwiftTasksGenAI 0.10.24` ships only `ios-arm64` slices — no `macos-arm64*`. Blocked upstream. |
+
 ## Roadmap
 
-- **Phase 1** *(this release)* — repo rename, top-level SPM (`YardstickKit` + `yardstick` CLI), Mac CLI builds clean, README + device pages, methodology docs, iOS app intact.
-- **Phase 2** — Mac CLI runs end-to-end (via Xcode-built target to sidestep mlx-swift #349), first M4 Max + MacBook Air M3 numbers committed to `RESULTS.md`.
-- **Phase 3** — quality / accuracy tasks: WER + CER (reusing `swift-transformers` Whisper normalizer), perplexity, MMLU subset. ASR + TTS adapters (WhisperKit, Apple Speech, system TTS).
-- **Phase 4** — public results dashboard, regeneration CI, comparison plots.
+- **Phase 1** — repo rename, top-level SPM (`YardstickKit` + `yardstick` CLI), Mac CLI builds clean, README + device pages, methodology docs, iOS app intact.
+- **Phase 2** — Mac CLI runs end-to-end (via Xcode-built target to sidestep mlx-swift #349), first M4 Max numbers committed to `RESULTS.md`.
+- **Phase 2.5** — All 5 buildable backends (MLX, llama.cpp, CoreML, ExecuTorch, ANEMLL) wired into the Mac tool target; first cross-backend row (Gemma 4 E2B: MLX vs llama.cpp).
+- **Phase 3** *(in progress)* — fill remaining adapter row gaps (downloader + model-format work, mostly upstream), MacBook Air M3 + iPhone 17 Pro numbers via `[Yardstick_USER_RUNS.md](../Yardstick_USER_RUNS.md)`.
+- **Phase 4** — quality / accuracy tasks: WER + CER (reusing `swift-transformers` Whisper normalizer), perplexity, MMLU subset. ASR + TTS adapters (WhisperKit, Apple Speech, system TTS).
+- **Phase 5** — public results dashboard, regeneration CI, comparison plots.
 
 ## License
 
