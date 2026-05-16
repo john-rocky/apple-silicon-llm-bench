@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.iosllmbenchmark
   deploymentTarget:
     iOS: "18.0"
+    macOS: "14.0"
   createIntermediateGroups: true
   generateEmptyDirectories: true
 
@@ -99,3 +100,39 @@ targets:
         embed: true
         codeSign: true
         optional: true
+
+  yardstick:
+    type: tool
+    platform: macOS
+    deploymentTarget: "15.0"
+    sources:
+      # Shared with the iOS app, minus the SwiftUI-only Views layer and the
+      # adapters whose dependency is iOS-only (MediaPipe → SwiftTasksGenAI;
+      # ANEMLL → vendored iOS Anemll source; llama.xcframework → iOS slice).
+      # CoreML adapter is left out of Phase-1 Mac CLI too, because its
+      # CoreMLLLM dependency targets macOS 15+ but we want the Mac CLI
+      # baseline to remain "Phase-1 = MLX only" so the build matches the
+      # SPM `Package.swift` shape exactly.
+      - path: Sources/Benchmark
+      - path: Sources/Models
+      - path: Sources/Runtimes/MLXRuntime.swift
+      - path: Sources/Runtimes/MLXBridges.swift
+      - path: Sources/Runtimes/HFDownloader.swift
+      - path: Sources/Runtimes/LLMRuntime.swift
+      - path: ../../apple/YardstickCLI/Sources
+    settings:
+      base:
+        PRODUCT_NAME: yardstick
+        SWIFT_STRICT_CONCURRENCY: minimal
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        OTHER_LDFLAGS: "-ObjC"
+        SKIP_INSTALL: NO
+    dependencies:
+      - package: mlx-swift-lm
+        product: MLXLLM
+      - package: mlx-swift-lm
+        product: MLXLMCommon
+      - package: swift-huggingface
+        product: HuggingFace
+      - package: swift-transformers
+        product: Transformers

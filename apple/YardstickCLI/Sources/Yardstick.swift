@@ -11,7 +11,21 @@
 // scripts), so this binary stays tiny.
 
 import Foundation
-import YardstickKit
+
+// The CLI is built two ways:
+//
+//   1. `swift build` from the repo root — `main.swift` is in the
+//      `YardstickCLI` SPM target, and the bench types live in the
+//      sibling `YardstickKit` library target.
+//   2. `xcodebuild -scheme yardstick` — `main.swift` is compiled
+//      together with `Sources/{Benchmark,Models,Runtimes}/...` into a
+//      single `yardstick` Mac tool target. In that build there is no
+//      separate `YardstickKit` module.
+//
+// The conditional import keeps both paths happy.
+#if canImport(YardstickKit)
+    import YardstickKit
+#endif
 
 @main
 struct YardstickApp {

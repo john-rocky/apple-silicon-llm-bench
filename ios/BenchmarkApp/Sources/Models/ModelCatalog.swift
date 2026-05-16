@@ -44,63 +44,88 @@ public struct ModelInfo: Codable, Sendable, Hashable {
 
 /// Aggregate view of all models the app can run, grouped by runtime.
 public enum ModelCatalog {
-    /// Models the MLX Swift adapter can load.
+    /// Models the MLX Swift adapter can load. Curated 2026-05 — all
+    /// entries verified present on `huggingface.co/mlx-community`.
+    /// Sizes are approximate (verified via HF API or by download).
     public static let mlx: [ModelInfo] = [
+        // --- Tiny — fits any device, including iPhone with headroom ---
+        ModelInfo(
+            id: "mlx-community/Qwen3.5-0.8B-MLX-4bit",
+            displayName: "Qwen 3.5 0.8B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 0.8,
+            onDiskSizeMB: 500,
+            hfRepoId: "mlx-community/Qwen3.5-0.8B-MLX-4bit"
+        ),
         ModelInfo(
             id: "mlx-community/gemma-4-e2b-it-4bit",
             displayName: "Gemma 4 E2B (4-bit)",
             quantization: "Q4",
             parameterCountB: 2.0,
-            onDiskSizeMB: 3580,
+            onDiskSizeMB: 1330,
             hfRepoId: "mlx-community/gemma-4-e2b-it-4bit"
+        ),
+
+        // --- Small — fits 16 GB Mac and iPhone Pro models ---
+        ModelInfo(
+            id: "mlx-community/Qwen3.5-2B-MLX-4bit",
+            displayName: "Qwen 3.5 2B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 2.0,
+            onDiskSizeMB: 1500,
+            hfRepoId: "mlx-community/Qwen3.5-2B-MLX-4bit"
         ),
         ModelInfo(
             id: "mlx-community/gemma-4-e4b-it-4bit",
             displayName: "Gemma 4 E4B (4-bit)",
             quantization: "Q4",
             parameterCountB: 4.0,
-            onDiskSizeMB: 5800,
+            onDiskSizeMB: 3000,
             hfRepoId: "mlx-community/gemma-4-e4b-it-4bit"
         ),
+
+        // --- Medium — Mac-class (M-series with ≥16 GB) ---
         ModelInfo(
-            id: "mlx-community/gemma-3-1b-it-qat-4bit",
-            displayName: "Gemma 3 1B QAT (4-bit)",
-            quantization: "Q4 (QAT)",
-            parameterCountB: 1.0,
-            onDiskSizeMB: 700,
-            hfRepoId: "mlx-community/gemma-3-1b-it-qat-4bit"
+            id: "mlx-community/Qwen3.5-9B-MLX-4bit",
+            displayName: "Qwen 3.5 9B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 9.0,
+            onDiskSizeMB: 5500,
+            hfRepoId: "mlx-community/Qwen3.5-9B-MLX-4bit"
+        ),
+
+        // --- Large / MoE — workstation-class Mac ---
+        ModelInfo(
+            id: "mlx-community/gemma-4-26b-a4b-it-4bit",
+            displayName: "Gemma 4 26B-A4B (4-bit, MoE)",
+            quantization: "Q4",
+            parameterCountB: 26.0,
+            onDiskSizeMB: 14_500,
+            hfRepoId: "mlx-community/gemma-4-26b-a4b-it-4bit"
         ),
         ModelInfo(
-            id: "mlx-community/Qwen3-0.6B-4bit",
-            displayName: "Qwen3 0.6B (4-bit)",
+            id: "mlx-community/Qwen3.5-27B-4bit",
+            displayName: "Qwen 3.5 27B (4-bit)",
             quantization: "Q4",
-            parameterCountB: 0.6,
-            onDiskSizeMB: 400,
-            hfRepoId: "mlx-community/Qwen3-0.6B-4bit"
+            parameterCountB: 27.0,
+            onDiskSizeMB: 15_500,
+            hfRepoId: "mlx-community/Qwen3.5-27B-4bit"
         ),
         ModelInfo(
-            id: "mlx-community/Qwen3-1.7B-4bit",
-            displayName: "Qwen3 1.7B (4-bit)",
+            id: "mlx-community/Qwen3.5-35B-A3B-4bit",
+            displayName: "Qwen 3.5 35B-A3B (4-bit, MoE)",
             quantization: "Q4",
-            parameterCountB: 1.7,
-            onDiskSizeMB: 1100,
-            hfRepoId: "mlx-community/Qwen3-1.7B-4bit"
+            parameterCountB: 35.0,
+            onDiskSizeMB: 19_500,
+            hfRepoId: "mlx-community/Qwen3.5-35B-A3B-4bit"
         ),
         ModelInfo(
-            id: "mlx-community/Llama-3.2-1B-Instruct-4bit",
-            displayName: "Llama 3.2 1B (4-bit)",
+            id: "mlx-community/gemma-4-31b-it-4bit",
+            displayName: "Gemma 4 31B (4-bit)",
             quantization: "Q4",
-            parameterCountB: 1.0,
-            onDiskSizeMB: 700,
-            hfRepoId: "mlx-community/Llama-3.2-1B-Instruct-4bit"
-        ),
-        ModelInfo(
-            id: "mlx-community/SmolLM3-3B-4bit",
-            displayName: "SmolLM3 3B (4-bit)",
-            quantization: "Q4",
-            parameterCountB: 3.0,
-            onDiskSizeMB: 1900,
-            hfRepoId: "mlx-community/SmolLM3-3B-4bit"
+            parameterCountB: 31.0,
+            onDiskSizeMB: 17_500,
+            hfRepoId: "mlx-community/gemma-4-31b-it-4bit"
         ),
     ]
 
