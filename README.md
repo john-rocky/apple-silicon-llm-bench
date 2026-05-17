@@ -8,6 +8,28 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 ---
 
+## TL;DR (M4 Max, May 2026)
+
+No runtime wins everything. Each of the four optimises a different corner of the throughput / memory / energy / streaming-smoothness box:
+
+![Throughput × Energy tradeoff](docs/charts/tradeoff.png)
+
+- **mlx-swift** wins decode throughput on every cell measured (1.4×–1.8× over llama.cpp after early-2026 kernel updates).
+- **Apple Foundation Models** is 2× more energy-efficient per token than the GPU-backed runtimes, 4× more than CoreML/ANE.
+- **CoreML / ANE** wins peak memory (chunked MLKV) but is the slowest *and* the worst on J/token.
+- **llama.cpp** sits in the middle on speed and energy — no axis it wins, no axis it loses badly.
+
+The four charts that summarise the rest of the headline numbers:
+
+| | |
+|---|---|
+| ![Decode throughput](docs/charts/decode_tok_per_s.png) | ![Energy per token](docs/charts/energy_per_token.png) |
+| ![Inter-token jitter](docs/charts/itl_jitter.png) | _Tables for the exact numbers live below._ |
+
+Regenerate after adding rows: `python scripts/generate_charts.py`.
+
+---
+
 ## 📊 Latest numbers — Apple M4 Max, short-chat (128 tokens, decode tok/s, median)
 
 > One device, four runtimes, multiple models. Decode tok/s is the primary headline number; the full table (prefill, TTFT, peak memory, per-run audit trail) lives in [`RESULTS.md`](RESULTS.md). Read the [Headline observations](RESULTS.md#headline-observations-read-this-after-the-tables) section before drawing conclusions — the runtime ranking is **model-size-dependent**.
