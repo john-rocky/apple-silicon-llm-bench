@@ -19,8 +19,8 @@ All three end the same way: drop JSONL into `results/raw/`, run `python scripts/
 Mac CLI:
 
 ```sh
-git clone https://github.com/john-rocky/Yardstick.git
-cd Yardstick/ios/BenchmarkApp
+git clone https://github.com/john-rocky/apple-silicon-llm-bench.git
+cd apple-silicon-llm-bench/ios/BenchmarkApp
 xcodegen generate                              # regenerate Xcode project from project.yml
 xcodebuild -project BenchmarkApp.xcodeproj \
            -scheme yardstick \
