@@ -1,4 +1,4 @@
-# Yardstick
+# Apple Silicon LLM Benchmark
 
 **On-device LLM benchmark for Apple Silicon — iPhone · iPad · Mac.**
 
@@ -14,12 +14,21 @@ The headline is the phone: real LLM inference, on-device, no server. iPhone 17 P
 
 ![iPhone 17 Pro — decode tok/s + peak memory, MLX-Swift vs llama.cpp](docs/charts/iphone_decode_mem.png)
 
-| Logical model | Params | n | **mlx-swift** decode | llama.cpp decode | **mlx-swift** mem | llama.cpp mem |
-|---|---:|---:|---:|---:|---:|---:|
-| Qwen 3.5 2B | 2 B | 3 | **61.2 tok/s** | 39.1 | **1279 MB** | 1479 |
-| Gemma 4 E2B | 2 B | 3 | **47.5 tok/s** | 37.8 | **2900 MB** | 3156 |
+**Decode throughput** — tok/s, higher is better:
 
-- **MLX-Swift wins decode _and_ peak memory on both models** — 1.25×–1.6× faster than llama.cpp and a touch leaner in RAM. Same ranking as on the M4 Max desktop.
+| Model (4-bit, n=3) | 🟣 MLX-Swift | 🔵 llama.cpp | MLX advantage |
+|---|---:|---:|:---:|
+| Qwen 3.5 2B | **61.2** | 39.1 | **1.6× faster** |
+| Gemma 4 E2B | **47.5** | 37.8 | **1.3× faster** |
+
+**Peak memory** — MB, lower is better:
+
+| Model (4-bit, n=3) | 🟣 MLX-Swift | 🔵 llama.cpp | MLX advantage |
+|---|---:|---:|:---:|
+| Qwen 3.5 2B | **1,279** | 1,479 | **14% leaner** |
+| Gemma 4 E2B | **2,900** | 3,156 | **8% leaner** |
+
+- **MLX-Swift sweeps both axes** — faster decode (up to **1.6×**) _and_ a smaller memory footprint, on both models. Same ranking as on the M4 Max desktop.
 - **The on-device tax is real:** roughly 4–5× slower than the M4 Max at the same model + runtime (Qwen 3.5 2B → 61 tok/s on iPhone vs 292 on M4 Max).
 - **Fully automated, side-loaded:** runs are driven headlessly from a Mac via `devicectl` — nothing typed on the phone — using the *same* methodology as the desktop rows.
 - **Coming next:** CoreML/ANE, Apple Foundation Models, LiteRT-LM, more models and more iPhones / iPads. [One row is a great PR](CONTRIBUTING.md).
