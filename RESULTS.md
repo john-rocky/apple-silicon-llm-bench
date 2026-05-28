@@ -43,7 +43,7 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 
 | Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
-| litert-lm | `litert-community/gemma-4-E2B-it-litert-lm` | INT4 (QAT) | 3 | 1.9 | 77 | — | 58.2 | 933 |
+| litert-lm | `litert-community/gemma-4-E2B-it-litert-lm` | INT4 (QAT) | 3 | 0.6 | 267 | 457.6 | 55.4 | 641 |
 | llama.cpp | `unsloth/gemma-4-E2B-it-GGUF/Q4_K_M` | Q4_K_M | 3 | 2.8 | 114 | 2086.6 | 37.8 | 3156 |
 | mlx-swift | `mlx-community/gemma-4-e2b-it-4bit` | Q4 | 3 | 3.0 | 144 | 179.9 | 47.5 | 2900 |
 
@@ -133,7 +133,7 @@ Each sub-table fixes the runtime and varies the model, so you can see how a sing
 
 | Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---:|---|---:|---:|---:|---:|
-| Gemma 4 E2B (.litertlm) | 2 | INT4 (QAT) | 3 | 77 | 58.2 | 933 |
+| Gemma 4 E2B (.litertlm) | 2 | INT4 (QAT) | 3 | 267 | 55.4 | 641 |
 
 ### `llama.cpp`  (iPhone 17 Pro, short-chat)
 
@@ -216,7 +216,7 @@ Decode tok/s is an average. The percentiles below are the gap between consecutiv
 
 | Device | Runtime | Model | n | TTFT (ms, median) | ITL p50 (ms) | ITL p95 (ms) | ITL p99 (ms) |
 |---|---|---|---:|---:|---:|---:|---:|
-| iPhone 17 Pro | litert-lm | Gemma 4 E2B (.litertlm) | 3 | 77 | 17.3 | 17.6 | 17.8 |
+| iPhone 17 Pro | litert-lm | Gemma 4 E2B (.litertlm) | 3 | 267 | 17.3 | 18.8 | 19.0 |
 | iPhone 17 Pro | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | 3 | 96 | 24.9 | 26.7 | 29.1 |
 | iPhone 17 Pro | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | 3 | 114 | 25.2 | 27.5 | 29.1 |
 | iPhone 17 Pro | mlx-swift | Qwen 3.5 2B (4-bit) | 3 | 103 | 16.4 | 16.8 | 17.0 |
@@ -258,9 +258,9 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 
 | Runtime | Model | Quant | Run | Load (s) | TTFT (ms) | Prefill tok/s | Decode tok/s | Peak Mem (MB) | JSONL |
 |---|---|---|---:|---:|---:|---:|---:|---:|---|
-| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 1 | 7.2 | 737 | — | 52.9 | 1411 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run1.jsonl` |
-| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 2 | 1.9 | 77 | — | 58.9 | 933 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run2.jsonl` |
-| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 3 | 0.6 | 64 | — | 58.2 | 631 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run3.jsonl` |
+| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 1 | 0.8 | 735 | 70.7 | 53.2 | 655 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run1.jsonl` |
+| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 2 | 0.5 | 267 | 457.6 | 56.4 | 641 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run2.jsonl` |
+| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 3 | 0.6 | 69 | 471.6 | 55.4 | 640 | `iphone17pro-litert-lm-gemma-4-e2b-short-chat-run3.jsonl` |
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 1 | 1.2 | 336 | 41.3 | 39.6 | 1442 | `iphone17pro-llama-cpp-qwen3.5-2b-short-chat-run1.jsonl` |
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 2 | 0.3 | 96 | 2876.6 | 39.1 | 1479 | `iphone17pro-llama-cpp-qwen3.5-2b-short-chat-run2.jsonl` |
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 3 | 0.3 | 96 | 2503.9 | 38.7 | 1479 | `iphone17pro-llama-cpp-qwen3.5-2b-short-chat-run3.jsonl` |

@@ -18,24 +18,24 @@ Real LLM inference on a phone — on-device, no server. iPhone 17 Pro, 4-bit, sh
 
 | Model (4-bit, n=3) | 🔴 LiteRT-LM | 🟣 MLX-Swift | 🔵 llama.cpp |
 |---|---:|---:|---:|
-| Gemma 4 E2B | **58*** 🏆 | 47.5 | 37.8 |
+| Gemma 4 E2B | **55.4** 🏆 | 47.5 | 37.8 |
 | Qwen 3.5 2B | — | **61.2** 🏆 | 39.1 |
 
 **Peak memory** — MB, lower is better (🏆 = winner):
 
 | Model (4-bit, n=3) | 🔴 LiteRT-LM | 🟣 MLX-Swift | 🔵 llama.cpp |
 |---|---:|---:|---:|
-| Gemma 4 E2B | **933** 🏆 | 2,900 | 3,156 |
+| Gemma 4 E2B | **641** 🏆 | 2,900 | 3,156 |
 | Qwen 3.5 2B | — | **1,279** 🏆 | 1,479 |
 
-- **The upset — Gemma 4 E2B:** Google's **LiteRT-LM** (INT4-QAT, GPU, its native `.litertlm`) beats MLX-Swift on decode **and** uses **~3× less memory** (933 MB vs 2,900). The purpose-built runtime wins on its own format.
+- **The upset — Gemma 4 E2B:** Google's **LiteRT-LM** (INT4-QAT, GPU, its native `.litertlm`) beats MLX-Swift on decode **and** uses **~4.5× less memory** (641 MB vs 2,900). The purpose-built runtime wins on its own format.
 - **MLX-Swift wins Qwen 3.5 2B** — 61 vs 39 tok/s, and leaner RAM. LiteRT-LM has no Qwen entry (its catalog is Gemma-only).
-- **\* LiteRT-LM decode is a stream-chunk estimate** — the adapter counts streamed chunks, not tokenizer tokens, so read its tok/s as ± (like the Apple FM row). The **memory** numbers are exact process RSS and directly comparable.
+- **All figures are exact**, including LiteRT-LM's — its tok/s + token counts come straight from LiteRT-LM's own benchmark counters (`getBenchmarkInfo`). One fairness note: LiteRT-LM has no per-call output cap, so it generates to **EOS** (a full ~458-token reply) where MLX / llama.cpp stop at the 128-token budget; decode tok/s is a steady-state rate, so the head-to-head holds.
 - **On-device tax:** ~4–5× slower than the M4 Max at the same model + runtime (Qwen 3.5 2B → 61 tok/s on iPhone vs 292 on M4 Max).
 - **Fully automated, side-loaded:** every run is driven headlessly from a Mac via `devicectl` — nothing typed on the phone — using the *same* methodology as the desktop rows.
 - **Coming next:** CoreML/ANE, Apple Foundation Models, more models and more iPhones / iPads. [One row is a great PR](CONTRIBUTING.md).
 
-> **How the LiteRT-LM row was measured:** `google-ai-edge/LiteRT-LM` 0.12.0 running `litert-community/gemma-4-E2B-it.litertlm` (INT4-QAT) on the Metal **GPU** backend, via the in-tree [`MediaPipeRuntime`](ios/BenchmarkApp/Sources/Runtimes/MediaPipeRuntime.swift) adapter, driven by the same headless harness + prompt as every other row (3 cold runs, median). Its **decode tok/s counts streamed text chunks** — the 0.12.0 `Conversation` API doesn't expose token ids — so treat it as an estimate (±), like the Apple FM row; **peak memory is exact process RSS** and directly comparable. The SwiftPM wiring currently uses a **local LiteRT-LM checkout** (the released package trips SwiftPM's unsafe-flags rule via its `-all_load`), so the adapter isn't enabled in the default build yet — integration is in progress.
+> **How the LiteRT-LM row was measured:** `google-ai-edge/LiteRT-LM` 0.12.0 running `litert-community/gemma-4-E2B-it.litertlm` (INT4-QAT) on the Metal **GPU** backend, via the in-tree [`MediaPipeRuntime`](ios/BenchmarkApp/Sources/Runtimes/MediaPipeRuntime.swift) adapter — same headless harness + prompt as every other row (3 cold runs, median). Token counts and tok/s come from **LiteRT-LM's own benchmark counters** (`Conversation.getBenchmarkInfo`), so they're exact, not estimated. It generates to EOS (no per-call output cap in the API), so its token count is the model's full reply rather than the 128-token budget — decode tok/s is a rate and stays comparable; memory is exact process RSS. LiteRT-LM is vendored as a **local SwiftPM package** (`scripts/bootstrap.sh` clones it with `GIT_LFS_SKIP_SMUDGE=1`; the released package trips SwiftPM's unsafe-flags rule via its `-all_load`).
 >
 > Decode tok/s is the headline number; the full per-run audit (prefill, TTFT, inter-token jitter, memory) lives in [`RESULTS.md`](RESULTS.md).
 

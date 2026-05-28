@@ -333,7 +333,7 @@ def chart_iphone():
         fontsize=12.5, fontweight="bold", y=1.03,
     )
     fig.text(0.5, -0.03,
-             "Gemma 4 E2B: LiteRT-LM leads decode + ~3× less memory  ·  Qwen 3.5 2B: MLX wins (LiteRT-LM is Gemma-only)  ·  LiteRT-LM tok/s = stream-chunk estimate",
+             "Gemma 4 E2B: LiteRT-LM leads decode + ~4.5× less memory  ·  Qwen 3.5 2B: MLX wins (LiteRT-LM is Gemma-only)  ·  LiteRT-LM runs to EOS (its API has no token cap)",
              ha="center", fontsize=8.5, color="#666")
     plt.tight_layout()
     plt.savefig(OUT / "iphone_decode_mem.png")

@@ -33,6 +33,11 @@ packages:
   CoreML-LLM:
     url: https://github.com/john-rocky/CoreML-LLM
     from: "1.9.0"
+  LiteRT-LM:
+    # Local path (not url:) so SwiftPM accepts the package's `.unsafeFlags(-all_load)`
+    # — versioned/remote products with unsafe flags are rejected by SwiftPM.
+    # Vendored/ is git-ignored; clone with GIT_LFS_SKIP_SMUDGE=1 (broken Android LFS blob upstream).
+    path: Vendored/LiteRT-LM
 
 targets:
   BenchmarkApp:
@@ -96,6 +101,8 @@ targets:
         product: kernels_quantized
       - package: Anemll
         product: AnemllCore
+      - package: LiteRT-LM
+        product: LiteRTLM
       - framework: Vendored/llama.xcframework
         embed: true
         codeSign: true
@@ -120,6 +127,7 @@ targets:
       - path: Sources/Runtimes/LlamaCppRuntime.swift
       - path: Sources/Runtimes/AnemllRuntime.swift
       - path: Sources/Runtimes/AppleFMRuntime.swift
+      - path: Sources/Runtimes/MediaPipeRuntime.swift
       - path: ../../apple/YardstickCLI/Sources
     settings:
       base:
@@ -157,6 +165,8 @@ targets:
         product: kernels_quantized
       - package: Anemll
         product: AnemllCore
+      - package: LiteRT-LM
+        product: LiteRTLM
       - framework: Vendored/llama.xcframework
         embed: false
         codeSign: false

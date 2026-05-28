@@ -12,6 +12,7 @@
 		0F82181CAC39B256ECB79580 /* BenchmarkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D10CD171A7FE9EF1BB369F /* BenchmarkTask.swift */; };
 		100A9D75956A32FC2BA2C1F2 /* BenchmarkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6CAC41B79737975D3977D7 /* BenchmarkResult.swift */; };
 		112E2A29A4EEA42B9F7D6444 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E86895F4C4C799B493D115C /* Assets.xcassets */; };
+		174A591078D87D4B3B504572 /* LiteRTLM in Frameworks */ = {isa = PBXBuildFile; productRef = 33E0A67472EF0169CD621D55 /* LiteRTLM */; };
 		1DE99C97463A3023A68C459C /* AnemllCore in Frameworks */ = {isa = PBXBuildFile; productRef = F472A90A338D866AA59AA6CC /* AnemllCore */; };
 		233E07CCDFD38F03A7808A08 /* BenchmarkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6CAC41B79737975D3977D7 /* BenchmarkResult.swift */; };
 		235129CA3670027E3887200D /* BenchmarkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D10CD171A7FE9EF1BB369F /* BenchmarkTask.swift */; };
@@ -31,6 +32,7 @@
 		44D7562FCF98BE91F2694784 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 41C557F6CC8047D69B9A3EF5 /* MLXLLM */; };
 		4766D15ABA21C6FF5EBBCDB8 /* MediaPipeRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EACC554115BC9411C3D83F1 /* MediaPipeRuntime.swift */; };
 		4A9DE6A543D868FB71A41A02 /* MLXRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F079AF5934BDEE412984B /* MLXRuntime.swift */; };
+		4BAC573F8F4D1928A686469F /* MediaPipeRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EACC554115BC9411C3D83F1 /* MediaPipeRuntime.swift */; };
 		4C7A81F47EB282F5B3B84166 /* ThermalMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DBDFD928C557A5352D613E /* ThermalMonitor.swift */; };
 		4D5CECB4C50714A3B928F66C /* AnemllRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BF89FC5DAB913F5DC74C99 /* AnemllRuntime.swift */; };
 		52F23D827122805FEDBBDA29 /* DeviceSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6978D6BB9139052EA83F5605 /* DeviceSnapshot.swift */; };
@@ -58,6 +60,7 @@
 		934F49A4C07A710BCD246052 /* MLXBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB25DA3940385A8468CDF86C /* MLXBridges.swift */; };
 		94DD408FB6BD844A7AEA46B2 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = D9951B938519F9C6991F2B77 /* MLXLLM */; };
 		969557357BB859074D8D1B5C /* RuntimeKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2757B6113092D68EC4F94 /* RuntimeKind.swift */; };
+		9803FC6C3E84A513093B9351 /* LiteRTLM in Frameworks */ = {isa = PBXBuildFile; productRef = A56AB7ADC552B4521F7725A8 /* LiteRTLM */; };
 		9965B527BD88EF07B285754E /* executorch in Frameworks */ = {isa = PBXBuildFile; productRef = F5E45AD0A479F8152D251911 /* executorch */; };
 		9C5DF4C1C1EF300A1B21B367 /* ShortChatTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B472A5B7142B5A088948C3E /* ShortChatTask.swift */; };
 		9CF9A0FAC7BDA40ADA7B7D86 /* ThermalMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DBDFD928C557A5352D613E /* ThermalMonitor.swift */; };
@@ -140,6 +143,7 @@
 		DB25DA3940385A8468CDF86C /* MLXBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXBridges.swift; sourceTree = "<group>"; };
 		DDC21ED32AE3215BD9BAB3DC /* SustainedGenerationTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SustainedGenerationTask.swift; sourceTree = "<group>"; };
 		F5235B8E78B06C2870291FF5 /* HFDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HFDownloader.swift; sourceTree = "<group>"; };
+		F5A53FFB38F5191EA948C20E /* LiteRT-LM */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "LiteRT-LM"; path = "Vendored/LiteRT-LM"; sourceTree = SOURCE_ROOT; };
 		FC7B6B97C8F1331B7F122CF4 /* ResultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultStore.swift; sourceTree = "<group>"; };
 		FCADC364D9871831E17D1318 /* LongContextTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongContextTask.swift; sourceTree = "<group>"; };
 		FF66B5ACD9BD34F3F9940141 /* BenchmarkApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BenchmarkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +166,7 @@
 				0B84BFD4FD22D8DD7E67E04E /* kernels_optimized in Frameworks */,
 				B3236EC37B1CE4074B972226 /* kernels_quantized in Frameworks */,
 				1DE99C97463A3023A68C459C /* AnemllCore in Frameworks */,
+				174A591078D87D4B3B504572 /* LiteRTLM in Frameworks */,
 				EC039C8FC4A2DF68CE274F17 /* llama.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +187,7 @@
 				DBE501DF7CCED67DB12B58B5 /* kernels_optimized in Frameworks */,
 				6832D123E545F399E40D2315 /* kernels_quantized in Frameworks */,
 				FFA878CC5AE5FF86E8734E02 /* AnemllCore in Frameworks */,
+				9803FC6C3E84A513093B9351 /* LiteRTLM in Frameworks */,
 				4093906B51F58C8ECBC1A23B /* llama.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				5E26E6FC4D7741AF3A2EC137 /* anemll-swift-cli */,
+				F5A53FFB38F5191EA948C20E /* LiteRT-LM */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -373,6 +380,7 @@
 				94E0BEAFA16C6763A28522EB /* kernels_optimized */,
 				5E734E7640926D7B17DD6CC4 /* kernels_quantized */,
 				F472A90A338D866AA59AA6CC /* AnemllCore */,
+				33E0A67472EF0169CD621D55 /* LiteRTLM */,
 			);
 			productName = yardstick;
 			productReference = 3D1A95AD68FB592E643E5CD3 /* yardstick */;
@@ -405,6 +413,7 @@
 				8B81C5E8FC5F3CAD804883A7 /* kernels_optimized */,
 				E083290449B341AB7921F544 /* kernels_quantized */,
 				992DB9CED2E82FFE8B146A31 /* AnemllCore */,
+				A56AB7ADC552B4521F7725A8 /* LiteRTLM */,
 			);
 			productName = BenchmarkApp;
 			productReference = FF66B5ACD9BD34F3F9940141 /* BenchmarkApp.app */;
@@ -446,6 +455,7 @@
 				80DD55C85D3764D0D34ECC4E /* XCRemoteSwiftPackageReference "swift-huggingface" */,
 				3CA1B107F9BEE92DC4D9485E /* XCRemoteSwiftPackageReference "swift-transformers" */,
 				1FA24253559F386509684D8D /* XCLocalSwiftPackageReference "Vendored/Anemll/anemll-swift-cli" */,
+				CCEC444E85A63997D78907B2 /* XCLocalSwiftPackageReference "Vendored/LiteRT-LM" */,
 			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
@@ -489,6 +499,7 @@
 				5D0D63767498D8542E2AED3D /* LongContextTask.swift in Sources */,
 				934F49A4C07A710BCD246052 /* MLXBridges.swift in Sources */,
 				809989CAEFAD0B15B307469C /* MLXRuntime.swift in Sources */,
+				4BAC573F8F4D1928A686469F /* MediaPipeRuntime.swift in Sources */,
 				67AE241DA38F53CE78E20C86 /* MemoryMonitor.swift in Sources */,
 				60D67ADC917C3CD389CDF184 /* ModelCatalog.swift in Sources */,
 				9FB0903D22C954FDEB555847 /* ResultStore.swift in Sources */,
@@ -794,6 +805,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "Vendored/Anemll/anemll-swift-cli";
 		};
+		CCEC444E85A63997D78907B2 /* XCLocalSwiftPackageReference "Vendored/LiteRT-LM" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "Vendored/LiteRT-LM";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -870,6 +885,10 @@
 			package = 6ABDBD1AD4883A8815094867 /* XCRemoteSwiftPackageReference "executorch" */;
 			productName = executorch_llm;
 		};
+		33E0A67472EF0169CD621D55 /* LiteRTLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiteRTLM;
+		};
 		41522D438C797371055C13FC /* Transformers */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3CA1B107F9BEE92DC4D9485E /* XCRemoteSwiftPackageReference "swift-transformers" */;
@@ -913,6 +932,10 @@
 		992DB9CED2E82FFE8B146A31 /* AnemllCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AnemllCore;
+		};
+		A56AB7ADC552B4521F7725A8 /* LiteRTLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiteRTLM;
 		};
 		D9951B938519F9C6991F2B77 /* MLXLLM */ = {
 			isa = XCSwiftPackageProductDependency;

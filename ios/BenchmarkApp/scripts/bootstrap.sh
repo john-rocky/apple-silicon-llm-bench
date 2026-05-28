@@ -3,6 +3,7 @@
 #
 #   1. Vendored/llama.xcframework  (llama.cpp Metal build, ~168 MB)
 #   2. Vendored/Anemll             (cloned source for AnemllCore SwiftPM target)
+#   3. Vendored/LiteRT-LM          (cloned source for the LiteRTLM SwiftPM target)
 #
 # Optional: if `xcodegen` is installed and you've edited project.yml, this
 # script also regenerates BenchmarkApp.xcodeproj. Most users do NOT need
@@ -17,6 +18,8 @@ VENDORED_DIR="Vendored"
 LLAMA_FRAMEWORK="${VENDORED_DIR}/llama.xcframework"
 ANEMLL_DIR="${VENDORED_DIR}/Anemll"
 ANEMLL_PKG="${ANEMLL_DIR}/anemll-swift-cli/Package.swift"
+LITERTLM_DIR="${VENDORED_DIR}/LiteRT-LM"
+LITERTLM_TAG="${LITERTLM_TAG:-v0.12.0}"
 
 mkdir -p "${VENDORED_DIR}"
 
@@ -59,7 +62,20 @@ if grep -q 'swift-transformers".*branch: "main"' "${ANEMLL_PKG}"; then
     sed -i '' 's|.package(url: "https://github.com/huggingface/swift-transformers", branch: "main").*|.package(url: "https://github.com/huggingface/swift-transformers", "1.0.0"..<"2.0.0"),|' "${ANEMLL_PKG}"
 fi
 
-# 3. Optional: regenerate the Xcode project (only needed if you edit project.yml).
+# 3. LiteRT-LM (google-ai-edge). Vendored as a *local* SwiftPM package: the released
+# package declares `.unsafeFlags(["-Xlinker","-all_load"])`, and SwiftPM rejects unsafe
+# flags from versioned/remote products — local path packages are allowed. GIT_LFS_SKIP_SMUDGE=1
+# skips a broken Android LFS object upstream; the iOS/macOS xcframework is a remote
+# binaryTarget (release URL), so it's fetched by SwiftPM, not git-LFS.
+if [ ! -d "${LITERTLM_DIR}" ]; then
+    echo "Cloning LiteRT-LM (${LITERTLM_TAG}) …"
+    GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 --branch "${LITERTLM_TAG}" \
+        https://github.com/google-ai-edge/LiteRT-LM.git "${LITERTLM_DIR}"
+else
+    echo "${LITERTLM_DIR} already present."
+fi
+
+# 4. Optional: regenerate the Xcode project (only needed if you edit project.yml).
 if command -v xcodegen >/dev/null 2>&1; then
     if [ "${REGEN_XCODEPROJ:-0}" = "1" ] || [ ! -d "BenchmarkApp.xcodeproj" ]; then
         echo "Generating BenchmarkApp.xcodeproj …"
@@ -79,8 +95,8 @@ In Xcode:
   2. Select your iPhone as the run destination.
   3. ⌘R.
 
-Optional: to enable the MediaPipe / LiteRT-LM runtime, add
-https://github.com/paescebu/SwiftTasksGenAI via File → Add Package Dependencies.
+LiteRT-LM (Gemma .litertlm, GPU) is vendored above (Vendored/LiteRT-LM) and wired via
+project.yml — no manual Xcode step. Its decode tok/s comes from LiteRT-LM's own counters.
 
 First Xcode build resolves SPM (mlx-swift-lm, swift-huggingface, swift-transformers,
 executorch, Anemll, CoreMLLLM). Takes several minutes.
