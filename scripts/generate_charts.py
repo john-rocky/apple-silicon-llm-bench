@@ -281,8 +281,10 @@ def chart_tradeoff():
 def chart_iphone():
     runs = load_runs("iphone17pro", task="short-chat")
     models = ["Qwen 3.5 2B", "Gemma 4 E2B"]
-    runtimes = ["mlx-swift", "llama.cpp"]
-    rt_label = {"mlx-swift": "MLX-Swift", "llama.cpp": "llama.cpp"}
+    # litert-lm first to spotlight the Gemma upset; it's Gemma-only (no Qwen bar).
+    runtimes = ["litert-lm", "mlx-swift", "llama.cpp"]
+    rt_label = {"litert-lm": "LiteRT-LM", "mlx-swift": "MLX-Swift", "llama.cpp": "llama.cpp"}
+    color = {"litert-lm": "#e11d48", "mlx-swift": PALETTE["mlx-swift"], "llama.cpp": PALETTE["llama.cpp"]}
 
     dec: dict = {}
     mem: dict = {}
@@ -295,36 +297,44 @@ def chart_iphone():
         mem.setdefault((lm, rt), []).append(r["metrics"]["memoryPeakDuringDecodeMB"])
 
     xs = list(range(len(models)))
-    width = 0.36
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4.4))
+    width = 0.26
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.5, 4.6))
 
     def grouped(ax, data, fmt, title, ylab):
         ax.grid(False)
+        labelled: set = set()
         for i, rt in enumerate(runtimes):
-            ys = [median(data.get((m, rt), [])) or 0 for m in models]
-            offs = [x + (i - 0.5) * width for x in xs]
-            bars = ax.bar(offs, ys, width, label=rt_label[rt],
-                          color=PALETTE[rt], edgecolor="white", linewidth=0.6)
-            for b, y in zip(bars, ys):
-                ax.text(b.get_x() + b.get_width() / 2, y, fmt.format(y),
-                        ha="center", va="bottom", fontsize=10.5, fontweight="bold")
+            for j, m in enumerate(models):
+                vals = data.get((m, rt))
+                if not vals:
+                    continue  # e.g. LiteRT-LM has no Qwen row (Gemma-only catalog)
+                y = median(vals)
+                x = xs[j] + (i - 1) * width
+                ax.bar([x], [y], width,
+                       label=(rt_label[rt] if rt not in labelled else None),
+                       color=color[rt], edgecolor="white", linewidth=0.6)
+                labelled.add(rt)
+                ax.text(x, y, fmt.format(y), ha="center", va="bottom",
+                        fontsize=10, fontweight="bold")
         ax.set_xticks(xs)
         ax.set_xticklabels(models, fontsize=11)
         ax.set_title(title, fontsize=12.5, fontweight="bold", pad=10)
         ax.set_ylabel(ylab)
         ax.grid(True, axis="y", alpha=0.3)
         ax.set_axisbelow(True)
-        ax.margins(y=0.20)
+        ax.margins(y=0.22)
 
-    grouped(ax1, dec, "{:.0f}", "Decode throughput (tok/s)   ↑ better", "tok/s")
-    grouped(ax2, mem, "{:.0f}", "Peak memory (MB)   ↓ better", "MB")
-    ax1.legend(frameon=False, loc="upper right", fontsize=10.5)
+    grouped(ax1, dec, "{:.0f}", "Decode throughput   ↑ better", "tok/s")
+    grouped(ax2, mem, "{:.0f}", "Peak memory   ↓ better", "MB")
+    ax1.legend(frameon=False, loc="upper right", fontsize=10, ncol=3,
+               bbox_to_anchor=(1.0, 1.0))
     fig.suptitle(
         "On-device LLM — iPhone 17 Pro (A19 Pro) · 4-bit · short-chat · median of 3 cold runs",
-        fontsize=12.5, fontweight="bold", y=1.02,
+        fontsize=12.5, fontweight="bold", y=1.03,
     )
-    fig.text(0.5, -0.02, "MLX-Swift wins decode AND peak memory on both models",
-             ha="center", fontsize=9.5, color="#666")
+    fig.text(0.5, -0.03,
+             "Gemma 4 E2B: LiteRT-LM leads decode + ~3× less memory  ·  Qwen 3.5 2B: MLX wins (LiteRT-LM is Gemma-only)  ·  LiteRT-LM tok/s = stream-chunk estimate",
+             ha="center", fontsize=8.5, color="#666")
     plt.tight_layout()
     plt.savefig(OUT / "iphone_decode_mem.png")
     plt.close(fig)

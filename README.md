@@ -10,29 +10,33 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 
 ## 📱 TL;DR — iPhone 17 Pro (A19 Pro)
 
-The headline is the phone: real LLM inference, on-device, no server. iPhone 17 Pro, 4-bit, short-chat (128 tokens), median of 3 cold runs.
+Real LLM inference on a phone — on-device, no server. iPhone 17 Pro, 4-bit, short-chat (128 tokens), median of 3 cold runs. **The winning runtime is model-dependent — and the upset is on Gemma.**
 
-![iPhone 17 Pro — decode tok/s + peak memory, MLX-Swift vs llama.cpp](docs/charts/iphone_decode_mem.png)
+![iPhone 17 Pro — decode + peak memory, LiteRT-LM vs MLX-Swift vs llama.cpp](docs/charts/iphone_decode_mem.png)
 
-**Decode throughput** — tok/s, higher is better:
+**Decode throughput** — tok/s, higher is better (🏆 = winner):
 
-| Model (4-bit, n=3) | 🟣 MLX-Swift | 🔵 llama.cpp | MLX advantage |
-|---|---:|---:|:---:|
-| Qwen 3.5 2B | **61.2** | 39.1 | **1.6× faster** |
-| Gemma 4 E2B | **47.5** | 37.8 | **1.3× faster** |
+| Model (4-bit, n=3) | 🔴 LiteRT-LM | 🟣 MLX-Swift | 🔵 llama.cpp |
+|---|---:|---:|---:|
+| Gemma 4 E2B | **58*** 🏆 | 47.5 | 37.8 |
+| Qwen 3.5 2B | — | **61.2** 🏆 | 39.1 |
 
-**Peak memory** — MB, lower is better:
+**Peak memory** — MB, lower is better (🏆 = winner):
 
-| Model (4-bit, n=3) | 🟣 MLX-Swift | 🔵 llama.cpp | MLX advantage |
-|---|---:|---:|:---:|
-| Qwen 3.5 2B | **1,279** | 1,479 | **14% leaner** |
-| Gemma 4 E2B | **2,900** | 3,156 | **8% leaner** |
+| Model (4-bit, n=3) | 🔴 LiteRT-LM | 🟣 MLX-Swift | 🔵 llama.cpp |
+|---|---:|---:|---:|
+| Gemma 4 E2B | **933** 🏆 | 2,900 | 3,156 |
+| Qwen 3.5 2B | — | **1,279** 🏆 | 1,479 |
 
-- **MLX-Swift sweeps both axes** — faster decode (up to **1.6×**) _and_ a smaller memory footprint, on both models. Same ranking as on the M4 Max desktop.
-- **The on-device tax is real:** roughly 4–5× slower than the M4 Max at the same model + runtime (Qwen 3.5 2B → 61 tok/s on iPhone vs 292 on M4 Max).
-- **Fully automated, side-loaded:** runs are driven headlessly from a Mac via `devicectl` — nothing typed on the phone — using the *same* methodology as the desktop rows.
-- **Coming next:** CoreML/ANE, Apple Foundation Models, LiteRT-LM, more models and more iPhones / iPads. [One row is a great PR](CONTRIBUTING.md).
+- **The upset — Gemma 4 E2B:** Google's **LiteRT-LM** (INT4-QAT, GPU, its native `.litertlm`) beats MLX-Swift on decode **and** uses **~3× less memory** (933 MB vs 2,900). The purpose-built runtime wins on its own format.
+- **MLX-Swift wins Qwen 3.5 2B** — 61 vs 39 tok/s, and leaner RAM. LiteRT-LM has no Qwen entry (its catalog is Gemma-only).
+- **\* LiteRT-LM decode is a stream-chunk estimate** — the adapter counts streamed chunks, not tokenizer tokens, so read its tok/s as ± (like the Apple FM row). The **memory** numbers are exact process RSS and directly comparable.
+- **On-device tax:** ~4–5× slower than the M4 Max at the same model + runtime (Qwen 3.5 2B → 61 tok/s on iPhone vs 292 on M4 Max).
+- **Fully automated, side-loaded:** every run is driven headlessly from a Mac via `devicectl` — nothing typed on the phone — using the *same* methodology as the desktop rows.
+- **Coming next:** CoreML/ANE, Apple Foundation Models, more models and more iPhones / iPads. [One row is a great PR](CONTRIBUTING.md).
 
+> **How the LiteRT-LM row was measured:** `google-ai-edge/LiteRT-LM` 0.12.0 running `litert-community/gemma-4-E2B-it.litertlm` (INT4-QAT) on the Metal **GPU** backend, via the in-tree [`MediaPipeRuntime`](ios/BenchmarkApp/Sources/Runtimes/MediaPipeRuntime.swift) adapter, driven by the same headless harness + prompt as every other row (3 cold runs, median). Its **decode tok/s counts streamed text chunks** — the 0.12.0 `Conversation` API doesn't expose token ids — so treat it as an estimate (±), like the Apple FM row; **peak memory is exact process RSS** and directly comparable. The SwiftPM wiring currently uses a **local LiteRT-LM checkout** (the released package trips SwiftPM's unsafe-flags rule via its `-all_load`), so the adapter isn't enabled in the default build yet — integration is in progress.
+>
 > Decode tok/s is the headline number; the full per-run audit (prefill, TTFT, inter-token jitter, memory) lives in [`RESULTS.md`](RESULTS.md).
 
 ---
@@ -284,7 +288,7 @@ First launch downloads the chosen model (default: `mlx-community/gemma-4-e2b-it-
 | MLX Swift | `MLXRuntime.swift` | SPM (`mlx-swift-lm`) |
 | llama.cpp | `LlamaCppRuntime.swift` | vendored `llama.xcframework` (`bootstrap.sh`) |
 | CoreML (swift-transformers) | `CoreMLRuntime.swift` | SPM (`swift-transformers` `Models` + `Generation`) |
-| MediaPipe / LiteRT-LM | `MediaPipeRuntime.swift` | `canImport`-gated; add `paescebu/SwiftTasksGenAI` via Xcode UI |
+| LiteRT-LM | `MediaPipeRuntime.swift` | SPM (`google-ai-edge/LiteRT-LM` ≥ 0.12.0, product `LiteRTLM`); `#if canImport(LiteRTLM)`-gated |
 | ExecuTorch | `ExecuTorchRuntime.swift` | SPM (`pytorch/executorch` `swiftpm-*` branch) |
 | ANEMLL | `AnemllRuntime.swift` | local SPM via vendored `Anemll/` (`bootstrap.sh`) |
 | Apple Foundation Models | `AppleFMRuntime.swift` | system framework, `#if canImport(FoundationModels)` (macOS 26 / iOS 26) |
@@ -322,7 +326,7 @@ Devices we'd love numbers for:
 | CoreML (CoreMLLLM) | ✅ | ✅ (some models) | macOS 15+. Models with the single-top-level `.mlpackage` layout (e.g. LFM 2.5 350M) auto-download from HF and run; the chunked / multi-`.mlpackage` repos (e.g. `mlboydaisuke/qwen3.5-0.8B-CoreML`) need upstream `CoreMLLLM` work to load. |
 | ExecuTorch | ✅ | ⏸ | Build path is clean; current ET-community models ship SentencePiece `tokenizer.model` but ET's `hf_tokenizer.cpp` expects HF-format `tokenizer.json`. Needs a model with HF tokenizer or an ET-side SentencePiece adapter. |
 | ANEMLL | ✅ | ⏸ | Build path is clean; `swift-huggingface.HFDownloader` fails on `.mlmodelc/` directory-shaped HF repos. Needs upstream downloader work. |
-| MediaPipe / LiteRT-LM | ⛔ | ⛔ | `paescebu/SwiftTasksGenAI 0.10.24` ships only `ios-arm64` slices — no `macos-arm64*`. Blocked upstream. |
+| LiteRT-LM | ✅ | ⏸ | `google-ai-edge/LiteRT-LM` v0.12.0 ships `ios-arm64` + `macos-arm64` slices, wired via SPM (product `LiteRTLM`, macOS 12+). Build path clean; M4 Max run pending. Watch the package's `-all_load` for duplicate-symbol clashes with the vendored `llama`/`executorch` static libs (fall back to scoped `-force_load`). |
 
 ## Roadmap
 
