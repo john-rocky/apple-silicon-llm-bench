@@ -118,6 +118,10 @@ The decode-tok/s table above hides the memory side. Same models, looking at peak
 
 The number nobody else publishes: how many joules does each backend burn per generated token? Captured via [`scripts/measure_energy.py`](scripts/measure_energy.py) which co-runs `powermetrics` (whole-system, package power = CPU + GPU + ANE) and clips the sample window to the bench's reported active time.
 
+![Package power per compute unit](results/apple-silicon-power.png)
+
+The ANE path draws **~half** the GPU path's package power at full decode (12.7 W vs ~24.7 W) — the same power gap that makes the GPU runtimes thermally throttle on iPhone while the ANE holds its rate (see the sustained-throttle section above).
+
 | Runtime | Avg pkg power (W) | Energy / 512-tok run (J) | **J / token** |
 |---|---:|---:|---:|
 | **apple-fm** (system model) | 7.6  | 67.4  | **0.11** |
