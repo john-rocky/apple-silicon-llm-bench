@@ -44,6 +44,24 @@ Real LLM inference on a phone — on-device, no server. iPhone 17 Pro, 4-bit, sh
 
 ---
 
+## ⏱ Burst tok/s is only half the story — sustained throttling
+
+The table above is **cold-burst** speed. Run the same model **continuously** and it flips: the GPU runtimes (MLX, LiteRT-LM) heat up and throttle **50%+ within ~60 s**, while the **ANE barely moves** — it draws ~half the power, so it heats slowly and the SoC doesn't throttle it.
+
+![Sustained decode throttling — iPhone 17 Pro, Gemma 4 E2B](results/iphone17pro-throttle.png)
+
+| Gemma 4 E2B, iPhone 17 Pro | Burst tok/s | Sustained (10 min) | Retained |
+|---|---:|---:|---:|
+| **CoreML / ANE** | 33 | **22** | **67%** |
+| MLX / GPU | 48 | 18 | 38% |
+| LiteRT-LM / GPU | 56 | 27 | 48% |
+
+Two **independent** GPU runtimes collapsing the same way is a GPU-thermal property of the phone, not a runtime quirk. MLX ends up *below* the ANE; LiteRT keeps only a slim lead after shedding half its speed. **The GPU wins the sprint; the ANE wins the marathon** — and it frees the GPU for the rest of the app.
+
+> Method: 600 s continuous generation, cold (`nominal`) start, unplugged, tg128; decode rate from a rolling window. Raw JSONL in `results/raw/iphone17pro-*-energy-tg128.jsonl`; redraw with [`scripts/throttle_chart.py`](scripts/throttle_chart.py) (curves table via [`scripts/throttle_curve.py`](scripts/throttle_curve.py)). LiteRT-LM has no output-token cap (longer per-call) and that run started at `fair` thermal; CoreML-LLM uses sliding-window attention (bounded context), part of why its decode stays flat.
+
+---
+
 ## 🖥 Desktop reference — Apple M4 Max
 
 The same harness on a laptop-class chip, for scale. No runtime wins everything here — each optimises a different corner of the throughput / memory / energy / streaming box:
