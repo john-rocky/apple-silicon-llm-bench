@@ -48,6 +48,7 @@ public final class CoreMLRuntime: LLMRuntime, @unchecked Sendable {
     private enum Engine {
         case general(CoreMLLLM)
         case qwen35(Qwen35MLKVGenerator, any Tokenizer)
+        case qwen3stateful(Qwen3VL2BStatefulGenerator, any Tokenizer)
     }
     nonisolated(unsafe) private var engine: Engine?
     #endif
@@ -63,6 +64,13 @@ public final class CoreMLRuntime: LLMRuntime, @unchecked Sendable {
         }
 
         #if canImport(CoreMLLLM)
+        // Qwen3-0.6B uses the stateful Qwen3VL generator (size-agnostic via
+        // Config.qwen3_06b); it self-resolves its side-loaded bundle, so no
+        // ModelDownloader entry is needed.
+        if model.id == "coreml-llm/qwen3-0.6b" {
+            try await loadQwen3Stateful(model: model, progress: progress)
+            return
+        }
         guard let info = Self.downloaderInfo(for: model.id) else {
             throw LLMRuntimeError.loadFailed(
                 "Model id \(model.id) is not registered in CoreMLLLM.ModelDownloader.ModelInfo.defaults."
@@ -120,6 +128,24 @@ public final class CoreMLRuntime: LLMRuntime, @unchecked Sendable {
         let tok = try await AutoTokenizer.from(pretrained: tokId)
 
         self.engine = .qwen35(gen, tok)
+        self._loadedModelId = model.id
+        progress(1)
+    }
+
+    /// Qwen3-0.6B via the stateful (MLState) ANE generator. The bundle
+    /// (`qwen3_0_6b_stateful_chunks/`: 4 INT8 chunks + head + embed) is
+    /// side-loaded to `Documents/Models/qwen3-0.6b/`; the generator
+    /// self-resolves it. Greedy (in-graph argmax) — fastest decode path.
+    private func loadQwen3Stateful(
+        model: ModelInfo,
+        progress: @Sendable @escaping (Double) -> Void
+    ) async throws {
+        let gen = Qwen3VL2BStatefulGenerator(cfg: .qwen3_06b)
+        progress(0.4)
+        try gen.load()
+        progress(0.8)
+        let tok = try await AutoTokenizer.from(pretrained: "Qwen/Qwen3-0.6B")
+        self.engine = .qwen3stateful(gen, tok)
         self._loadedModelId = model.id
         progress(1)
     }
@@ -208,6 +234,53 @@ public final class CoreMLRuntime: LLMRuntime, @unchecked Sendable {
                 topK: 40,
                 topP: 1.0,
                 repetitionPenalty: 1.1,
+                eosTokenIds: eosSet,
+                onToken: { tokenId in
+                    if state.firstTokenAt == nil {
+                        state.firstTokenAt = CFAbsoluteTimeGetCurrent()
+                    }
+                    state.tokenCount += 1
+                    if eosSet.contains(tokenId) { return }
+                    state.accumIds.append(Int(tokenId))
+                    let current = tok.decode(tokens: state.accumIds)
+                    if current.count > state.emittedText.count {
+                        let delta = String(current[state.emittedText.endIndex...])
+                        state.emittedText = current
+                        continuation.yield(.chunk(delta))
+                    }
+                }
+            )
+
+            let end = CFAbsoluteTimeGetCurrent()
+            let prefillTime = (state.firstTokenAt ?? end) - prefillStart
+            let generateTime = max(end - (state.firstTokenAt ?? prefillStart), 0.001)
+            continuation.yield(.info(GenerationInfo(
+                promptTokenCount: inputIds.count,
+                generationTokenCount: state.tokenCount,
+                promptTime: prefillTime,
+                generateTime: generateTime,
+                stopReason: state.tokenCount >= parameters.maxTokens ? .length : .stop
+            )))
+
+        case .qwen3stateful(let gen, let tok):
+            let chatMessages: [Message] = [["role": "user", "content": prompt]]
+            let inputIds: [Int] = (try? tok.applyChatTemplate(messages: chatMessages))
+                ?? tok.encode(text: prompt)
+            let inputIdsInt32 = inputIds.map { Int32($0) }
+            var eosSet: Set<Int32> = [151645]   // <|im_end|>
+            if let eid = tok.eosTokenId { eosSet.insert(Int32(eid)) }
+
+            final class StreamState: @unchecked Sendable {
+                var firstTokenAt: CFAbsoluteTime?
+                var tokenCount: Int = 0
+                var accumIds: [Int] = []
+                var emittedText: String = ""
+            }
+            let state = StreamState()
+
+            _ = try await gen.generate(
+                inputIds: inputIdsInt32,
+                maxNewTokens: parameters.maxTokens,
                 eosTokenIds: eosSet,
                 onToken: { tokenId in
                     if state.firstTokenAt == nil {

@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to benchmark live vision-language model inference (VLM) on the camera feed.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>

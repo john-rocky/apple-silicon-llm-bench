@@ -8,6 +8,7 @@ public enum RuntimeKind: String, CaseIterable, Codable, Sendable, Identifiable {
     case executorch = "executorch"
     case anemll = "anemll"
     case appleFM = "apple-fm"
+    case coreAI = "core-ai"
 
     public var id: String { rawValue }
 
@@ -16,10 +17,11 @@ public enum RuntimeKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .mlxSwift: return "MLX Swift"
         case .llamaCpp: return "llama.cpp"
         case .coreMLLLM: return "CoreML (swift-transformers)"
-        case .mediaPipe: return "MediaPipe / LiteRT-LM"
+        case .mediaPipe: return "LiteRT-LM"
         case .executorch: return "ExecuTorch"
         case .anemll: return "ANEMLL (ANE)"
         case .appleFM: return "Apple Foundation Models"
+        case .coreAI: return "Apple Core AI"
         }
     }
 }

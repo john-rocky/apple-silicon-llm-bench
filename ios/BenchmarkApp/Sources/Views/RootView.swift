@@ -11,6 +11,11 @@ struct RootView: View {
             .tabItem { Label("Run", systemImage: "play.circle") }
 
             NavigationStack {
+                CameraVLMView()
+            }
+            .tabItem { Label("Camera", systemImage: "camera.viewfinder") }
+
+            NavigationStack {
                 HistoryView()
             }
             .tabItem { Label("History", systemImage: "list.bullet.rectangle") }

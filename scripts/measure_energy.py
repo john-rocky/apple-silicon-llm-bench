@@ -95,24 +95,26 @@ def locate_yardstick() -> Path:
     )
 
 
-def parse_power_samples(text: str) -> list[float]:
-    """Return one combined-power-in-mW sample per powermetrics interval.
+def parse_power_samples(text: str) -> dict[str, list[float]]:
+    """Return per-subsystem power samples (mW), one entry per powermetrics
+    interval, as ``{"combined": [...], "cpu": [...], "gpu": [...], "ane": [...]}``.
 
-    powermetrics prints one block per sample. If a `Combined Power` line
-    is present we use it directly; otherwise we sum the per-subsystem
-    lines (CPU, GPU, ANE) within the same block.
+    powermetrics prints one block per sample. We keep the per-subsystem
+    (CPU / GPU / ANE) series so callers can show *which* compute unit did
+    the work — e.g. an ANE run leaves the GPU near-idle, which is the whole
+    point of running an LLM on the Neural Engine. ``combined`` prefers a
+    ``Combined Power`` line when present, else the CPU+GPU+ANE sum.
     """
-    samples: list[float] = []
-    block_cpu = block_gpu = block_ane = None
-    saw_combined = False
+    combined: list[float] = []
+    cpu_s: list[float] = []
+    gpu_s: list[float] = []
+    ane_s: list[float] = []
+    block_cpu = block_gpu = block_ane = block_combined = None
     for raw_line in text.splitlines():
         line = raw_line.strip()
         m = POWER_FALLBACK_PATTERNS["combined"].search(line)
         if m:
-            samples.append(float(m.group(1)))
-            saw_combined = True
-            continue
-        if saw_combined:
+            block_combined = float(m.group(1))
             continue
         m = POWER_FALLBACK_PATTERNS["cpu"].search(line)
         if m:
@@ -125,15 +127,22 @@ def parse_power_samples(text: str) -> list[float]:
         m = POWER_FALLBACK_PATTERNS["ane"].search(line)
         if m:
             block_ane = float(m.group(1))
-            # ANE line tends to be last in a powermetrics block; commit
-            # the per-subsystem sum once we have all three.
-            if block_cpu is not None and block_gpu is not None:
-                samples.append(block_cpu + block_gpu + block_ane)
-                block_cpu = block_gpu = block_ane = None
+            # ANE line tends to be last in a powermetrics block; commit the
+            # per-subsystem readings (and a combined value) once we hit it.
+            if block_cpu is not None:
+                cpu_s.append(block_cpu)
+            if block_gpu is not None:
+                gpu_s.append(block_gpu)
+            ane_s.append(block_ane)
+            if block_combined is not None:
+                combined.append(block_combined)
+            elif block_cpu is not None and block_gpu is not None:
+                combined.append(block_cpu + block_gpu + block_ane)
+            block_cpu = block_gpu = block_ane = block_combined = None
             continue
         if line == "":
-            block_cpu = block_gpu = block_ane = None
-    return samples
+            block_cpu = block_gpu = block_ane = block_combined = None
+    return {"combined": combined, "cpu": cpu_s, "gpu": gpu_s, "ane": ane_s}
 
 
 def main() -> int:
@@ -309,14 +318,18 @@ def main() -> int:
         )
 
     text = Path(power_log.name).read_text(encoding="utf-8", errors="replace")
-    samples_mW = parse_power_samples(text)
+    series = parse_power_samples(text)
+    samples_mW = series["combined"]
     # The first sample tends to be a "since boot" average rather than an
     # interval reading. Also drop ~0.5 s of warm-up (the wait loop
     # holds the bench until powermetrics has flushed its first block to
     # the log file). After that, samples are real per-interval readings
-    # captured while the bench is actually running.
+    # captured while the bench is actually running. We track the window as
+    # [win_start:win_end) so the per-subsystem series get the same slice.
     warmup_samples = max(1, int(0.5 / (args.sample_interval_ms / 1000.0)))
-    samples_mW = samples_mW[warmup_samples:]
+    win_start = warmup_samples
+    win_end: int | None = None
+    samples_mW = samples_mW[win_start:]
 
     # If the wrapped binary crashes during exit (the well-known llama.cpp
     # Metal-cleanup `ggml_abort`), the subprocess can take 30+ seconds to
@@ -339,6 +352,7 @@ def main() -> int:
     if 0 < bench_active_s < elapsed:
         n_keep = max(1, int(bench_active_s / (args.sample_interval_ms / 1000.0)))
         if n_keep < len(samples_mW):
+            win_end = win_start + n_keep
             samples_mW = samples_mW[:n_keep]
             elapsed = bench_active_s
             print(
@@ -380,6 +394,19 @@ def main() -> int:
     avg_W = (sum(samples_mW) / len(samples_mW)) / 1000.0
     energy_J = avg_W * elapsed
 
+    # Per-subsystem average power over the *same* window. This is what makes
+    # the ANE case visible: a CoreML/ANE run shows ANE busy + GPU near-idle,
+    # whereas an MLX/Metal run shows the GPU saturated. None when a sampler
+    # produced no readings on this macOS release.
+    def _avg_window_W(key: str):
+        s = series.get(key, [])
+        w = s[win_start:win_end] if win_end is not None else s[win_start:]
+        return round((sum(w) / len(w)) / 1000.0, 4) if w else None
+
+    ane_W = _avg_window_W("ane")
+    gpu_W = _avg_window_W("gpu")
+    cpu_W = _avg_window_W("cpu")
+
     # Patch the JSONL written by yardstick.
     out_path = Path(output_path)
     raw = out_path.read_text(encoding="utf-8").strip()
@@ -395,6 +422,12 @@ def main() -> int:
     metrics = last.setdefault("metrics", {})
     metrics["energyJoules"] = round(energy_J, 4)
     metrics["averagePackagePowerW"] = round(avg_W, 4)
+    if ane_W is not None:
+        metrics["averageANEPowerW"] = ane_W
+    if gpu_W is not None:
+        metrics["averageGPUPowerW"] = gpu_W
+    if cpu_W is not None:
+        metrics["averageCPUPowerW"] = cpu_W
     metrics["energyMeasurementWindowSeconds"] = round(elapsed, 4)
     metrics["energySource"] = "powermetrics"
     gen_tok = metrics.get("generatedTokenCount") or 0
@@ -404,10 +437,16 @@ def main() -> int:
     lines[-1] = json.dumps(last)
     out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    split = "  ".join(
+        f"{name}={val:.2f}W"
+        for name, val in (("ANE", ane_W), ("GPU", gpu_W), ("CPU", cpu_W))
+        if val is not None
+    )
     print(
         f"yardstick-energy: window={elapsed:.2f}s "
         f"samples={len(samples_mW)} "
-        f"avgPkg={avg_W:.2f}W energy={energy_J:.2f}J",
+        f"avgPkg={avg_W:.2f}W energy={energy_J:.2f}J"
+        + (f"  [{split}]" if split else ""),
         file=sys.stderr,
     )
     if gen_tok > 0:

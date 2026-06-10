@@ -58,6 +58,14 @@ public enum ModelCatalog {
             hfRepoId: "mlx-community/Qwen2.5-0.5B-Instruct-4bit"
         ),
         ModelInfo(
+            id: "mlx-community/Qwen3-0.6B-4bit",
+            displayName: "Qwen3-0.6B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 0.6,
+            onDiskSizeMB: 350,
+            hfRepoId: "mlx-community/Qwen3-0.6B-4bit"
+        ),
+        ModelInfo(
             id: "mlx-community/Qwen3.5-0.8B-MLX-4bit",
             displayName: "Qwen 3.5 0.8B (4-bit)",
             quantization: "Q4",
@@ -212,32 +220,53 @@ public enum ModelCatalog {
         ),
     ]
 
-    /// Models the MediaPipe / LiteRT-LM adapter can load.
-    /// Note: Gemma 4 ships only as `.litertlm` which the deprecated
-    /// MediaPipeTasksGenAI 0.10.x runtime cannot read; Gemma 3n is the
-    /// newest model that loads.
-    public static let mediaPipe: [ModelInfo] = [
+    /// Models the LiteRT-LM adapter can load.
+    ///
+    /// Wires `google-ai-edge/LiteRT-LM` ≥ 0.12.0 (the official Swift API,
+    /// `import LiteRTLM`), which reads Google's `.litertlm` bundles — the
+    /// format Gemma 4 ships in. This supersedes the old MediaPipe 0.10.x
+    /// (`.task`) path, which could not read Gemma 4 at all.
+    ///
+    /// Sizes are the standard (non-web, non-NPU) Metal-GPU variant. Gemma 4
+    /// `.litertlm` is QAT INT4 on the decoder with the embedding table kept
+    /// in higher precision and memory-mapped (E2B ≈ 0.79 GB decoder + 1.12 GB
+    /// mmap'd embeddings ≈ 2.59 GB on disk). Context window 32k.
+    public static let liteRTLM: [ModelInfo] = [
         ModelInfo(
-            id: "litert-community/Gemma3-1B-IT/task",
-            displayName: "Gemma 3 1B IT (.task)",
-            quantization: "INT4",
-            parameterCountB: 1.0,
-            onDiskSizeMB: 555,
-            hfRepoId: "litert-community/Gemma3-1B-IT",
-            hfFilePatterns: ["*.task"],
-            primaryFile: "gemma3-1b-it-int4.task"
+            id: "litert-community/gemma-4-E2B-it-litert-lm",
+            displayName: "Gemma 4 E2B (.litertlm)",
+            quantization: "INT4 (QAT)",
+            parameterCountB: 2.0,
+            onDiskSizeMB: 2650,
+            hfRepoId: "litert-community/gemma-4-E2B-it-litert-lm",
+            hfFilePatterns: ["gemma-4-E2B-it.litertlm"],
+            primaryFile: "gemma-4-E2B-it.litertlm"
         ),
         ModelInfo(
-            id: "google/gemma-3n-E2B-it-litert-preview/task",
-            displayName: "Gemma 3n E2B (.task, preview)",
-            quantization: "INT4",
+            id: "litert-community/gemma-4-E4B-it-litert-lm",
+            displayName: "Gemma 4 E4B (.litertlm)",
+            quantization: "INT4 (QAT)",
+            parameterCountB: 4.0,
+            onDiskSizeMB: 3750,
+            hfRepoId: "litert-community/gemma-4-E4B-it-litert-lm",
+            hfFilePatterns: ["gemma-4-E4B-it.litertlm"],
+            primaryFile: "gemma-4-E4B-it.litertlm"
+        ),
+        ModelInfo(
+            id: "google/gemma-3n-E2B-it-litert-lm",
+            displayName: "Gemma 3n E2B (.litertlm)",
+            quantization: "INT4 (QAT)",
             parameterCountB: 2.0,
-            onDiskSizeMB: 1500,
-            hfRepoId: "google/gemma-3n-E2B-it-litert-preview",
-            hfFilePatterns: ["*.task"],
-            primaryFile: "gemma-3n-E2B-it-int4.task"
+            onDiskSizeMB: 3100,
+            hfRepoId: "google/gemma-3n-E2B-it-litert-lm",
+            hfFilePatterns: ["*.litertlm"],
+            primaryFile: ""
         ),
     ]
+
+    /// Back-compat alias. The adapter and earlier call sites refer to this
+    /// runtime's catalog as `mediaPipe`; LiteRT-LM is the current name.
+    public static let mediaPipe: [ModelInfo] = liteRTLM
 
     /// Models the ExecuTorch adapter can load.
     /// Each repo ships a `.pte` plus a `tokenizer.model` (sentencepiece).
@@ -337,6 +366,14 @@ public enum ModelCatalog {
             onDiskSizeMB: 309,
             hfRepoId: "mlboydaisuke/qwen2.5-0.5b-coreml"
         ),
+        ModelInfo(
+            id: "coreml-llm/qwen3-0.6b",
+            displayName: "Qwen3-0.6B (CoreML, ANE)",
+            quantization: "INT8 palettized",
+            parameterCountB: 0.6,
+            onDiskSizeMB: 900,
+            hfRepoId: "mlboydaisuke/qwen3-0.6b-coreml"
+        ),
     ]
 
     /// Models the Apple Foundation Models adapter can run.
@@ -354,6 +391,33 @@ public enum ModelCatalog {
             quantization: "Apple-quant (~2-4 bit, adapters)",
             parameterCountB: 3.0,
             onDiskSizeMB: nil,
+            hfRepoId: ""
+        ),
+    ]
+
+    /// Models the Apple **Core AI** adapter can run — the same Qwen3-0.6B
+    /// `.aimodel` bundle exported by the official `coreai.llm.export` pipeline,
+    /// exposed twice so the harness can benchmark both compute paths:
+    /// the Neural Engine (`static-shape`) and the GPU (`coreai-pipelined`).
+    ///
+    /// The bundle is side-loaded into `Documents/CoreAIModels/qwen3_0_6b_ios/`
+    /// (the `.aimodel` is ~434 MB and not published to HF), so `hfRepoId` is
+    /// empty. Requires iOS 27 + the `coreai-models` Swift package.
+    public static let coreAI: [ModelInfo] = [
+        ModelInfo(
+            id: "core-ai/qwen3-0.6b-ane",
+            displayName: "Qwen3-0.6B (Core AI, ANE)",
+            quantization: "mixed 4/8-bit palettized",
+            parameterCountB: 0.6,
+            onDiskSizeMB: 434,
+            hfRepoId: ""
+        ),
+        ModelInfo(
+            id: "core-ai/qwen3-0.6b-gpu",
+            displayName: "Qwen3-0.6B (Core AI, GPU)",
+            quantization: "INT4 (dynamic)",
+            parameterCountB: 0.6,
+            onDiskSizeMB: 327,
             hfRepoId: ""
         ),
     ]

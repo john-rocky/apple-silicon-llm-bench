@@ -10,8 +10,11 @@ public struct DeviceSnapshot: Codable, Sendable {
     public let processorCount: Int
     public let physicalMemoryMB: Int
     public let isLowPowerModeEnabled: Bool
-    public let batteryState: String
-    public let batteryLevel: Float
+    // var (not let) so the runner can refresh these to end-of-run values: a
+    // launch-then-unplug energy run starts plugged but discharges mid-run, and
+    // we want batteryState to reflect what actually happened.
+    public var batteryState: String
+    public var batteryLevel: Float
     public let initialThermalState: String
     public let buildConfiguration: String
 
@@ -19,18 +22,10 @@ public struct DeviceSnapshot: Codable, Sendable {
         let info = ProcessInfo.processInfo
         let physicalMemory = Int(info.physicalMemory / (1024 * 1024))
 
-        var batteryState = "unknown"
-        var batteryLevel: Float = -1
+        let battery = currentBattery()
+        let batteryState = battery.state
+        let batteryLevel = battery.level
         #if canImport(UIKit)
-        UIDevice.current.isBatteryMonitoringEnabled = true
-        switch UIDevice.current.batteryState {
-        case .charging: batteryState = "charging"
-        case .full: batteryState = "full"
-        case .unplugged: batteryState = "unplugged"
-        case .unknown: batteryState = "unknown"
-        @unknown default: batteryState = "unknown"
-        }
-        batteryLevel = UIDevice.current.batteryLevel
         let systemName = UIDevice.current.systemName
         let systemVersion = UIDevice.current.systemVersion
         #else
@@ -50,6 +45,26 @@ public struct DeviceSnapshot: Codable, Sendable {
             initialThermalState: ThermalMonitor.describe(info.thermalState),
             buildConfiguration: buildConfiguration()
         )
+    }
+
+    /// Reads the current battery state + level. Returns `("unknown", -1)` on
+    /// platforms without UIKit (the Mac CLI). Used both for the start-of-run
+    /// snapshot and to refresh the snapshot to end-of-run values.
+    public static func currentBattery() -> (state: String, level: Float) {
+        #if canImport(UIKit)
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        let state: String
+        switch UIDevice.current.batteryState {
+        case .charging: state = "charging"
+        case .full: state = "full"
+        case .unplugged: state = "unplugged"
+        case .unknown: state = "unknown"
+        @unknown default: state = "unknown"
+        }
+        return (state, UIDevice.current.batteryLevel)
+        #else
+        return ("unknown", -1)
+        #endif
     }
 
     private static func hardwareModelIdentifier() -> String {

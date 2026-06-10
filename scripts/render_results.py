@@ -88,6 +88,7 @@ def runtime_display(runtime: str) -> str:
         "anemll": "anemll",
         "litert-lm": "litert-lm",
         "apple-fm": "apple-fm",
+        "core-ai": "core-ai",
     }.get(runtime, runtime)
 
 
@@ -177,6 +178,8 @@ class Sample:
     energy_j_per_tok: float | None
     avg_package_w: float | None
     energy_source: str | None
+    generated_tokens: int
+    battery_delta_pct: float
     quantization: str
     model_display: str
     params_b: float | None
@@ -221,6 +224,8 @@ def parse_sample(path: Path) -> tuple[RunKey, Sample] | None:
         energy_j_per_tok=metrics.get("energyJoulesPerToken"),
         avg_package_w=metrics.get("averagePackagePowerW"),
         energy_source=metrics.get("energySource"),
+        generated_tokens=int(metrics.get("generatedTokenCount", 0)),
+        battery_delta_pct=float(metrics.get("batteryDeltaPercent", 0.0)),
         quantization=model.get("quantization", "?"),
         model_display=model.get("displayName", model.get("id", "?")),
         params_b=model.get("parameterCountB"),
@@ -558,12 +563,18 @@ def render_energy_profile(groups: dict[RunKey, list[Sample]]) -> str:
         "## Energy profile (joules per token)",
         "",
         "Populated for runs wrapped in `scripts/measure_energy.py` on Mac "
-        "(`powermetrics`-derived, whole-system) or iOS battery-delta. "
-        "Whole-system power on Mac includes ambient load — run on an "
-        "idle desktop and compare *runtimes on the same Mac*, not Macs to each other.",
+        "(`powermetrics`-derived, whole-system; `sustained-generation` task) or "
+        "for iOS `energy`-task runs that recorded a battery-level delta "
+        "(`battery-1pct`; see [`methodology/energy-ios.md`](methodology/energy-ios.md)). "
+        "Whole-system power includes the display/ambient load — compare "
+        "*runtimes on the same device*, never one device to another, and never "
+        "Mac `powermetrics` figures against iOS `battery-1pct` figures. "
+        "`tok/Wh` is the inverse of J/token (3600 ÷ J·tok⁻¹); `tok/1%-batt` is "
+        "phone-only and the most relatable number — generated tokens per 1% of "
+        "the pack.",
         "",
-        "| Device | Runtime | Model | n | Source | Avg pkg power (W) | Energy (J) | J / token |",
-        "|---|---|---|---:|---|---:|---:|---:|",
+        "| Device | Runtime | Model | n | Source | Avg W | J/token | tok/Wh | tok/1%-batt |",
+        "|---|---|---|---:|---|---:|---:|---:|---:|",
     ]
     for key, samples in rows:
         s0 = samples[0]
@@ -572,6 +583,16 @@ def render_energy_profile(groups: dict[RunKey, list[Sample]]) -> str:
             (s.energy_source for s in energy_samples if s.energy_source),
             "—",
         )
+        tok_per_wh = [
+            s.generated_tokens * 3600.0 / s.energy_j
+            for s in energy_samples
+            if s.energy_j and s.energy_j > 0 and s.generated_tokens > 0
+        ]
+        tok_per_pct = [
+            s.generated_tokens / s.battery_delta_pct
+            for s in energy_samples
+            if s.battery_delta_pct and s.battery_delta_pct > 0 and s.generated_tokens > 0
+        ]
         out.append(
             f"| {device_display(key.device)} "
             f"| {runtime_display(key.runtime)} "
@@ -579,8 +600,9 @@ def render_energy_profile(groups: dict[RunKey, list[Sample]]) -> str:
             f"| {len(energy_samples)} "
             f"| {source} "
             f"| {fmt_one(median_or_only((s.avg_package_w or 0) for s in samples if s.avg_package_w is not None))} "
-            f"| {fmt_one(median_or_only((s.energy_j or 0) for s in samples if s.energy_j is not None))} "
-            f"| {fmt_one(median_or_only((s.energy_j_per_tok or 0) for s in samples if s.energy_j_per_tok is not None), places=4)} |"
+            f"| {fmt_one(median_or_only((s.energy_j_per_tok or 0) for s in samples if s.energy_j_per_tok is not None), places=4)} "
+            f"| {fmt_int(median_or_only(tok_per_wh)) if tok_per_wh else '—'} "
+            f"| {fmt_int(median_or_only(tok_per_pct)) if tok_per_pct else '—'} |"
         )
     return "\n".join(out)
 

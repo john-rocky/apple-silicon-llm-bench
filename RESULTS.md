@@ -19,26 +19,34 @@ On-device / on-Mac measurements. Each row is a `(runtime, model, device, task, b
 ## Coverage snapshot
 
 - **Devices** (2): iPhone 17 Pro, Mac M4 Max
-- **Runtimes** (5): apple-fm, coreml-llm, litert-lm, llama.cpp, mlx-swift
-- **Models** (18): apple-fm/default, bartowski/Llama-3.2-1B-Instruct-GGUF/Q4_K_M, bartowski/Qwen2.5-0.5B-Instruct-GGUF/Q4_K_M, bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M, coreml-llm/gemma4-e2b, coreml-llm/lfm2.5-350m, coreml-llm/qwen2.5-0.5b, coreml-llm/qwen3.5-0.8b, coreml-llm/qwen3.5-2b, litert-community/gemma-4-E2B-it-litert-lm, mlx-community/Qwen2.5-0.5B-Instruct-4bit, mlx-community/Qwen3.5-0.8B-MLX-4bit, mlx-community/Qwen3.5-2B-MLX-4bit, mlx-community/gemma-4-e2b-it-4bit, mlx-community/gemma-4-e4b-it-4bit, unsloth/Qwen3.5-2B-GGUF/Q4_K_M, unsloth/gemma-4-E2B-it-GGUF/Q4_K_M, unsloth/gemma-4-E4B-it-GGUF/Q4_K_M
-- **Tasks** (2): short-chat, sustained-generation
-- **Total runs**: 83
+- **Runtimes** (6): apple-fm, core-ai, coreml-llm, litert-lm, llama.cpp, mlx-swift
+- **Models** (24): apple-fm/default, bartowski/Llama-3.2-1B-Instruct-GGUF/Q4_K_M, bartowski/Qwen2.5-0.5B-Instruct-GGUF/Q4_K_M, bartowski/Qwen_Qwen3.5-0.8B-GGUF/Q4_K_M, core-ai/qwen3-0.6b-ane, core-ai/qwen3-0.6b-gpu, coreml-llm/gemma4-e2b, coreml-llm/lfm2.5-350m, coreml-llm/qwen2.5-0.5b, coreml-llm/qwen3-0.6b, coreml-llm/qwen3.5-0.8b, coreml-llm/qwen3.5-2b, litert-community/gemma-4-E2B-it-litert-lm, mlx-community/Qwen2.5-0.5B-Instruct-4bit, mlx-community/Qwen3-0.6B-4bit, mlx-community/Qwen3.5-0.8B-MLX-4bit, mlx-community/Qwen3.5-2B-MLX-4bit, mlx-community/Qwen3.5-9B-MLX-4bit, mlx-community/gemma-4-e2b-it-4bit, mlx-community/gemma-4-e4b-it-4bit, unsloth/Qwen3.5-2B-GGUF/Q4_K_M, unsloth/Qwen3.5-9B-GGUF/Q4_K_M, unsloth/gemma-4-E2B-it-GGUF/Q4_K_M, unsloth/gemma-4-E4B-it-GGUF/Q4_K_M
+- **Tasks** (3): energy, short-chat, sustained-generation
+- **Total runs**: 107
 
 
 ## At-a-glance
 
-The cross-runtime cell with the broadest coverage today — **Gemma 4 E2B** on **iPhone 17 Pro**, task **short-chat**.
+The cross-runtime cell with the broadest coverage today — **Qwen 3 0.6B** on **iPhone 17 Pro**, task **short-chat**.
 
 | Runtime | Quant | n | TTFT (ms) | Decode tok/s | Prefill tok/s | Peak Mem (MB) |
 |---|---|---:|---:|---:|---:|---:|
-| coreml-llm | INT4 palettized | 3 | 728 | 33.4 | — | 1187 |
-| litert-lm | INT4 (QAT) | 3 | 267 | 55.4 | 457.6 | 641 |
-| llama.cpp | Q4_K_M | 3 | 114 | 37.8 | 2086.6 | 3156 |
-| mlx-swift | Q4 | 3 | 144 | 47.5 | 179.9 | 2900 |
+| core-ai | mixed 4/8-bit palettized | 5 | 63 | 49.8 | 318.5 | 1166 |
+| core-ai | INT4 (dynamic) | 4 | 26 | 179.9 | 876.7 | 524 |
+| coreml-llm | INT8 palettized | 4 | 548 | 38.8 | 34.7 | 184 |
+| mlx-swift | Q4 | 4 | 57 | 115.3 | 358.3 | 539 |
 
 ## Pivot 1 — by model
 
 Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and varies the runtime. Runtimes pull weights from different HF orgs, so the precise model id varies per row — the quant column makes the difference explicit.
+
+### Gemma 4 E2B  (iPhone 17 Pro, energy)
+
+| Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| coreml-llm | `coreml-llm/gemma4-e2b` | INT4 palettized | 1 | 87.0 | 877 | — | 29.1 | 844 |
+| litert-lm | `litert-community/gemma-4-E2B-it-litert-lm` | INT4 (QAT) | 1 | 0.5 | 107 | 1056.0 | 30.8 | 826 |
+| mlx-swift | `mlx-community/gemma-4-e2b-it-4bit` | Q4 | 1 | 3.1 | 385 | 282.9 | 22.5 | 800 |
 
 ### Gemma 4 E2B  (iPhone 17 Pro, short-chat)
 
@@ -48,6 +56,15 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 | litert-lm | `litert-community/gemma-4-E2B-it-litert-lm` | INT4 (QAT) | 3 | 0.6 | 267 | 457.6 | 55.4 | 641 |
 | llama.cpp | `unsloth/gemma-4-E2B-it-GGUF/Q4_K_M` | Q4_K_M | 3 | 2.8 | 114 | 2086.6 | 37.8 | 3156 |
 | mlx-swift | `mlx-community/gemma-4-e2b-it-4bit` | Q4 | 3 | 3.0 | 144 | 179.9 | 47.5 | 2900 |
+
+### Qwen 3 0.6B  (iPhone 17 Pro, short-chat)
+
+| Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| core-ai | `core-ai/qwen3-0.6b-ane` | mixed 4/8-bit palettized | 5 | 2.3 | 63 | 318.5 | 49.8 | 1166 |
+| core-ai | `core-ai/qwen3-0.6b-gpu` | INT4 (dynamic) | 4 | 1.7 | 26 | 876.7 | 179.9 | 524 |
+| coreml-llm | `coreml-llm/qwen3-0.6b` | INT8 palettized | 4 | 11.4 | 548 | 34.7 | 38.8 | 184 |
+| mlx-swift | `mlx-community/Qwen3-0.6B-4bit` | Q4 | 4 | 1.4 | 57 | 358.3 | 115.3 | 539 |
 
 ### Qwen 3.5 2B  (iPhone 17 Pro, short-chat)
 
@@ -108,6 +125,13 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 | llama.cpp | `unsloth/Qwen3.5-2B-GGUF/Q4_K_M` | Q4_K_M | 3 | 0.5 | 29 | 2504.5 | 149.7 | 1443 |
 | mlx-swift | `mlx-community/Qwen3.5-2B-MLX-4bit` | Q4 | 3 | 0.9 | 42 | 702.4 | 295.1 | 1222 |
 
+### Qwen 3.5 9B  (Mac M4 Max, short-chat)
+
+| Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| llama.cpp | `unsloth/Qwen3.5-9B-GGUF/Q4_K_M` | Q4_K_M | 1 | 721.9 | 141 | 132.8 | 57.6 | 5682 |
+| mlx-swift | `mlx-community/Qwen3.5-9B-MLX-4bit` | Q4 | 3 | 0.9 | 95 | 240.8 | 90.0 | 5022 |
+
 ### apple-fm/default  (Mac M4 Max, short-chat)
 
 | Runtime | Model ID | Quant | n | Load (s, median) | TTFT (ms, median) | Prefill tok/s (median) | Decode tok/s (median) | Peak Mem (MB, median) |
@@ -132,10 +156,36 @@ Each sub-table fixes the *logical* model (Gemma 4 E2B, Qwen 3.5 2B, …) and var
 
 Each sub-table fixes the runtime and varies the model, so you can see how a single backend scales across model sizes within itself.
 
+### `coreml-llm`  (iPhone 17 Pro, energy)
+
+| Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---:|---|---:|---:|---:|---:|
+| Gemma 4 E2B (CoreML, ANE) | 2 | INT4 palettized | 1 | 877 | 29.1 | 844 |
+
+### `litert-lm`  (iPhone 17 Pro, energy)
+
+| Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---:|---|---:|---:|---:|---:|
+| Gemma 4 E2B (.litertlm) | 2 | INT4 (QAT) | 1 | 107 | 30.8 | 826 |
+
+### `mlx-swift`  (iPhone 17 Pro, energy)
+
+| Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---:|---|---:|---:|---:|---:|
+| Gemma 4 E2B (4-bit) | 2 | Q4 | 1 | 385 | 22.5 | 800 |
+
+### `core-ai`  (iPhone 17 Pro, short-chat)
+
+| Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
+|---|---:|---|---:|---:|---:|---:|
+| Qwen3-0.6B (Core AI, ANE) | 0.6 | mixed 4/8-bit palettized | 5 | 63 | 49.8 | 1166 |
+| Qwen3-0.6B (Core AI, GPU) | 0.6 | INT4 (dynamic) | 4 | 26 | 179.9 | 524 |
+
 ### `coreml-llm`  (iPhone 17 Pro, short-chat)
 
 | Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---:|---|---:|---:|---:|---:|
+| Qwen3-0.6B (CoreML, ANE) | 0.6 | INT8 palettized | 4 | 548 | 38.8 | 184 |
 | Gemma 4 E2B (CoreML, ANE) | 2 | INT4 palettized | 3 | 728 | 33.4 | 1187 |
 | Qwen 3.5 2B (CoreML, ANE) | 2 | INT8 | 3 | 844 | 27.9 | 241 |
 
@@ -156,6 +206,7 @@ Each sub-table fixes the runtime and varies the model, so you can see how a sing
 
 | Model | Params (B) | Quant | n | TTFT (ms, median) | Decode tok/s (median) | Peak Mem (MB, median) |
 |---|---:|---|---:|---:|---:|---:|
+| Qwen3-0.6B (4-bit) | 0.6 | Q4 | 4 | 57 | 115.3 | 539 |
 | Qwen 3.5 2B (4-bit) | 2 | Q4 | 3 | 103 | 61.2 | 1279 |
 | Gemma 4 E2B (4-bit) | 2 | Q4 | 3 | 144 | 47.5 | 2900 |
 
@@ -185,6 +236,7 @@ Each sub-table fixes the runtime and varies the model, so you can see how a sing
 | Qwen 3.5 2B Q4_K_M (GGUF) | 2 | Q4_K_M | 3 | 29 | 149.7 | 1443 |
 | Gemma 4 E2B Q4_K_M (GGUF) | 2 | Q4_K_M | 3 | 41 | 119.2 | 3212 |
 | Gemma 4 E4B Q4_K_M (GGUF) | 4 | Q4_K_M | 3 | 62 | 80.5 | 5150 |
+| Qwen 3.5 9B Q4_K_M (GGUF) | 9 | Q4_K_M | 1 | 141 | 57.6 | 5682 |
 
 ### `mlx-swift`  (Mac M4 Max, short-chat)
 
@@ -195,6 +247,7 @@ Each sub-table fixes the runtime and varies the model, so you can see how a sing
 | Qwen 3.5 2B (4-bit) | 2 | Q4 | 3 | 42 | 295.1 | 1222 |
 | Gemma 4 E2B (4-bit) | 2 | Q4 | 3 | 68 | 185.4 | 2829 |
 | Gemma 4 E4B (4-bit) | 4 | Q4 | 3 | 90 | 113.5 | 4376 |
+| Qwen 3.5 9B (4-bit) | 9 | Q4 | 3 | 95 | 90.0 | 5022 |
 
 ### `apple-fm`  (Mac M4 Max, sustained-generation)
 
@@ -226,11 +279,18 @@ Decode tok/s is an average. The percentiles below are the gap between consecutiv
 
 | Device | Runtime | Model | n | TTFT (ms, median) | ITL p50 (ms) | ITL p95 (ms) | ITL p99 (ms) |
 |---|---|---|---:|---:|---:|---:|---:|
+| iPhone 17 Pro | coreml-llm | Gemma 4 E2B (CoreML, ANE) | 1 | 877 | 34.4 | 39.9 | 47.6 |
+| iPhone 17 Pro | litert-lm | Gemma 4 E2B (.litertlm) | 1 | 107 | 33.4 | 37.9 | 39.2 |
+| iPhone 17 Pro | mlx-swift | Gemma 4 E2B (4-bit) | 1 | 385 | 48.0 | 56.5 | 60.5 |
+| iPhone 17 Pro | core-ai | Qwen3-0.6B (Core AI, ANE) | 5 | 63 | 20.0 | 21.6 | 23.6 |
+| iPhone 17 Pro | core-ai | Qwen3-0.6B (Core AI, GPU) | 4 | 26 | 5.5 | 6.0 | 7.1 |
 | iPhone 17 Pro | coreml-llm | Gemma 4 E2B (CoreML, ANE) | 3 | 728 | 29.8 | 31.2 | 33.4 |
+| iPhone 17 Pro | coreml-llm | Qwen3-0.6B (CoreML, ANE) | 4 | 548 | 25.7 | 27.6 | 29.4 |
 | iPhone 17 Pro | coreml-llm | Qwen 3.5 2B (CoreML, ANE) | 3 | 844 | 35.4 | 38.8 | 39.9 |
 | iPhone 17 Pro | litert-lm | Gemma 4 E2B (.litertlm) | 3 | 267 | 17.3 | 18.8 | 19.0 |
 | iPhone 17 Pro | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | 3 | 96 | 24.9 | 26.7 | 29.1 |
 | iPhone 17 Pro | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | 3 | 114 | 25.2 | 27.5 | 29.1 |
+| iPhone 17 Pro | mlx-swift | Qwen3-0.6B (4-bit) | 4 | 57 | 8.7 | 9.3 | 10.2 |
 | iPhone 17 Pro | mlx-swift | Qwen 3.5 2B (4-bit) | 3 | 103 | 16.4 | 16.8 | 17.0 |
 | iPhone 17 Pro | mlx-swift | Gemma 4 E2B (4-bit) | 3 | 144 | 20.9 | 21.6 | 23.0 |
 | Mac M4 Max | apple-fm | Apple Foundation Model (default, on-device) | 3 | 265 | 168.3 | 200.4 | 200.4 |
@@ -241,11 +301,13 @@ Decode tok/s is an average. The percentiles below are the gap between consecutiv
 | Mac M4 Max | llama.cpp | Qwen 2.5 0.5B Q4_K_M (GGUF) | 3 | 17 | 3.3 | 3.4 | 3.5 |
 | Mac M4 Max | llama.cpp | Qwen 3.5 0.8B Q4_K_M (GGUF) | 3 | 22 | 4.9 | 5.1 | 5.2 |
 | Mac M4 Max | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | 3 | 29 | 6.5 | 6.7 | 6.9 |
+| Mac M4 Max | llama.cpp | Qwen 3.5 9B Q4_K_M (GGUF) | 1 | 141 | 16.9 | 17.7 | 18.1 |
 | Mac M4 Max | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | 3 | 41 | 8.1 | 9.3 | 9.6 |
 | Mac M4 Max | llama.cpp | Gemma 4 E4B Q4_K_M (GGUF) | 3 | 62 | 12.1 | 12.7 | 12.9 |
 | Mac M4 Max | mlx-swift | Qwen 2.5 0.5B (4-bit) | 3 | 26 | 1.9 | 2.0 | 2.2 |
 | Mac M4 Max | mlx-swift | Qwen 3.5 0.8B (4-bit) | 3 | 36 | 2.4 | 2.7 | 2.9 |
 | Mac M4 Max | mlx-swift | Qwen 3.5 2B (4-bit) | 3 | 42 | 3.4 | 3.6 | 3.8 |
+| Mac M4 Max | mlx-swift | Qwen 3.5 9B (4-bit) | 3 | 95 | 11.0 | 11.7 | 12.1 |
 | Mac M4 Max | mlx-swift | Gemma 4 E2B (4-bit) | 3 | 68 | 5.4 | 5.7 | 5.8 |
 | Mac M4 Max | mlx-swift | Gemma 4 E4B (4-bit) | 3 | 90 | 8.8 | 9.2 | 9.4 |
 | Mac M4 Max | apple-fm | Apple Foundation Model (default, on-device) | 1 | 687 | 152.7 | 210.0 | 214.3 |
@@ -255,14 +317,17 @@ Decode tok/s is an average. The percentiles below are the gap between consecutiv
 
 ## Energy profile (joules per token)
 
-Populated for runs wrapped in `scripts/measure_energy.py` on Mac (`powermetrics`-derived, whole-system) or iOS battery-delta. Whole-system power on Mac includes ambient load — run on an idle desktop and compare *runtimes on the same Mac*, not Macs to each other.
+Populated for runs wrapped in `scripts/measure_energy.py` on Mac (`powermetrics`-derived, whole-system; `sustained-generation` task) or for iOS `energy`-task runs that recorded a battery-level delta (`battery-1pct`; see [`methodology/energy-ios.md`](methodology/energy-ios.md)). Whole-system power includes the display/ambient load — compare *runtimes on the same device*, never one device to another, and never Mac `powermetrics` figures against iOS `battery-1pct` figures. `tok/Wh` is the inverse of J/token (3600 ÷ J·tok⁻¹); `tok/1%-batt` is phone-only and the most relatable number — generated tokens per 1% of the pack.
 
-| Device | Runtime | Model | n | Source | Avg pkg power (W) | Energy (J) | J / token |
-|---|---|---|---:|---|---:|---:|---:|
-| Mac M4 Max | apple-fm | Apple Foundation Model (default, on-device) | 1 | powermetrics | 7.6 | 67.4 | 0.1092 |
-| Mac M4 Max | coreml-llm | Gemma 4 E2B (CoreML, ANE) | 1 | powermetrics | 12.7 | 244.9 | 0.4784 |
-| Mac M4 Max | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | 1 | powermetrics | 24.5 | 126.3 | 0.2468 |
-| Mac M4 Max | mlx-swift | Gemma 4 E2B (4-bit) | 1 | powermetrics | 24.7 | 123.0 | 0.2402 |
+| Device | Runtime | Model | n | Source | Avg W | J/token | tok/Wh | tok/1%-batt |
+|---|---|---|---:|---|---:|---:|---:|---:|
+| iPhone 17 Pro | coreml-llm | Gemma 4 E2B (CoreML, ANE) | 1 | battery-1pct | 4.9 | 0.2072 | 17377 | 2867 |
+| iPhone 17 Pro | litert-lm | Gemma 4 E2B (.litertlm) | 1 | battery-1pct | 4.5 | 0.1458 | 24693 | 4074 |
+| iPhone 17 Pro | mlx-swift | Gemma 4 E2B (4-bit) | 1 | battery-1pct | 4.9 | 0.2320 | 15515 | 2560 |
+| Mac M4 Max | apple-fm | Apple Foundation Model (default, on-device) | 1 | powermetrics | 7.6 | 0.1092 | 32974 | — |
+| Mac M4 Max | coreml-llm | Gemma 4 E2B (CoreML, ANE) | 1 | powermetrics | 12.7 | 0.4784 | 7525 | — |
+| Mac M4 Max | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | 1 | powermetrics | 24.5 | 0.2468 | 14589 | — |
+| Mac M4 Max | mlx-swift | Gemma 4 E2B (4-bit) | 1 | powermetrics | 24.7 | 0.2402 | 14986 | — |
 
 ### Pivot 3 — full row dump (audit trail)
 
@@ -270,9 +335,25 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 
 | Runtime | Model | Quant | Run | Load (s) | TTFT (ms) | Prefill tok/s | Decode tok/s | Peak Mem (MB) | JSONL |
 |---|---|---|---:|---:|---:|---:|---:|---:|---|
+| coreml-llm | Gemma 4 E2B (CoreML, ANE) | INT4 palettized | 1 | 87.0 | 877 | — | 29.1 | 844 | `iphone17pro-coreml-llm-gemma-4-e2b-energy-tg128.jsonl` |
+| litert-lm | Gemma 4 E2B (.litertlm) | INT4 (QAT) | 1 | 0.5 | 107 | 1056.0 | 30.8 | 826 | `iphone17pro-litert-lm-gemma-4-e2b-energy-tg128.jsonl` |
+| mlx-swift | Gemma 4 E2B (4-bit) | Q4 | 1 | 3.1 | 385 | 282.9 | 22.5 | 800 | `iphone17pro-mlx-swift-gemma-4-e2b-energy-tg128.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, ANE) | mixed 4/8-bit palettized | 1 | 3.9 | 179 | 112.0 | 50.4 | 1176 | `iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run1.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, ANE) | mixed 4/8-bit palettized | 2 | 2.1 | 61 | 357.5 | 49.8 | 1168 | `iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run2.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, ANE) | mixed 4/8-bit palettized | 3 | 2.3 | 66 | 331.7 | 50.9 | 1166 | `iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run3.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, ANE) | mixed 4/8-bit palettized | 4 | — | 63 | 308.6 | 49.4 | 1102 | `iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run4.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, ANE) | mixed 4/8-bit palettized | 5 | — | 61 | 318.5 | 48.5 | 1102 | `iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run5.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, GPU) | INT4 (dynamic) | 1 | 2.5 | 613 | 31.2 | 71.4 | 528 | `iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run1.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, GPU) | INT4 (dynamic) | 2 | 0.8 | 16 | 1714.8 | 179.8 | 523 | `iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run2.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, GPU) | INT4 (dynamic) | 3 | — | 23 | 969.3 | 179.9 | 524 | `iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run3.jsonl` |
+| core-ai | Qwen3-0.6B (Core AI, GPU) | INT4 (dynamic) | 4 | — | 28 | 784.1 | 182.1 | 516 | `iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run4.jsonl` |
 | coreml-llm | Gemma 4 E2B (CoreML, ANE) | INT4 palettized | 1 | 91.6 | 728 | — | 33.5 | 795 | `iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run1.jsonl` |
 | coreml-llm | Gemma 4 E2B (CoreML, ANE) | INT4 palettized | 2 | 4.2 | 1047 | — | 33.4 | 1187 | `iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run2.jsonl` |
 | coreml-llm | Gemma 4 E2B (CoreML, ANE) | INT4 palettized | 3 | 4.7 | 712 | — | 33.3 | 1195 | `iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run3.jsonl` |
+| coreml-llm | Qwen3-0.6B (CoreML, ANE) | INT8 palettized | 1 | 12.1 | 524 | 36.3 | 39.8 | 209 | `iphone17pro-coreml-llm-qwen3-0.6b-short-chat-run1.jsonl` |
+| coreml-llm | Qwen3-0.6B (CoreML, ANE) | INT8 palettized | 2 | 10.7 | 565 | 33.6 | 38.4 | 197 | `iphone17pro-coreml-llm-qwen3-0.6b-short-chat-run2.jsonl` |
+| coreml-llm | Qwen3-0.6B (CoreML, ANE) | INT8 palettized | 3 | — | 549 | 34.6 | 38.3 | 171 | `iphone17pro-coreml-llm-qwen3-0.6b-short-chat-run3.jsonl` |
+| coreml-llm | Qwen3-0.6B (CoreML, ANE) | INT8 palettized | 4 | — | 546 | 34.8 | 39.2 | 171 | `iphone17pro-coreml-llm-qwen3-0.6b-short-chat-run4.jsonl` |
 | coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 1 | 52.0 | 844 | 27.3 | 27.9 | 233 | `iphone17pro-coreml-llm-qwen3.5-2b-short-chat-run1.jsonl` |
 | coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 2 | 54.1 | 895 | 25.7 | 26.9 | 241 | `iphone17pro-coreml-llm-qwen3.5-2b-short-chat-run2.jsonl` |
 | coreml-llm | Qwen 3.5 2B (CoreML, ANE) | INT8 | 3 | 53.8 | 831 | 27.7 | 28.1 | 243 | `iphone17pro-coreml-llm-qwen3.5-2b-short-chat-run3.jsonl` |
@@ -285,6 +366,10 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 1 | 10.2 | 901 | 14.9 | 37.4 | 3104 | `iphone17pro-llama-cpp-gemma-4-e2b-short-chat-run1.jsonl` |
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 2 | 2.8 | 106 | 2420.8 | 38.3 | 3156 | `iphone17pro-llama-cpp-gemma-4-e2b-short-chat-run2.jsonl` |
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 3 | 0.4 | 114 | 2086.6 | 37.8 | 3247 | `iphone17pro-llama-cpp-gemma-4-e2b-short-chat-run3.jsonl` |
+| mlx-swift | Qwen3-0.6B (4-bit) | Q4 | 1 | 1.7 | 1524 | 12.5 | 116.7 | 539 | `iphone17pro-mlx-qwen3-0.6b-4bit-short-chat-run1.jsonl` |
+| mlx-swift | Qwen3-0.6B (4-bit) | Q4 | 2 | 1.2 | 60 | 355.5 | 119.6 | 539 | `iphone17pro-mlx-qwen3-0.6b-4bit-short-chat-run2.jsonl` |
+| mlx-swift | Qwen3-0.6B (4-bit) | Q4 | 3 | — | 53 | 368.1 | 114.0 | 540 | `iphone17pro-mlx-qwen3-0.6b-4bit-short-chat-run3.jsonl` |
+| mlx-swift | Qwen3-0.6B (4-bit) | Q4 | 4 | — | 54 | 361.1 | 109.0 | 540 | `iphone17pro-mlx-qwen3-0.6b-4bit-short-chat-run4.jsonl` |
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 1 | 2.5 | 2589 | 8.9 | 60.7 | 1279 | `iphone17pro-mlx-qwen3.5-2b-short-chat-run1.jsonl` |
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 2 | 1.7 | 102 | 251.3 | 61.6 | 1266 | `iphone17pro-mlx-qwen3.5-2b-short-chat-run2.jsonl` |
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 3 | 1.9 | 103 | 249.3 | 61.2 | 1282 | `iphone17pro-mlx-qwen3.5-2b-short-chat-run3.jsonl` |
@@ -319,6 +404,7 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 1 | 0.9 | 34 | 1505.4 | 148.7 | 1423 | `m4max-llama-cpp-qwen3.5-2b-short-chat-run1.jsonl` |
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 2 | 0.5 | 29 | 2504.5 | 149.7 | 1443 | `m4max-llama-cpp-qwen3.5-2b-short-chat-run2.jsonl` |
 | llama.cpp | Qwen 3.5 2B Q4_K_M (GGUF) | Q4_K_M | 3 | 0.5 | 29 | 2526.4 | 150.9 | 1443 | `m4max-llama-cpp-qwen3.5-2b-short-chat-run3.jsonl` |
+| llama.cpp | Qwen 3.5 9B Q4_K_M (GGUF) | Q4_K_M | 2 | 721.9 | 141 | 132.8 | 57.6 | 5682 | `m4max-llama-cpp-qwen3.5-9b-short-chat-run2.jsonl` |
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 1 | 8.4 | 44 | 1208.0 | 120.7 | 3177 | `m4max-llama-cpp-gemma-4-e2b-short-chat-run1.jsonl` |
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 2 | 0.6 | 41 | 2273.6 | 117.7 | 3212 | `m4max-llama-cpp-gemma-4-e2b-short-chat-run2.jsonl` |
 | llama.cpp | Gemma 4 E2B Q4_K_M (GGUF) | Q4_K_M | 3 | 0.6 | 39 | 2143.6 | 119.2 | 3213 | `m4max-llama-cpp-gemma-4-e2b-short-chat-run3.jsonl` |
@@ -334,6 +420,9 @@ Every raw measurement. Use Pivots 1 and 2 above for analysis; this table is the 
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 1 | 1.0 | 288 | 82.8 | 288.7 | 1224 | `m4max-mlx-qwen3.5-2b-short-chat-run1.jsonl` |
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 2 | 0.9 | 42 | 702.4 | 295.1 | 1222 | `m4max-mlx-qwen3.5-2b-short-chat-run2.jsonl` |
 | mlx-swift | Qwen 3.5 2B (4-bit) | Q4 | 3 | 0.9 | 40 | 724.5 | 295.3 | 1222 | `m4max-mlx-qwen3.5-2b-short-chat-run3.jsonl` |
+| mlx-swift | Qwen 3.5 9B (4-bit) | Q4 | 1 | 621.2 | 156 | 143.4 | 90.1 | 5029 | `m4max-mlx-qwen3.5-9b-short-chat-run1.jsonl` |
+| mlx-swift | Qwen 3.5 9B (4-bit) | Q4 | 2 | 0.9 | 95 | 240.8 | 89.4 | 5022 | `m4max-mlx-qwen3.5-9b-short-chat-run2.jsonl` |
+| mlx-swift | Qwen 3.5 9B (4-bit) | Q4 | 3 | 0.9 | 86 | 270.3 | 90.0 | 5003 | `m4max-mlx-qwen3.5-9b-short-chat-run3.jsonl` |
 | mlx-swift | Gemma 4 E2B (4-bit) | Q4 | 1 | 1.5 | 932 | 23.1 | 170.0 | 2830 | `m4max-mlx-gemma-4-e2b-short-chat-run1.jsonl` |
 | mlx-swift | Gemma 4 E2B (4-bit) | Q4 | 2 | 1.2 | 65 | 479.7 | 186.0 | 2812 | `m4max-mlx-gemma-4-e2b-short-chat-run2.jsonl` |
 | mlx-swift | Gemma 4 E2B (4-bit) | Q4 | 3 | 1.2 | 68 | 446.5 | 185.4 | 2829 | `m4max-mlx-gemma-4-e2b-short-chat-run3.jsonl` |

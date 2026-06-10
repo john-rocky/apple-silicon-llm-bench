@@ -343,8 +343,119 @@ def chart_iphone():
     print(f"wrote {OUT / 'iphone_decode_mem.png'}")
 
 
+# ------------------------------------------------------------------ #
+#  Chart 5/6 — iPhone 17 Pro energy: J/token bar + speed×efficiency scatter
+# ------------------------------------------------------------------ #
+
+IPHONE_COLOR = {
+    "litert-lm": "#e11d48", "mlx-swift": PALETTE["mlx-swift"],
+    "llama.cpp": PALETTE["llama.cpp"], "coreml-llm": PALETTE["coreml-llm"],
+}
+IPHONE_RT_LABEL = {
+    "litert-lm": "LiteRT-LM", "mlx-swift": "MLX-Swift",
+    "llama.cpp": "llama.cpp", "coreml-llm": "CoreML/ANE",
+}
+
+
+def iphone_energy_points(model: str = "Gemma 4 E2B") -> dict[str, dict]:
+    """Median energy stats per runtime from iphone17pro `energy`-task runs.
+
+    Returns {} when no battery-delta energy rows exist yet, so the chart
+    functions can skip cleanly until the measurements land."""
+    runs = load_runs("iphone17pro", task="energy")
+    agg: dict[str, dict[str, list[float]]] = {}
+    for r in runs:
+        m = r.get("metrics") or {}
+        if m.get("energySource") != "battery-1pct":
+            continue
+        if m.get("energyJoulesPerToken") is None:
+            continue
+        if logical_model((r.get("model") or {}).get("id", "")) != model:
+            continue
+        rt = r.get("runtime")
+        d = agg.setdefault(rt, {"jpt": [], "tok_s": [], "w": [], "tok_wh": []})
+        d["jpt"].append(m["energyJoulesPerToken"])
+        d["tok_s"].append(m.get("decodeTokensPerSecond") or 0)
+        d["w"].append(m.get("averagePackagePowerW") or 0)
+        j, gt = m.get("energyJoules") or 0, m.get("generatedTokenCount") or 0
+        if j > 0 and gt > 0:
+            d["tok_wh"].append(gt * 3600.0 / j)
+    out: dict[str, dict] = {}
+    for rt, d in agg.items():
+        out[rt] = {
+            "jpt": median(d["jpt"]), "tok_s": median(d["tok_s"]),
+            "w": median(d["w"]),
+            "tok_wh": median(d["tok_wh"]) if d["tok_wh"] else None,
+        }
+    return out
+
+
+def chart_iphone_energy():
+    pts = iphone_energy_points()
+    if not pts:
+        print("skip iphone_energy_per_token (no battery-delta energy rows yet)")
+        return
+    order = ["litert-lm", "mlx-swift", "llama.cpp", "coreml-llm"]
+    labels = [r for r in order if r in pts]
+    jpt = [pts[r]["jpt"] for r in labels]
+
+    fig, ax = plt.subplots(figsize=(8.5, 3.6))
+    colors = [IPHONE_COLOR[r] for r in labels]
+    bars = ax.barh(range(len(labels)), jpt, color=colors, edgecolor="white", linewidth=0.6)
+    for bar, v, r in zip(bars, jpt, labels):
+        tw = pts[r]["tok_wh"]
+        tail = f"  ·  {pts[r]['w']:.1f} W avg" + (f"  ·  {tw:.0f} tok/Wh" if tw else "")
+        ax.text(v + max(jpt) * 0.015, bar.get_y() + bar.get_height() / 2,
+                f"{v:.2f} J/tok{tail}", va="center", fontsize=9.5, color="#222")
+
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels([IPHONE_RT_LABEL[r] for r in labels], fontsize=10)
+    ax.invert_yaxis()
+    ax.set_xlabel("Joules per generated token (lower = better)")
+    ax.set_xlim(0, max(jpt) * 1.6)
+    ax.set_title("Energy per token — iPhone 17 Pro, Gemma 4 E2B, sustained (battery-delta)")
+    fig.text(0.5, -0.06,
+             "iPhone battery-delta (1% steps), unplugged. Whole-system incl. display — compare runtimes, not against the Mac powermetrics rows.",
+             ha="center", fontsize=8.5, color="#555")
+    plt.savefig(OUT / "iphone_energy_per_token.png")
+    plt.close(fig)
+    print(f"wrote {OUT / 'iphone_energy_per_token.png'}")
+
+
+def chart_iphone_tradeoff():
+    pts = iphone_energy_points()
+    if not pts:
+        print("skip iphone_tradeoff (no battery-delta energy rows yet)")
+        return
+    fig, ax = plt.subplots(figsize=(8.5, 5.5))
+    for rt, d in pts.items():
+        ax.scatter(d["tok_s"], d["jpt"], s=240, color=IPHONE_COLOR.get(rt, "#888"),
+                   edgecolor="white", linewidth=1.4, zorder=5)
+        ax.annotate(IPHONE_RT_LABEL.get(rt, rt), (d["tok_s"], d["jpt"]),
+                    textcoords="offset points", xytext=(8, 8),
+                    fontsize=11, fontweight="bold", color="#222")
+        ax.annotate(f"{d['jpt']:.2f} J/tok · {d['tok_s']:.0f} tok/s · {d['w']:.1f} W",
+                    (d["tok_s"], d["jpt"]), textcoords="offset points",
+                    xytext=(8, -14), fontsize=8.5, color="#555")
+
+    ax.set_xlabel("Sustained decode (tok/s) — right = faster")
+    ax.set_ylabel("Energy per token (J/tok) — down = more efficient")
+    ax.set_title("Throughput × Energy — iPhone 17 Pro, Gemma 4 E2B (battery-delta)")
+    ax.invert_yaxis()
+    ax.set_xlim(0, max(d["tok_s"] for d in pts.values()) * 1.25)
+    ax.set_ylim(max(d["jpt"] for d in pts.values()) * 1.2, 0)
+    fig.text(0.5, -0.02,
+             "Does the low-power ANE win J/token despite slow decode, or does GPU speed pay for itself? The phone's answer.",
+             ha="center", fontsize=8.5, color="#555")
+    plt.savefig(OUT / "iphone_tradeoff.png")
+    plt.close(fig)
+    print(f"wrote {OUT / 'iphone_tradeoff.png'}")
+
+
 def main():
     chart_iphone()
+    chart_iphone_energy()
+    chart_iphone_tradeoff()
     chart_decode_tok_per_s()
     chart_energy_per_token()
     chart_itl_jitter()

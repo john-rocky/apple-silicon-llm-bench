@@ -31,19 +31,30 @@ packages:
   Anemll:
     path: Vendored/Anemll/anemll-swift-cli
   CoreML-LLM:
-    url: https://github.com/john-rocky/CoreML-LLM
-    from: "1.9.0"
+    # Local path (not url) so the in-tree `.qwen3_06b` stateful preset (added to
+    # Qwen3VL2BStatefulGenerator) + any local conversion fixes are picked up.
+    # Vendored/ is git-ignored; symlink it: Vendored/CoreML-LLM -> ~/Downloads/CoreML-LLM
+    path: Vendored/CoreML-LLM
   LiteRT-LM:
     # Local path (not url:) so SwiftPM accepts the package's `.unsafeFlags(-all_load)`
     # — versioned/remote products with unsafe flags are rejected by SwiftPM.
     # Vendored/ is git-ignored; clone with GIT_LFS_SKIP_SMUDGE=1 (broken Android LFS blob upstream).
     path: Vendored/LiteRT-LM
+  coreai-models:
+    # Apple's official Core AI Swift runtime (CoreAILM). Local path because the
+    # package floor is iOS/macOS 27 and our checkout carries small local fixes.
+    # Vendored/ is git-ignored; symlink it: Vendored/coreai-models -> ~/code/coreai/coreai-models
+    path: Vendored/coreai-models
 
 targets:
   BenchmarkApp:
     type: application
     platform: iOS
-    deploymentTarget: "18.0"
+    # Bumped 18.0 -> 27.0: the coreai-models Swift package (CoreAILM) requires
+    # iOS 27. The whole current benchmark campaign runs on iPhone 17 Pro (iOS 27).
+    # If older-device installs (15/16 Pro) are needed again, split CoreAI into a
+    # separate iOS-27 target instead of bumping this one.
+    deploymentTarget: "27.0"
     sources:
       - path: Sources
     info:
@@ -52,6 +63,7 @@ targets:
         CFBundleDisplayName: iOS LLM Bench
         CFBundleShortVersionString: "0.2.0"
         CFBundleVersion: "1"
+        NSCameraUsageDescription: "Used to benchmark live vision-language model inference (VLM) on the camera feed."
         UILaunchScreen: {}
         UIRequiresFullScreen: false
         UISupportedInterfaceOrientations:
@@ -80,6 +92,8 @@ targets:
       - package: mlx-swift-lm
         product: MLXLLM
       - package: mlx-swift-lm
+        product: MLXVLM            # vision-language models (Qwen3-VL) for the camera bench
+      - package: mlx-swift-lm
         product: MLXLMCommon
       - package: swift-huggingface
         product: HuggingFace
@@ -87,18 +101,15 @@ targets:
         product: Transformers
       - package: CoreML-LLM
         product: CoreMLLLM
-      - package: executorch
-        product: executorch
-      - package: executorch
-        product: executorch_llm
-      - package: executorch
-        product: backend_xnnpack
-      - package: executorch
-        product: kernels_llm
-      - package: executorch
-        product: kernels_optimized
-      - package: executorch
-        product: kernels_quantized
+      - package: coreai-models
+        product: CoreAILM            # Apple Core AI runtime (iOS 27) for the CoreAIRuntime
+      # NOTE: executorch products are dropped from the iOS app while Core AI is
+      # linked — coreai-models' CXGrammar.xcframework and executorch.xcframework
+      # both emit `include/module.modulemap` to the shared products dir, which
+      # Xcode rejects ("Multiple commands produce module.modulemap"). ExecuTorch
+      # isn't part of the Core AI/CoreML/MLX comparison. ExecuTorchRuntime falls
+      # back to its canImport(ExecuTorchLLM)=false stub. Restore these (or split
+      # Core AI into its own target) to re-enable the ExecuTorch runtime.
       - package: Anemll
         product: AnemllCore
       - package: LiteRT-LM

@@ -72,10 +72,15 @@ public actor EnergyMonitor {
     private static func estimatedBatteryWh() -> Double {
         let model = hardwareModelIdentifier()
         switch model {
-        // iPhone 17 Pro / 17 Pro Max — estimated, refine when published
-        case "iPhone18,1": return 13.5  // iPhone 17 Pro placeholder
-        case "iPhone18,2": return 17.5  // iPhone 17 Pro Max placeholder
-        case "iPhone18,3": return 13.0  // iPhone 17 placeholder
+        // iPhone 17 family. Apple publishes mAh, not Wh; we convert at the
+        // ~3.88 V nominal implied by the iPhone 17 Pro Max teardown
+        // (5,112 mAh ↔ 19.99 Wh). The Pro ships in two pack sizes — the
+        // global/physical-SIM unit (3,988 mAh ≈ 15.5 Wh) and the US eSIM-only
+        // unit (4,252 mAh ≈ 16.5 Wh). The measured device is the eSIM-only
+        // unit; switch to 15.5 for a physical-SIM Pro.
+        case "iPhone18,1": return 16.5  // iPhone 17 Pro (US eSIM-only, 4,252 mAh)
+        case "iPhone18,2": return 20.0  // iPhone 17 Pro Max (5,112 mAh, teardown)
+        case "iPhone18,3": return 14.3  // iPhone 17 (3,692 mAh)
         // iPhone 16 family
         case "iPhone17,1": return 13.0  // iPhone 16 Pro
         case "iPhone17,2": return 17.0  // iPhone 16 Pro Max

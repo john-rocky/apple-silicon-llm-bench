@@ -24,6 +24,10 @@ let package = Package(
         .package(url: "https://github.com/ml-explore/mlx-swift-lm", branch: "main"),
         .package(url: "https://github.com/huggingface/swift-huggingface", from: "0.8.1"),
         .package(url: "https://github.com/huggingface/swift-transformers", from: "1.0.0"),
+        // LiteRT-LM ships a binary xcframework with ios-arm64 + macos-arm64
+        // slices (≥ 0.12.0), so unlike the vendored adapters it wires up as a
+        // plain SPM dependency on both targets.
+        .package(url: "https://github.com/google-ai-edge/LiteRT-LM", from: "0.12.0"),
     ],
     targets: [
         .target(
@@ -33,14 +37,17 @@ let package = Package(
                 .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
                 .product(name: "HuggingFace", package: "swift-huggingface"),
                 .product(name: "Transformers", package: "swift-transformers"),
+                // LiteRT-LM (`MediaPipeRuntime.swift`) — the adapter is
+                // `#if canImport(LiteRTLM)`-gated, so it lights up here.
+                .product(name: "LiteRTLM", package: "LiteRT-LM"),
             ],
             path: "ios/BenchmarkApp/Sources",
-            // Keep Benchmark/, Models/, and the MLX-related runtime sources
-            // (LLMRuntime protocol, HFDownloader helper, MLXBridges, MLXRuntime).
-            // The other adapter files are excluded until their Mac build path
-            // is wired up in a follow-up PR (each pulls in a different vendored
-            // SDK: AnemllCore, llama.xcframework, CoreMLLLM, executorch,
-            // MediaPipeTasksGenAI).
+            // Keep Benchmark/, Models/, the MLX-related runtime sources
+            // (LLMRuntime protocol, HFDownloader helper, MLXBridges, MLXRuntime)
+            // and the LiteRT-LM adapter (clean SPM xcframework). The remaining
+            // adapter files are excluded until their Mac build path is wired up
+            // (each pulls in a different vendored SDK: AnemllCore,
+            // llama.xcframework, CoreMLLLM, executorch).
             exclude: [
                 "Info.plist",
                 "Assets.xcassets",
@@ -51,7 +58,10 @@ let package = Package(
                 "Runtimes/AnemllRuntime.swift",
                 "Runtimes/LlamaCppRuntime.swift",
                 "Runtimes/ExecuTorchRuntime.swift",
-                "Runtimes/MediaPipeRuntime.swift",
+                // Apple Core AI (CoreAILM) — iOS/macOS 27 only; the iOS app
+                // wires it via XcodeGen. Excluded here like the other
+                // vendor-SDK adapters so the macOS YardstickKit lib still builds.
+                "Runtimes/CoreAIRuntime.swift",
             ]
         ),
 

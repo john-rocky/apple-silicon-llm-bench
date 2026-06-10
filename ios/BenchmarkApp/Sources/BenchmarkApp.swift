@@ -32,15 +32,28 @@ final class AppSession: ObservableObject {
 
     private(set) var runtimes: [RuntimeKind: any LLMRuntime] = [:]
 
+    /// VLM (camera) runtimes, keyed by the engine they drive — the two
+    /// camera-relevant backends only: MLX on the GPU, CoreML on the ANE.
+    private(set) var vlmRuntimes: [RuntimeKind: any VLMRuntime] = [:]
+    static let vlmRuntimeKinds: [RuntimeKind] = [.mlxSwift, .coreMLLLM]
+
     init() {
         for kind in RuntimeKind.allCases {
             runtimes[kind] = makeRuntime(for: kind)
         }
+        // Deployment target is iOS 18, so both VLM backends are referenceable
+        // without a runtime availability gate.
+        vlmRuntimes[.mlxSwift] = MLXVLMRuntime()
+        vlmRuntimes[.coreMLLLM] = CoreMLVLMRuntime()
         Task { await reloadHistory() }
     }
 
     func runtime(for kind: RuntimeKind) -> any LLMRuntime {
         runtimes[kind]!
+    }
+
+    func vlmRuntime(for kind: RuntimeKind) -> any VLMRuntime {
+        vlmRuntimes[kind]!
     }
 
     /// Models the currently-selected runtime can load.
@@ -99,6 +112,11 @@ final class AppSession: ObservableObject {
                     reason: "Apple Foundation Models requires iOS 26 + an Apple-Intelligence-eligible device."
                 )
             }
+        case .coreAI:
+            // CoreAIRuntime self-reports availability via canImport: when the
+            // coreai-models Swift package is linked (iOS 27 build) it runs; when
+            // it isn't, it returns an unavailable stub.
+            return CoreAIRuntime()
         }
     }
 }
@@ -149,6 +167,13 @@ enum HeadlessAutoRun {
         var modelId: String
         var taskId: String
         var runs: Int
+        /// Optional override for the energy task's sustain window (seconds).
+        var sustainSeconds: Double?
+        /// Optional override for the energy task's per-call output cap. Lowering
+        /// this (e.g. 128) keeps each generation's context short so full-attention
+        /// runtimes (MLX) stay near their burst rate instead of being dragged into
+        /// their long-context regime — a fairer comparison vs SWA runtimes (CoreML).
+        var maxTokens: Int?
     }
 
     static func specFromLaunchArgs(_ args: [String] = CommandLine.arguments) -> Spec? {
@@ -162,7 +187,10 @@ enum HeadlessAutoRun {
               let modelId = value("--model-id") else { return nil }
         let taskId = value("--task") ?? "short-chat"
         let runs = max(1, Int(value("--runs") ?? "1") ?? 1)
-        return Spec(runtime: runtime, modelId: modelId, taskId: taskId, runs: runs)
+        let sustainSeconds = value("--sustain-seconds").flatMap(Double.init)
+        let maxTokens = value("--max-tokens").flatMap(Int.init)
+        return Spec(runtime: runtime, modelId: modelId, taskId: taskId, runs: runs,
+                    sustainSeconds: sustainSeconds, maxTokens: maxTokens)
     }
 }
 
@@ -220,13 +248,25 @@ struct HeadlessRunnerView: View {
             await finish(3)
             return
         }
-        guard let task = BenchmarkTaskCatalog.task(for: spec.taskId) else {
+        guard var task = BenchmarkTaskCatalog.task(for: spec.taskId) else {
             await log("YARDSTICK_FATAL task=\(spec.taskId) unknown")
             await finish(4)
             return
         }
+        // Energy task: allow the driver to tune the sustain window + per-call
+        // output cap per run. A small --max-tokens (e.g. 128) keeps the context
+        // short so full-attention runtimes (MLX) stay near their burst rate
+        // instead of decaying in their long-context regime — a fair comparison
+        // against SWA runtimes (CoreML-LLM) whose context is bounded by design.
+        if spec.taskId == "energy" {
+            task = EnergyTask(
+                sustainSeconds: spec.sustainSeconds ?? 600,
+                maxTokens: spec.maxTokens ?? 2048
+            )
+        }
 
-        await log("YARDSTICK_BEGIN runtime=\(spec.runtime.rawValue) model=\(model.id) task=\(task.id) runs=\(spec.runs)")
+        let sustainNote = task.sustainSeconds.map { " sustain_s=\(Int($0))" } ?? ""
+        await log("YARDSTICK_BEGIN runtime=\(spec.runtime.rawValue) model=\(model.id) task=\(task.id) runs=\(spec.runs)\(sustainNote)")
         for i in 1...spec.runs {
             let runner = BenchmarkRunner()
             let cold = (await runtime.loadedModelId) != model.id
@@ -243,6 +283,24 @@ struct HeadlessRunnerView: View {
                     result.metrics.memoryPeakDuringDecodeMB,
                     result.metrics.generatedTokenCount
                 ))
+                // Energy is only present on a real, unplugged battery drop.
+                if let joules = result.metrics.energyJoules {
+                    await log(String(
+                        format: "YARDSTICK_ENERGY run=%d state=%@ battery_delta_pct=%.1f joules=%.1f avg_w=%.2f j_per_tok=%.4f window_s=%.0f tokens=%d",
+                        i, result.device.batteryState,
+                        result.metrics.batteryDeltaPercent,
+                        joules,
+                        result.metrics.averagePackagePowerW ?? 0,
+                        result.metrics.energyJoulesPerToken ?? 0,
+                        result.metrics.energyMeasurementWindowSeconds ?? 0,
+                        result.metrics.generatedTokenCount
+                    ))
+                } else {
+                    await log(String(
+                        format: "YARDSTICK_ENERGY run=%d state=%@ battery_delta_pct=%.1f joules=nil (run too short, or plugged in/charging)",
+                        i, result.device.batteryState, result.metrics.batteryDeltaPercent
+                    ))
+                }
             } catch {
                 await log("YARDSTICK_RUN_FAIL run=\(i) error=\(error.localizedDescription)")
             }

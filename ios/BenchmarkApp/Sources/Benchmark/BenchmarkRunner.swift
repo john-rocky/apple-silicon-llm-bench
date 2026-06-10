@@ -97,7 +97,7 @@ public actor BenchmarkRunner {
     }
 
     public func run(_ configuration: Configuration) async throws -> BenchmarkResult {
-        let device = DeviceSnapshot.capture()
+        var device = DeviceSnapshot.capture()
         let memorySampler = MemorySampler()
         let thermalSampler = ThermalSampler()
         let energyMonitor = EnergyMonitor()
@@ -124,46 +124,81 @@ public actor BenchmarkRunner {
         await memorySampler.start()
         await energyMonitor.start()
 
-        // 2. Run generation, accumulating chunks and timing.
+        // 2. Run generation, accumulating chunks and timing. For sustained /
+        //    energy tasks the runtime is re-prompted until `sustainSeconds` of
+        //    active decode elapses, so a 1%-resolution battery delta can build
+        //    up. Run-once tasks (sustainSeconds == nil) execute the body once.
         let generationStart = CFAbsoluteTimeGetCurrent()
         var firstTokenAt: CFAbsoluteTime?
         var tokenWindow: [(t: CFAbsoluteTime, n: Int)] = []
         var collectedOutput = ""
-        var tokenCount = 0
-        var info: GenerationInfo?
+        var tokenCount = 0          // streamed-chunk count (fallback token estimate)
+        var reportedTokens = 0      // runtime-reported decode tokens, summed over calls
+        var promptTokens = 0        // runtime-reported prompt tokens, summed over calls
+        var decodeTime = 0.0        // runtime-reported decode time, summed over calls
+        var promptTime = 0.0        // runtime-reported prompt time, summed over calls
+        var lastStopReason: GenerationInfo.StopReason = .stop
+        var sawInfo = false
         var capturedError: Error?
 
-        let stream = configuration.runtime.generate(
-            prompt: configuration.task.prompt,
-            parameters: configuration.task.parameters
-        )
-
-        do {
-            for try await event in stream {
-                switch event {
-                case .chunk(let text):
-                    if firstTokenAt == nil {
-                        firstTokenAt = CFAbsoluteTimeGetCurrent()
+        let sustainSeconds = configuration.task.sustainSeconds
+        repeat {
+            let tokensBeforeCall = tokenCount
+            let stream = configuration.runtime.generate(
+                prompt: configuration.task.prompt,
+                parameters: configuration.task.parameters
+            )
+            do {
+                for try await event in stream {
+                    switch event {
+                    case .chunk(let text):
+                        if firstTokenAt == nil {
+                            firstTokenAt = CFAbsoluteTimeGetCurrent()
+                        }
+                        tokenCount += 1
+                        // Cap the retained transcript — a 10-minute energy run
+                        // would otherwise build a multi-MB string we never use
+                        // (only the first 200 chars are kept as outputSample).
+                        if collectedOutput.count < 4000 {
+                            collectedOutput.append(text)
+                        }
+                        let now = CFAbsoluteTimeGetCurrent()
+                        tokenWindow.append((t: now, n: tokenCount))
+                        emit(.generating(tokens: tokenCount, partialOutput: String(collectedOutput.prefix(80))))
+                    case .info(let i):
+                        sawInfo = true
+                        reportedTokens += i.generationTokenCount
+                        promptTokens += i.promptTokenCount
+                        decodeTime += i.generateTime
+                        promptTime += i.promptTime
+                        lastStopReason = i.stopReason
                     }
-                    tokenCount += 1
-                    collectedOutput.append(text)
-                    let now = CFAbsoluteTimeGetCurrent()
-                    tokenWindow.append((t: now, n: tokenCount))
-                    let preview = String(collectedOutput.prefix(80))
-                    emit(.generating(tokens: tokenCount, partialOutput: preview))
-                case .info(let i):
-                    info = i
                 }
+            } catch {
+                capturedError = error
             }
-        } catch {
-            capturedError = error
-        }
+
+            // Sustain-loop exit conditions.
+            if capturedError != nil { break }
+            guard let sustain = sustainSeconds else { break }          // run-once tasks
+            if tokenCount == tokensBeforeCall { break }                // produced nothing → don't spin
+            if CFAbsoluteTimeGetCurrent() - generationStart >= sustain { break }
+            if Task.isCancelled { break }
+        } while true
 
         emit(.finalizing)
         await memorySampler.stop()
         await thermalSampler.stop()
         let memoryPeakMB = await memorySampler.peakMB
         let energy = await energyMonitor.snapshot()
+
+        // Refresh battery fields to end-of-run: a launch-then-unplug energy run
+        // begins plugged but discharges mid-run, so the start-of-run state would
+        // mislabel it. (energyJoules is still the bulletproof unplugged signal —
+        // it is only non-nil when the level actually dropped.)
+        let endBattery = DeviceSnapshot.currentBattery()
+        device.batteryState = endBattery.state
+        device.batteryLevel = endBattery.level
 
         // Wait briefly for transient buffers to drop.
         try? await Task.sleep(nanoseconds: 200_000_000)
@@ -174,29 +209,41 @@ public actor BenchmarkRunner {
             throw error
         }
 
-        let finalInfo = info ?? GenerationInfo(
-            promptTokenCount: 0,
-            generationTokenCount: tokenCount,
-            promptTime: 0,
-            generateTime: max(CFAbsoluteTimeGetCurrent() - generationStart, 0.001),
-            stopReason: .stop
-        )
-
         let firstTokenLatency = firstTokenAt.map { ($0 - generationStart) * 1000 } ?? 0
         let totalTime = CFAbsoluteTimeGetCurrent() - generationStart
+
+        // Prefer runtime-reported counts (summed across sustain-loop calls);
+        // fall back to streamed-chunk count / wall time when a runtime emits no
+        // `.info` event. For run-once tasks this reduces to the single call's
+        // numbers exactly.
+        let genTokens = reportedTokens > 0 ? reportedTokens : tokenCount
+        let effectiveDecodeTime = decodeTime > 0 ? decodeTime : max(totalTime, 0.001)
+        let decodeTokS = Double(genTokens) / effectiveDecodeTime
+        let promptTokS = promptTime > 0 ? Double(promptTokens) / promptTime : 0
+        let stopReason = (sawInfo ? lastStopReason : .stop).rawValue
+
+        // Energy figures only when a real (>0) battery delta was observed.
+        let avgPowerW: Double? = {
+            guard let j = energy.joules, energy.durationSeconds > 0 else { return nil }
+            return j / energy.durationSeconds
+        }()
+        let energyJPerTok: Double? = {
+            guard let j = energy.joules, genTokens > 0 else { return nil }
+            return j / Double(genTokens)
+        }()
 
         let metrics = Metrics(
             coldRun: configuration.coldRun,
             loadTimeSeconds: loadTime,
             downloadTimeSeconds: nil,
             firstTokenLatencyMS: Int(firstTokenLatency.rounded()),
-            promptTokensPerSecond: finalInfo.promptTokensPerSecond,
-            decodeTokensPerSecond: finalInfo.tokensPerSecond,
-            promptTokenCount: finalInfo.promptTokenCount,
-            generatedTokenCount: finalInfo.generationTokenCount,
+            promptTokensPerSecond: promptTokS,
+            decodeTokensPerSecond: decodeTokS,
+            promptTokenCount: promptTokens,
+            generatedTokenCount: genTokens,
             totalGenerationTimeSeconds: totalTime,
             cancellationLatencyMS: nil,
-            stopReason: finalInfo.stopReason.rawValue,
+            stopReason: stopReason,
             memoryBaselineMB: baselineMB,
             memoryAfterLoadMB: memoryAfterLoad,
             memoryPeakDuringDecodeMB: memoryPeakMB,
@@ -210,11 +257,10 @@ public actor BenchmarkRunner {
             interTokenLatencyP99MS: Self.percentileMS(tokenWindow: tokenWindow, percentile: 0.99),
             energyJoules: energy.joules,
             batteryDeltaPercent: energy.batteryDeltaPercent,
-            energyJoulesPerToken: {
-                guard let j = energy.joules,
-                      finalInfo.generationTokenCount > 0 else { return nil }
-                return j / Double(finalInfo.generationTokenCount)
-            }()
+            energyJoulesPerToken: energyJPerTok,
+            averagePackagePowerW: avgPowerW,
+            energyMeasurementWindowSeconds: energy.joules != nil ? energy.durationSeconds : nil,
+            energySource: energy.joules != nil ? "battery-1pct" : nil
         )
 
         emit(.done)

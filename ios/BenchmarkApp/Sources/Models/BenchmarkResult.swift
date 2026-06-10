@@ -93,6 +93,15 @@ public struct Metrics: Codable, Sendable {
     /// Joules per generated token, when both `energyJoules` and a token
     /// count are available.
     public let energyJoulesPerToken: Double?
+    /// Average whole-system power over the measured window (joules / seconds).
+    /// On iOS this is battery-delta-derived; on Mac it is injected post-hoc by
+    /// `scripts/measure_energy.py` from `powermetrics`.
+    public let averagePackagePowerW: Double?
+    /// Length of the window the energy figure covers, in seconds.
+    public let energyMeasurementWindowSeconds: Double?
+    /// Where the energy number came from: `battery-1pct` (iOS battery-level
+    /// delta) or `powermetrics` (Mac). `nil` when no energy was measured.
+    public let energySource: String?
 
     public init(
         coldRun: Bool,
@@ -119,7 +128,10 @@ public struct Metrics: Codable, Sendable {
         interTokenLatencyP99MS: Double?,
         energyJoules: Double?,
         batteryDeltaPercent: Float,
-        energyJoulesPerToken: Double?
+        energyJoulesPerToken: Double?,
+        averagePackagePowerW: Double? = nil,
+        energyMeasurementWindowSeconds: Double? = nil,
+        energySource: String? = nil
     ) {
         self.coldRun = coldRun
         self.loadTimeSeconds = loadTimeSeconds
@@ -146,5 +158,8 @@ public struct Metrics: Codable, Sendable {
         self.energyJoules = energyJoules
         self.batteryDeltaPercent = batteryDeltaPercent
         self.energyJoulesPerToken = energyJoulesPerToken
+        self.averagePackagePowerW = averagePackagePowerW
+        self.energyMeasurementWindowSeconds = energyMeasurementWindowSeconds
+        self.energySource = energySource
     }
 }

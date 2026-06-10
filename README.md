@@ -62,6 +62,38 @@ Two **independent** GPU runtimes collapsing the same way is a GPU-thermal proper
 
 ---
 
+## 🎥 Live-camera VLM — the same throttle story, now on vision (new)
+
+The throttle section above is text decode. The next axis runs a **vision-language
+model on the live camera, continuously for 10 minutes** — the workload an
+always-on "point the phone at the world" feature actually is — and asks the same
+question: **does the GPU melt while the ANE holds?**
+
+Same phone, same scene, **Qwen3-VL 2B** on both paths (both run today):
+
+- **GPU** — `MLXVLMRuntime` (MLX/Metal), `mlx-community/Qwen3-VL-2B-Instruct-4bit`.
+- **ANE** — `CoreMLVLMRuntime` (CoreML, `.cpuAndNeuralEngine`) driving
+  `john-rocky/CoreML-LLM`'s real Qwen3-VL pipeline (vision encoder → chunked
+  INT8 decoder), model `mlboydaisuke/qwen3-vl-2b-coreml`.
+
+The app gains a **Camera** tab: pick the backend, point it at a dense scene, hit
+Start. The HUD overlays **sustained FPS, thermal state, battery, ANE residency**
+live (it doubles as the screen-record surface for the demo clip). Each session
+logs sustained FPS, per-inference TTFT, ANE residency (`MLComputePlan`), peak
+thermal and whole-system power, plus the FPS-and-heat time series the chart is
+drawn from:
+
+```sh
+# Camera tab → backend → 10 min → Start (run once per backend, same scene)
+python3 scripts/vlm_throttle_chart.py     # → docs/charts/vlm-camera-throttle.png
+```
+
+Method, fairness rules, the ANE-residency measurement, and the clip protocol:
+[`methodology/vlm-camera-ios.md`](methodology/vlm-camera-ios.md). Numbers land
+once the runs are captured on device — [a paired ANE/GPU session is a great PR](CONTRIBUTING.md).
+
+---
+
 ## 🖥 Desktop reference — Apple M4 Max
 
 The same harness on a laptop-class chip, for scale. No runtime wins everything here — each optimises a different corner of the throughput / memory / energy / streaming box:

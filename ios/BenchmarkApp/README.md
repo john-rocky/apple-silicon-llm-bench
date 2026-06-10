@@ -34,16 +34,16 @@ First build resolves SwiftPM dependencies (`mlx-swift-lm`, `swift-huggingface`, 
 
 The `Vendored/` directory is git-ignored and re-fetched on demand.
 
-### Optional: enable MediaPipe / LiteRT-LM
+### LiteRT-LM
 
-The MediaPipe iOS framework is not on SPM. To enable that adapter:
+Wired via SPM — `xcodegen generate` picks it up from `project.yml`
+(`google-ai-edge/LiteRT-LM` ≥ 0.12.0, product `LiteRTLM`, macOS 12 / iOS 15).
+The adapter (`MediaPipeRuntime.swift`) is `#if canImport(LiteRTLM)`-gated, so it
+lights up automatically once the package resolves; no Xcode-UI or CocoaPods step.
 
-1. Xcode → File → Add Package Dependencies…
-2. URL: `https://github.com/paescebu/SwiftTasksGenAI`
-3. Add `SwiftTasksGenAI` to the `BenchmarkApp` target.
-4. Rebuild — `MediaPipeRuntime` lights up via `#if canImport(MediaPipeTasksGenAI)`.
-
-(Or use CocoaPods + a `.xcworkspace` if you prefer the pure-Google distribution.)
+If the link fails with duplicate symbols, the package's `-all_load` is colliding
+with the vendored `llama`/`executorch` static libs — swap it for a scoped
+`-force_load <path-to-libLiteRTLM.a>` in `OTHER_LDFLAGS`.
 
 ## Architecture
 

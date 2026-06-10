@@ -15,6 +15,16 @@ public protocol BenchmarkTask: Sendable {
 
     /// Generation parameters specific to this task.
     var parameters: GenerationParameters { get }
+
+    /// When non-nil, the runner repeats generation until this many seconds of
+    /// active decode have elapsed, instead of running the prompt once. Used by
+    /// the energy task so a measurable battery delta builds up (a single short
+    /// reply is far below the iOS battery API's 1% step). `nil` = run once.
+    var sustainSeconds: TimeInterval? { get }
+}
+
+public extension BenchmarkTask {
+    var sustainSeconds: TimeInterval? { nil }
 }
 
 public enum BenchmarkTaskCatalog {
@@ -22,6 +32,7 @@ public enum BenchmarkTaskCatalog {
         ShortChatTask(),
         LongContextTask(),
         SustainedGenerationTask(),
+        EnergyTask(),
         AppLifecycleTask(),
     ]
 
