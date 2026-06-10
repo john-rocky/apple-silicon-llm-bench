@@ -69,6 +69,21 @@ cold-to-warm (~115). The static-shape ANE path is steady (~50) with the lowest
 TTFT spread; CoreML-LLM is the memory champion (~184 MB, ~6× leaner than Core AI
 ANE) at the cost of decode speed and a slower recurrent prefill.
 
+## Mac scaling (matched) — the GPU lead shrinks
+
+The iPhone GPU lead (Core AI 1.6× MLX at 0.6B) is a small-model effect. On M4 Max
+with matched params (512-token prompt, 512 gen, greedy, 4-bit, warm) — Core AI via
+Apple's `llm-benchmark`, MLX via `mlx_lm`:
+
+| Model | Core AI GPU | MLX | lead |
+| --- | ---: | ---: | ---: |
+| Qwen3-0.6B | 1121 | 455 | 2.47× |
+| Qwen3-8B | 94 | 90 | 1.05× |
+
+Tiny models are dominated by per-token dispatch overlap (Core AI's strength); at a
+realistic 8B both are memory-bandwidth-bound and converge to a near-tie. Chart:
+`docs/charts/mac_coreai_scaling.png` (`scripts/coreai_mac_scaling_chart.py`).
+
 ## Requirements & reproduction
 
 - macOS 26.4+ / Xcode 27 (+ `coreai-core`) to export & compile; iPhone on iOS 27 to run.

@@ -28,6 +28,17 @@ A neutral, reproducible benchmark for running local LLMs (and, in time, ASR / TT
 - **CoreML-LLM is the memory champion** — 184 MB, ~6× leaner than Core AI's ANE path — via a stateful INT4 Neural-Engine conversion (own work, 100% ANE residency).
 - Faithful to Apple's intended path: official `coreai.llm.export` + the `coreai-models` `CoreAILM` runtime, driven by the in-tree [`CoreAIRuntime`](ios/BenchmarkApp/Sources/Runtimes/CoreAIRuntime.swift). Method + gotchas: [`methodology/coreai-ios.md`](methodology/coreai-ios.md).
 
+**Does the GPU lead hold at scale? (Mac M4 Max, same params)**
+
+![Core AI vs MLX scaling — M4 Max, Qwen3-0.6B vs 8B](docs/charts/mac_coreai_scaling.png)
+
+| Model (4-bit) | Core AI GPU | MLX | Core AI lead |
+|---|---:|---:|---:|
+| Qwen3-0.6B | 1,121 | 455 | **2.47×** |
+| Qwen3-8B | 94 | 90 | **1.05×** |
+
+Core AI's pipelined-GPU lead is large on **tiny** models — where its async-dispatch / overlap dominates — but **converges to a near-tie at a realistic 8B**, where both runtimes become memory-bandwidth-bound. So "Core AI is much faster" is a small-model effect; at usable sizes it's roughly MLX-equal (here, +5%). _(Matched: 512-token prompt, 512 gen, greedy, warm. Core AI via Apple's `llm-benchmark`; MLX via `mlx_lm`.)_
+
 ---
 
 ## 📱 TL;DR — iPhone 17 Pro (A19 Pro)
