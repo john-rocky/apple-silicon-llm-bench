@@ -66,7 +66,10 @@ Core AI's pipelined-GPU lead is large on **tiny** models — where its async-dis
 | mistral-7b-v0.3 | 3.8 GB | **101.7** (976) | 97.5 (918) | **Core AI +4%** |
 
 **Core AI matches or beats MLX on every dense model; MLX's one clear win is the MoE**
-(expert dispatch, not the core engine). gpt-oss-20b bonus: `COREAI_CHUNK_THRESHOLD` is a
+(expert dispatch, not the core engine). On noise: per-trial σ is ≤0.4% on 6 of 7
+models (worst 1.3%) — the dense deltas are 10–30× trial noise with a consistent
+direction; cross-machine variance is what independent reproduction tests (welcome —
+per-trial JSONs + env pins in `results/raw/`). gpt-oss-20b bonus: `COREAI_CHUNK_THRESHOLD` is a
 memory dial — unchunked 4096-token prefill hits 1,439 tok/s (+16%) at 18 GB dirty
 footprint, chunk-128 (the `llm-runner` MoE hint) caps memory at 1.7 GB for 766 tok/s.
 Raw logs + env pins: [`results/raw/2026-06-11-m4max-coreai-matrix/`](results/raw/2026-06-11-m4max-coreai-matrix/).
