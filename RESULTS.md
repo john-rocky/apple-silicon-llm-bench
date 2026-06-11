@@ -185,9 +185,15 @@ back-to-back, drop is thermal; load = cold install / warm relaunch):
 | GPU, macOS-26 artifact | **5,807** | **115.1** / 90.4 | 0.90 / 0.066 s | **0.22 GB** |
 | GPU, macOS-27β artifact | 1,519 | 57.2 / 52.5 | 1.14 / 0.07 s | 0.47 GB |
 | ANE, official iOS static preset | 5,325 | 69.6 / 54.1 | 2.85 / 0.045 s | 1.1 GB |
+| qwen3-4b ANE, official iOS static preset | 546 / 462 | 13.2 / 12.2 | **194 s** cold / 0.46 s | 3.27 GB |
 
 The export-lowering split carries to device: ~2× decode, 3.8× prefill, half the
 memory — from the export environment alone.
+
+Cross-check against the README's short-chat table: the macOS-26 GPU artifact at
+128p/128g (engine-warm) measures **184–190 tok/s**, re-confirming the published
+181 warm median on the archived artifact. Same artifact, 512p/1024g: 115 — protocol
+depth dominates small-model decode; never compare across protocols.
 
 ## Pivot 2 — by runtime
 
