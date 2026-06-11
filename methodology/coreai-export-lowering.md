@@ -45,11 +45,37 @@ Same 4-bit storage class (327 vs 320 MB); the **compute path** differs 2.2×.
   --platform macOS --output-name …`; `uv run` resolves to the same project venv).
 - Registry preset: `("qwen3-0.6b", …, "4bit", "float16", 8192)` in both revisions.
 
-Remaining variable: the **OS + Xcode toolchain** (macOS 26 → 27 beta between the two
-exports). The export's optimize/serialize stage runs inside `coreai-core`, which links
-the OS Core AI framework — consistent with the lowering decision living OS-side.
-We can no longer boot the macOS-26 stack to triple-confirm, so this is
-elimination-based, not bisected.
+## The mechanism (deeper forensics, 2026-06-11 night)
+
+Following the "how can the OS change a python export?" question, we traced the
+pipeline component by component:
+
+1. **The `coreai-core` wheel ships TWO complete native stacks** and picks one at
+   import time (`coreai/runtime/__init__.py`): macOS < 27 → the wheel-bundled local
+   stack (`_coreai_runtime.so`); macOS ≥ 27 + wheel install → the **OS framework**
+   (`_coreai_runtime_os.so`). Env overrides exist: `USE_LOCAL_COREAI` /
+   `USE_OS_COREAI`. The compiler bindings (`_coreaiIR`) ride the same switch.
+   So the 06-09 export (macOS 26) compiled with the bundled stack; the 06-11
+   exports compile with the OS framework by default.
+2. **The quantizer is constant.** `quantize_pytorch_model` → `coreai-opt` PT2E
+   `Quantizer` (ExecutionMode comes from static config, no environment probing) —
+   it ALWAYS emits the parametrized/dequant form. The fast artifact's
+   plain-`Linear$N`-no-dequant form must therefore be produced LATER, by the
+   compiler folding dequant into the Linear composites during
+   `prog.optimize()` (`coreai-pre-compilation-rewrite`) / serialization.
+3. **The negative result that pins it on the OS:** re-exporting on macOS 27β with
+   `USE_LOCAL_COREAI=1` — i.e. the *byte-identical frozen wheel compiler that
+   produced the fast artifact on macOS 26* — STILL yields the dequant-style
+   artifact (141 `constexpr_blockwise_shift_scale`, ~500 tok/s). Same pass code,
+   different OS underneath, different lowering ⇒ the fold decision consults the
+   running OS (capability/target queries under the pass), not just the stack's
+   own code.
+
+Everything userland is hash/mtime-verified constant (models repo, coreai-core /
+coreai-torch / coreai-opt / torchao / transformers / torch wheels, command,
+registry). The one moving part is macOS itself. We cannot bisect further without
+a macOS-26 machine or Apple's pass sources; plausibly a 27-beta regression in
+quantized-Linear legalization. Worth an Apple feedback with this document attached.
 
 ## Consequences for benchmarking (and for shipping)
 
