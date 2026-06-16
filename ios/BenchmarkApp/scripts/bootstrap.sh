@@ -4,6 +4,8 @@
 #   1. Vendored/llama.xcframework  (llama.cpp Metal build, ~168 MB)
 #   2. Vendored/Anemll             (cloned source for AnemllCore SwiftPM target)
 #   3. Vendored/LiteRT-LM          (cloned source for the LiteRTLM SwiftPM target)
+#   4. Vendored/CoreML-LLM         (cloned source for the CoreMLLLM SwiftPM target)
+#   5. Vendored/coreai-models      (cloned source for the CoreAILM SwiftPM target)
 #
 # Optional: if `xcodegen` is installed and you've edited project.yml, this
 # script also regenerates BenchmarkApp.xcodeproj. Most users do NOT need
@@ -75,7 +77,29 @@ else
     echo "${LITERTLM_DIR} already present."
 fi
 
-# 4. Optional: regenerate the Xcode project (only needed if you edit project.yml).
+# 4. CoreML-LLM (john-rocky). Local SwiftPM package (CoreMLLLM product) for the CoreML/ANE
+#    runtime. Tracks the latest default branch; pin a commit if you need exact reproduction.
+COREMLLLM_DIR="${VENDORED_DIR}/CoreML-LLM"
+if [ ! -d "${COREMLLLM_DIR}" ]; then
+    echo "Cloning CoreML-LLM …"
+    git clone --depth 1 https://github.com/john-rocky/CoreML-LLM.git "${COREMLLLM_DIR}"
+else
+    echo "${COREMLLLM_DIR} already present."
+fi
+
+# 5. coreai-models (Apple Core AI, CoreAILM product). Ships CXGrammar.xcframework in-repo.
+#    Required for the project to *compile* (project.yml links it) even though Core AI *runs*
+#    additionally need a side-loaded .aimodel in Documents/CoreAIModels/<id>/.
+COREAI_DIR="${VENDORED_DIR}/coreai-models"
+COREAI_TAG="${COREAI_TAG:-0.1.0}"
+if [ ! -d "${COREAI_DIR}" ]; then
+    echo "Cloning coreai-models (${COREAI_TAG}) …"
+    git clone --depth 1 --branch "${COREAI_TAG}" https://github.com/apple/coreai-models.git "${COREAI_DIR}"
+else
+    echo "${COREAI_DIR} already present."
+fi
+
+# 6. Optional: regenerate the Xcode project (only needed if you edit project.yml).
 if command -v xcodegen >/dev/null 2>&1; then
     if [ "${REGEN_XCODEPROJ:-0}" = "1" ] || [ ! -d "BenchmarkApp.xcodeproj" ]; then
         echo "Generating BenchmarkApp.xcodeproj …"
