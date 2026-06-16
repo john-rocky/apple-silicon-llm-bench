@@ -29,8 +29,21 @@ public actor MediaPipeRuntime: LLMRuntime {
 
     private var engine: Engine?
     private var modelPath: String?
+    // LiteRT-LM pre-allocates KV for `maxNumTokens`, so an over-provisioned context
+    // inflates peak memory for short tasks. Sized to the task's output budget by
+    // `prepareContext` (called before loadModel); default covers a long-ish chat.
+    private var contextBudget = 2048
 
     public init() {}
+
+    /// Size the LiteRT-LM context (KV pre-allocation) to the task's output budget so a
+    /// 128-token short-chat doesn't reserve a 2048-token KV — keeps peak memory honest
+    /// (it's still not directly comparable to a dynamic-KV runtime like MLX, but it's no
+    /// longer inflated by unused context). Generous prompt headroom; long-context tasks
+    /// pass a large `maxOutputTokens` and get a correspondingly large context.
+    public func prepareContext(maxOutputTokens: Int) {
+        contextBudget = max(256, maxOutputTokens + 384)
+    }
 
     public func loadModel(
         _ model: ModelInfo,
@@ -50,12 +63,13 @@ public actor MediaPipeRuntime: LLMRuntime {
         let modelFile = try locateModelFile(in: snapshot, expected: model.primaryFile)
 
         do {
-            // maxNumTokens caps the working context; the per-run output budget
-            // is enforced separately in `runGenerate` via `parameters.maxTokens`.
+            // maxNumTokens caps the working context (and the KV LiteRT-LM pre-allocates);
+            // sized to the task via `prepareContext` so short tasks don't reserve a huge KV.
+            // The per-run output budget is enforced separately in `runGenerate`.
             let config = try EngineConfig(
                 modelPath: modelFile.path,
                 backend: .gpu,
-                maxNumTokens: 2048,
+                maxNumTokens: contextBudget,
                 cacheDir: NSTemporaryDirectory()
             )
             let engine = Engine(engineConfig: config)

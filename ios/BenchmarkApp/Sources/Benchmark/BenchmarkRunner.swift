@@ -110,6 +110,10 @@ public actor BenchmarkRunner {
         let currentLoaded = await configuration.runtime.loadedModelId
         if currentLoaded != configuration.model.id {
             emit(.loadingModel(progress: 0))
+            // Size the runtime's working context to this task's output budget (no-op for
+            // runtimes with dynamic KV) so peak memory isn't inflated by unused context.
+            await configuration.runtime.prepareContext(
+                maxOutputTokens: configuration.task.parameters.maxTokens)
             let loadStart = CFAbsoluteTimeGetCurrent()
             // Keep iOS from auto-locking + suspending the URLSession mid-download.
             let scope = await MainActor.run { DownloadActivityScope() }

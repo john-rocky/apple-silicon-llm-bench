@@ -10,6 +10,10 @@
 # Prereq: build + install the app once via Xcode (it needs your signing):
 #     cd ios/BenchmarkApp && ./scripts/bootstrap.sh   # clones LiteRT-LM v0.13.1 etc.
 #     open BenchmarkApp.xcodeproj                      # select the iPhone, ⌘R
+#   Build in RELEASE for representative numbers (Product > Scheme > Edit Scheme >
+#   Run > Build Configuration: Release), per methodology/fairness-rules.md #7. The
+#   inference cores are prebuilt-release xcframeworks, so the Swift-layer Debug/Release
+#   gap is small, but Release is the honest default.
 #
 # Usage:
 #     UDID=<device-udid> ./scripts/run_device_bench.sh            # run the matrix

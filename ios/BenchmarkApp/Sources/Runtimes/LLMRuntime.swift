@@ -31,6 +31,16 @@ public protocol LLMRuntime: AnyObject, Sendable {
         prompt: String,
         parameters: GenerationParameters
     ) -> AsyncThrowingStream<GenerationEvent, Error>
+
+    /// Optional hint, called just before `loadModel`: size the runtime's working context
+    /// (e.g. KV pre-allocation) to this task's output budget, so it doesn't reserve a
+    /// larger context than the task needs and inflate peak memory. Runtimes that allocate
+    /// KV dynamically ignore it (default no-op).
+    func prepareContext(maxOutputTokens: Int) async
+}
+
+public extension LLMRuntime {
+    func prepareContext(maxOutputTokens: Int) async {}
 }
 
 public enum GenerationEvent: Sendable {
