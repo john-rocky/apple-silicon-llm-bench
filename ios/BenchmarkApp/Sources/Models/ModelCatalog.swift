@@ -222,15 +222,19 @@ public enum ModelCatalog {
 
     /// Models the LiteRT-LM adapter can load.
     ///
-    /// Wires `google-ai-edge/LiteRT-LM` ≥ 0.12.0 (the official Swift API,
-    /// `import LiteRTLM`), which reads Google's `.litertlm` bundles — the
-    /// format Gemma 4 ships in. This supersedes the old MediaPipe 0.10.x
-    /// (`.task`) path, which could not read Gemma 4 at all.
+    /// Wires `google-ai-edge/LiteRT-LM` ≥ 0.13 (the official Swift API,
+    /// `import LiteRTLM`), which reads Google's `.litertlm` bundles. The
+    /// catalog is **not** Gemma-only — `litert-community` ships Qwen3
+    /// (0.6B/4B), LFM/Liquid, and others in `.litertlm` alongside Gemma; we
+    /// target Qwen3-0.6B here so it lines up with the existing Qwen3-0.6B
+    /// rows on MLX / CoreML / Core AI. This path supersedes the old MediaPipe
+    /// 0.10.x (`.task`) path, which could not read Gemma 4 at all.
     ///
     /// Sizes are the standard (non-web, non-NPU) Metal-GPU variant. Gemma 4
     /// `.litertlm` is QAT INT4 on the decoder with the embedding table kept
     /// in higher precision and memory-mapped (E2B ≈ 0.79 GB decoder + 1.12 GB
-    /// mmap'd embeddings ≈ 2.59 GB on disk). Context window 32k.
+    /// mmap'd embeddings ≈ 2.59 GB on disk). Context window 32k. Qwen3-0.6B is
+    /// the mixed blockwise-INT4 artifact (gs32 weights, INT8 embeddings).
     public static let liteRTLM: [ModelInfo] = [
         ModelInfo(
             id: "litert-community/gemma-4-E2B-it-litert-lm",
@@ -241,6 +245,20 @@ public enum ModelCatalog {
             hfRepoId: "litert-community/gemma-4-E2B-it-litert-lm",
             hfFilePatterns: ["gemma-4-E2B-it.litertlm"],
             primaryFile: "gemma-4-E2B-it.litertlm"
+        ),
+        // Qwen3-0.6B — the model Lu's team is optimising; the 4-bit `.litertlm`
+        // lines up with the existing Qwen3-0.6B rows on MLX / CoreML / Core AI.
+        // Fallback if it won't load on GPU: the standard dynamic-INT8
+        // `Qwen3-0.6B.litertlm` (614 MB) in the same repo.
+        ModelInfo(
+            id: "litert-community/Qwen3-0.6B",
+            displayName: "Qwen3 0.6B (.litertlm)",
+            quantization: "INT4 (mixed, blockwise gs32)",
+            parameterCountB: 0.6,
+            onDiskSizeMB: 498,
+            hfRepoId: "litert-community/Qwen3-0.6B",
+            hfFilePatterns: ["qwen3_0_6b_mixed_int4.litertlm"],
+            primaryFile: "qwen3_0_6b_mixed_int4.litertlm"
         ),
         ModelInfo(
             id: "litert-community/gemma-4-E4B-it-litert-lm",

@@ -4,19 +4,26 @@ iOS will jetsam an app that uses too much memory. For LLM runtimes this is the d
 
 ## Sampling
 
-We use the Mach `task_info` call to read `mach_task_basic_info.resident_size`, which gives the process's resident memory in bytes:
+We read **`phys_footprint`** via the Mach `task_info` `TASK_VM_INFO` call — the
+byte count iOS charges the process and the exact value **jetsam** uses to decide
+what to kill (dirty + compressed + IOKit-attributed memory):
 
 ```swift
-var info = mach_task_basic_info()
-var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size / MemoryLayout<integer_t>.size)
+var info = task_vm_info_data_t()
+var count = mach_msg_type_number_t(MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<integer_t>.size)
 let result = withUnsafeMutablePointer(to: &info) {
     $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
-        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+        task_info(mach_task_self_, task_flavor_t(TASK_VM_INFO), $0, &count)
     }
 }
+// info.phys_footprint  (bytes)
 ```
 
-Sampled every 100 ms on a background queue during a run.
+Sampled every 100 ms on a background queue during a run. Runs captured before
+2026-06 used `mach_task_basic_info.resident_size` (RSS); `phys_footprint` is
+typically **higher** because RSS omits compressed pages, so numbers across the
+two eras are not byte-identical — re-measure a device to compare on one basis.
+`MemoryMonitor.residentMB()` is still available for the RSS reference.
 
 ## Reported values
 
@@ -33,9 +40,13 @@ The interesting deltas:
 - `peak_during_decode_mb - after_load_mb` ≈ KV cache + transient buffers
 - `after_generation_mb - after_load_mb` ≈ steady-state cost of an idle loaded model
 
-## Why not `os_proc_available_memory()`?
+## `phys_footprint` vs `resident_size` vs `os_proc_available_memory()`
 
-It exists, but its semantics changed across iOS versions. Resident size is the number jetsam looks at, and it is comparable across iOS versions.
+`resident_size` (RSS) omits compressed pages, so under memory pressure it
+*under-reports* by hundreds of MB — it is **not** the number jetsam charges.
+`os_proc_available_memory()` reports remaining headroom, but its semantics
+shifted across iOS versions. `phys_footprint` is the stable, jetsam-relevant
+figure and the one Instruments' "Memory" gauge shows, so that is what we report.
 
 ## Jetsam budget
 

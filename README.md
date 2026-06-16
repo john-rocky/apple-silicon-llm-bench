@@ -99,14 +99,14 @@ Real LLM inference on a phone — on-device, no server. iPhone 17 Pro, 4-bit, sh
 | Qwen 3.5 2B | — | 1,279 | 1,479 | **241** 🏆 |
 
 - **The upset — Gemma 4 E2B:** Google's **LiteRT-LM** (INT4-QAT, GPU, its native `.litertlm`) beats MLX-Swift on decode **and** uses ~4.5× less memory (641 MB vs 2,900). The purpose-built runtime wins on its own format.
-- **MLX-Swift wins Qwen 3.5 2B decode** — 61 vs 39 tok/s. (LiteRT-LM has no Qwen entry — its catalog is Gemma-only.)
+- **MLX-Swift wins Qwen 3.5 2B decode** — 61 vs 39 tok/s. (No LiteRT-LM row at this 2B size — its `.litertlm` catalog ships **Qwen3** at 0.6B/4B and Gemma, just not a 2B; a **Qwen3-0.6B** LiteRT row is coming as a direct cross-runtime match against MLX / CoreML / Core AI.)
 - **CoreML / ANE is the memory champion** — Qwen 3.5 2B in just **241 MB** (~5× leaner than MLX's 1,279) via chunked-MLKV on the Neural Engine — but it's the **slowest decode** (ANE trades throughput for footprint), same story as on M4 Max.
 - **ANE is near-parity with the desktop:** CoreML Gemma 4 E2B does 33 tok/s on iPhone vs 32.5 on M4 Max — same silicon family. The **GPU** runtimes pay the real on-device tax: ~4–5× slower than M4 Max (Qwen 3.5 2B → 61 tok/s vs 292).
 - **Counting:** MLX / llama.cpp / LiteRT-LM report exact tokenizer tokens (LiteRT-LM via `getBenchmarkInfo`); CoreML/ANE counts streamed pieces (≈ tokens). LiteRT-LM runs to EOS (no per-call cap → ~458-tok reply vs the others' 128 budget); decode tok/s is a rate, so the head-to-head holds.
 - **Fully automated, side-loaded** via `devicectl` headless mode — nothing typed on the phone, same methodology as the desktop rows.
 - **Coming next:** Apple Foundation Models, more models and more iPhones / iPads. [One row is a great PR](CONTRIBUTING.md).
 
-> **How the LiteRT-LM row was measured:** `google-ai-edge/LiteRT-LM` 0.12.0 running `litert-community/gemma-4-E2B-it.litertlm` (INT4-QAT) on the Metal **GPU** backend, via the in-tree [`MediaPipeRuntime`](ios/BenchmarkApp/Sources/Runtimes/MediaPipeRuntime.swift) adapter — same headless harness + prompt as every other row (3 cold runs, median). Token counts and tok/s come from **LiteRT-LM's own benchmark counters** (`Conversation.getBenchmarkInfo`), so they're exact, not estimated. It generates to EOS (no per-call output cap in the API), so its token count is the model's full reply rather than the 128-token budget — decode tok/s is a rate and stays comparable; memory is exact process RSS. LiteRT-LM is vendored as a **local SwiftPM package** (`scripts/bootstrap.sh` clones it with `GIT_LFS_SKIP_SMUDGE=1`; the released package trips SwiftPM's unsafe-flags rule via its `-all_load`).
+> **How the LiteRT-LM row was measured:** `google-ai-edge/LiteRT-LM` 0.12.0 running `litert-community/gemma-4-E2B-it.litertlm` (INT4-QAT) on the Metal **GPU** backend, via the in-tree [`MediaPipeRuntime`](ios/BenchmarkApp/Sources/Runtimes/MediaPipeRuntime.swift) adapter — same headless harness + prompt as every other row (3 cold runs, median). Token counts and tok/s come from **LiteRT-LM's own benchmark counters** (`Conversation.getBenchmarkInfo`), so they're exact, not estimated. It generates to EOS (no per-call output cap in the API), so its token count is the model's full reply rather than the 128-token budget — decode tok/s is a rate and stays comparable; memory is exact process RSS (this 0.12.0 row predates the harness switch to jetsam-charged `phys_footprint`). LiteRT-LM is vendored as a **local SwiftPM package** (`scripts/bootstrap.sh` clones it with `GIT_LFS_SKIP_SMUDGE=1`; the released package trips SwiftPM's unsafe-flags rule via its `-all_load`).
 >
 > **How the CoreML/ANE rows were measured:** `john-rocky/CoreML-LLM` on the Neural Engine (`computeUnits: .cpuAndNeuralEngine`) — Gemma 4 E2B via the chunked `.mlmodelc` path, Qwen 3.5 2B via `Qwen35MLKVGenerator` (chunked MLKV, hence the 241 MB). Decode counts streamed pieces (≈ tokens); first-load ANE compilation makes its load time high (and it's the lowest-throughput runtime — the ANE trades speed for memory).
 >
@@ -116,7 +116,7 @@ Real LLM inference on a phone — on-device, no server. iPhone 17 Pro, 4-bit, sh
 
 ## ⏱ Burst tok/s is only half the story — sustained throttling
 
-The table above is **cold-burst** speed. Run the same model **continuously** and it flips: the GPU runtimes (MLX, LiteRT-LM) heat up and throttle **50%+ within ~60 s**, while the **ANE barely moves** — it draws ~half the power, so it heats slowly and the SoC doesn't throttle it.
+The table above is **cold-burst** speed. Run the same model **continuously** and it flips: the GPU runtimes (MLX, LiteRT-LM) heat up and shed **~50–60% of their throughput** under sustained load, while the **ANE barely moves** (retains ~65%). MLX crosses the 50%-lost line within ~60 s; LiteRT-LM is more thermally resilient early — it still holds ~53% of its burst rate at 1 min and only crosses 50% near the 4-min mark — but settles in the same place. The ANE draws ~half the package power (measured on Mac via `powermetrics` — iOS doesn't expose power counters to third-party apps), so it heats slowly and the SoC doesn't throttle it.
 
 ![Sustained decode throttling — iPhone 17 Pro, Gemma 4 E2B](results/iphone17pro-throttle.png)
 
@@ -198,7 +198,7 @@ Regenerate after adding rows: `python scripts/generate_charts.py`.
 | Gemma 4 E2B   | 2 B   | 3 | **185.4** | 119.2 | 32.5 (INT4 palettized) | _pending_ |
 | Gemma 4 E4B   | 4 B   | 3 | **113.5** | 80.5 | _not run_ | _pending_ |
 
-> `litert-lm` column: **_pending_** = adapter wired against `google-ai-edge/LiteRT-LM` v0.12.0, M4 Max run not yet captured (see [`RESULTS.md`](RESULTS.md) / `Yardstick_USER_RUNS.md`). **n/a** = LiteRT-LM's catalog is Gemma-only (`.litertlm`), so the Qwen rows have no entry. For reference, Google's E2B model card reports 56.5 tok/s on iPhone 17 Pro GPU — a vendor figure on a different device, not an M4 Max Yardstick measurement.
+> `litert-lm` column: **_pending_** = adapter wired against `google-ai-edge/LiteRT-LM` v0.12.0, M4 Max run not yet captured (see [`RESULTS.md`](RESULTS.md) / `Yardstick_USER_RUNS.md`). **n/a** = no official `.litertlm` at this exact Qwen size — `litert-community` ships **Qwen3-0.6B** and **Qwen3.5-4B** alongside Gemma (it is **not** Gemma-only); the 0.5B/0.8B/2B sizes in this table just have no matching LiteRT artifact. A Qwen3-0.6B cross-runtime row is coming. For reference, Google's E2B model card reports 56.5 tok/s on iPhone 17 Pro GPU — a vendor figure on a different device, not an M4 Max Yardstick measurement.
 
 → **MLX-Swift now wins decode on every cell** — 1.4×–1.8× over llama.cpp — after upstream `mlx-swift-lm` shipped Qwen + Gemma kernel updates in early 2026 (the Qwen rows roughly tripled vs. the snapshot captured before those landed). The old "llama.cpp Metal always wins small-model decode" rule is no longer true on M4 Max; re-measure before quoting it. CoreML / ANE is the slowest of the three on every cell, in exchange for the dramatic memory savings shown below.
 
@@ -415,7 +415,7 @@ First launch downloads the chosen model (default: `mlx-community/gemma-4-e2b-it-
 | MLX Swift | `MLXRuntime.swift` | SPM (`mlx-swift-lm`) |
 | llama.cpp | `LlamaCppRuntime.swift` | vendored `llama.xcframework` (`bootstrap.sh`) |
 | CoreML (swift-transformers) | `CoreMLRuntime.swift` | SPM (`swift-transformers` `Models` + `Generation`) |
-| LiteRT-LM | `MediaPipeRuntime.swift` | SPM (`google-ai-edge/LiteRT-LM` ≥ 0.12.0, product `LiteRTLM`); `#if canImport(LiteRTLM)`-gated |
+| LiteRT-LM | `MediaPipeRuntime.swift` | SPM (`google-ai-edge/LiteRT-LM` ≥ 0.13, product `LiteRTLM`); `#if canImport(LiteRTLM)`-gated |
 | ExecuTorch | `ExecuTorchRuntime.swift` | SPM (`pytorch/executorch` `swiftpm-*` branch) |
 | ANEMLL | `AnemllRuntime.swift` | local SPM via vendored `Anemll/` (`bootstrap.sh`) |
 | Apple Foundation Models | `AppleFMRuntime.swift` | system framework, `#if canImport(FoundationModels)` (macOS 26 / iOS 26) |

@@ -102,7 +102,7 @@ public actor BenchmarkRunner {
         let thermalSampler = ThermalSampler()
         let energyMonitor = EnergyMonitor()
 
-        let baselineMB = MemoryMonitor.residentMB()
+        let baselineMB = MemoryMonitor.footprintMB()
         await thermalSampler.start()
 
         // 1. Load model (if not already loaded).
@@ -120,7 +120,7 @@ public actor BenchmarkRunner {
             loadTime = CFAbsoluteTimeGetCurrent() - loadStart
         }
 
-        let memoryAfterLoad = MemoryMonitor.residentMB()
+        let memoryAfterLoad = MemoryMonitor.footprintMB()
         await memorySampler.start()
         await energyMonitor.start()
 
@@ -202,7 +202,7 @@ public actor BenchmarkRunner {
 
         // Wait briefly for transient buffers to drop.
         try? await Task.sleep(nanoseconds: 200_000_000)
-        let memoryAfterMB = MemoryMonitor.residentMB()
+        let memoryAfterMB = MemoryMonitor.footprintMB()
 
         if let error = capturedError {
             emit(.failed(error.localizedDescription))

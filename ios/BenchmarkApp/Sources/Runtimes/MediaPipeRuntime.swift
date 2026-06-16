@@ -115,6 +115,7 @@ public actor MediaPipeRuntime: LLMRuntime {
         let prefillStart = CFAbsoluteTimeGetCurrent()
         var firstTokenAt: CFAbsoluteTime?
         var tokenCount = 0
+        var capped = false
 
         for try await chunk in conversation.sendMessageStream(Message(prompt)) {
             try Task.checkCancellation()
@@ -122,14 +123,15 @@ public actor MediaPipeRuntime: LLMRuntime {
             let text = chunk.toString
             if !text.isEmpty {
                 continuation.yield(.chunk(text))
-                tokenCount += 1  // chunk tally — fallback only; real count comes from getBenchmarkInfo
+                tokenCount += 1  // chunk tally ≈ tokens
             }
-            // Run the turn to its natural end (EOS): LiteRT-LM finalizes its
-            // per-turn benchmark counters only on completion, and its streaming
-            // API has no per-call output-token cap, so a mid-turn break would
-            // leave getBenchmarkInfo empty. Output length is therefore the
-            // model's own (vs. the 128-token hard cap other runtimes honor);
-            // decode tok/s is a rate, so it stays comparable.
+            // Cap output at the task's token budget so LiteRT-LM is measured over the
+            // SAME number of generated tokens as every other runtime (fairness rule 1:
+            // same maxTokens). 0.12/0.13's streaming API has no per-call cap and its
+            // `getBenchmarkInfo` finalizes only on a natural EOS finish, so when we break
+            // early we fall back to chunk-count + wall-clock (the CoreML-style measure) —
+            // see the `capped` branch below.
+            if tokenCount >= parameters.maxTokens { capped = true; break }
         }
 
         let end = CFAbsoluteTimeGetCurrent()
@@ -141,7 +143,9 @@ public actor MediaPipeRuntime: LLMRuntime {
         // generateTime so GenerationInfo's computed tok/s == LiteRT's reported
         // rates exactly. Fall back to chunk-count + wall-clock if the benchmark
         // info is unavailable (e.g. flag not honored on this build).
-        let bench = try? conversation.getBenchmarkInfo()
+        // Capped mid-turn → LiteRT-LM's per-turn counters aren't finalized; use the
+        // chunk-count + wall-clock fallback. Only an EOS finish yields exact counters.
+        let bench = capped ? nil : (try? conversation.getBenchmarkInfo())
         let decodeTokens = (bench.map { $0.lastDecodeTokenCount } ?? 0) > 0
             ? bench!.lastDecodeTokenCount : tokenCount
         let promptTokens = bench?.lastPrefillTokenCount ?? 0
@@ -163,7 +167,7 @@ public actor MediaPipeRuntime: LLMRuntime {
             generationTokenCount: decodeTokens,
             promptTime: promptTime,
             generateTime: generateTime,
-            stopReason: .stop  // ran to EOS
+            stopReason: capped ? .length : .stop
         )))
         continuation.finish()
     }

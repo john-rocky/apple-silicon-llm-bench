@@ -19,7 +19,7 @@ LLAMA_FRAMEWORK="${VENDORED_DIR}/llama.xcframework"
 ANEMLL_DIR="${VENDORED_DIR}/Anemll"
 ANEMLL_PKG="${ANEMLL_DIR}/anemll-swift-cli/Package.swift"
 LITERTLM_DIR="${VENDORED_DIR}/LiteRT-LM"
-LITERTLM_TAG="${LITERTLM_TAG:-v0.12.0}"
+LITERTLM_TAG="${LITERTLM_TAG:-v0.13.1}"
 
 mkdir -p "${VENDORED_DIR}"
 

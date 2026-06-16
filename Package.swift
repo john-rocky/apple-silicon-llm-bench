@@ -24,10 +24,11 @@ let package = Package(
         .package(url: "https://github.com/ml-explore/mlx-swift-lm", branch: "main"),
         .package(url: "https://github.com/huggingface/swift-huggingface", from: "0.8.1"),
         .package(url: "https://github.com/huggingface/swift-transformers", from: "1.0.0"),
-        // LiteRT-LM ships a binary xcframework with ios-arm64 + macos-arm64
-        // slices (≥ 0.12.0), so unlike the vendored adapters it wires up as a
-        // plain SPM dependency on both targets.
-        .package(url: "https://github.com/google-ai-edge/LiteRT-LM", from: "0.12.0"),
+        // LiteRT-LM ships a binary xcframework, so unlike the vendored adapters
+        // it wires up as a plain SPM dependency on both targets. Pinned to match
+        // the version vendored in ios/BenchmarkApp (Vendored/LiteRT-LM @ v0.13.1)
+        // so the iOS build, which resolves this graph too, stays consistent.
+        .package(url: "https://github.com/google-ai-edge/LiteRT-LM", from: "0.13.0"),
     ],
     targets: [
         .target(

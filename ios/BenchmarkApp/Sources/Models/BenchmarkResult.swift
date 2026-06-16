@@ -65,6 +65,9 @@ public struct Metrics: Codable, Sendable {
     public let cancellationLatencyMS: Int?
     public let stopReason: String
 
+    // Memory is `phys_footprint` (jetsam-charged) — see MemoryMonitor. Runs
+    // captured before 2026-06 used resident_size (RSS); the two are not
+    // byte-identical (phys_footprint runs higher; RSS omits compressed pages).
     public let memoryBaselineMB: Double
     public let memoryAfterLoadMB: Double?
     public let memoryPeakDuringDecodeMB: Double

@@ -122,7 +122,13 @@ public actor LlamaCppRuntime: LLMRuntime {
             throw LLMRuntimeError.modelNotLoaded
         }
 
-        let promptTokens = tokenize(text: prompt, addBOS: true)
+        // Apply the model's chat template so llama.cpp matches the other adapters (rule 1);
+        // parseSpecial so the template's <start_of_turn> / <|im_start|> tokenize as special
+        // tokens, not literal text. VERIFY ON DEVICE: if the template also prepends <bos>,
+        // drop addBOS here to avoid a double-BOS. llama.cpp rows need re-measure after this.
+        let templated = applyChatTemplate(prompt)
+        let promptTokens = tokenize(text: templated ?? prompt, addBOS: true,
+                                    parseSpecial: templated != nil)
 
         var b = batch ?? llama_batch_init(Int32(max(promptTokens.count, 2048)), 0, 1)
         // Reset batch.
@@ -186,15 +192,39 @@ public actor LlamaCppRuntime: LLMRuntime {
 
     // MARK: - Tokenization helpers (mirror upstream LibLlama.swift)
 
-    private func tokenize(text: String, addBOS: Bool) -> [llama_token] {
+    private func tokenize(text: String, addBOS: Bool, parseSpecial: Bool = false) -> [llama_token] {
         guard let vocab else { return [] }
         let utf8Count = text.utf8.count
         let n = utf8Count + (addBOS ? 1 : 0) + 1
         let buf = UnsafeMutablePointer<llama_token>.allocate(capacity: n)
         defer { buf.deallocate() }
-        let count = llama_tokenize(vocab, text, Int32(utf8Count), buf, Int32(n), addBOS, false)
+        let count = llama_tokenize(vocab, text, Int32(utf8Count), buf, Int32(n), addBOS, parseSpecial)
         guard count > 0 else { return [] }
         return (0 ..< Int(count)).map { buf[$0] }
+    }
+
+    /// Wrap the bare prompt in the model's own chat template (read from the GGUF metadata)
+    /// so llama.cpp sees the same input as every other adapter — MLX / CoreML / Core AI /
+    /// ANEMLL / LiteRT all apply their template via the tokenizer; llama.cpp must do it
+    /// explicitly (fairness rule 1). Returns nil if the model has no template or it isn't in
+    /// `llama_chat_apply_template`'s built-in set (Gemma / Qwen / Llama are), so the caller
+    /// falls back to the bare prompt rather than failing.
+    private func applyChatTemplate(_ userPrompt: String) -> String? {
+        guard let model, let tmpl = llama_model_chat_template(model, nil) else { return nil }
+        return "user".withCString { rolePtr in
+            userPrompt.withCString { contentPtr -> String? in
+                var msg = llama_chat_message(role: rolePtr, content: contentPtr)
+                var buf = [CChar](repeating: 0, count: max(userPrompt.utf8.count * 2 + 256, 512))
+                var n = llama_chat_apply_template(tmpl, &msg, 1, true, &buf, Int32(buf.count))
+                if n > Int32(buf.count) {                // buffer too small — grow once
+                    buf = [CChar](repeating: 0, count: Int(n))
+                    n = llama_chat_apply_template(tmpl, &msg, 1, true, &buf, Int32(buf.count))
+                }
+                guard n > 0 else { return nil }
+                let take = max(0, min(Int(n), buf.count))
+                return String(cString: Array(buf[0..<take]) + [0])
+            }
+        }
     }
 
     private func tokenToPiece(token: llama_token) -> String {

@@ -10,7 +10,7 @@ MediaPipe LLM Inference task).
 
 ## Strengths
 
-- Strong Gemma family support — it's Google's own runtime, and Gemma 4 ships in `.litertlm` first.
+- Strong first-party model coverage — Gemma 4 ships in `.litertlm` first (Google's own runtime), and `litert-community` also publishes **Qwen3** (0.6B/4B), LFM/Liquid, and more. **Not** Gemma-only.
 - Cross-platform parity with Android, useful for teams shipping both.
 - Metal GPU acceleration on Apple Silicon; one binary covers iOS + macOS.
 
@@ -20,7 +20,7 @@ MediaPipe LLM Inference task).
 - Model format is runtime-specific (`.litertlm`) — availability depends on Google publishing conversions.
 - Swift API is **early preview** (since v0.12.0); signatures may shift between releases.
 
-## Apple integration (wired — v0.12.0)
+## Apple integration (wired — v0.13.1)
 
 The official `LiteRTLM` product ships a binary xcframework with **both
 `ios-arm64` and `macos-arm64` slices**, so it wires up as a plain SPM
@@ -29,7 +29,7 @@ CocoaPod, no vendoring.
 
 ```swift
 // Package.swift / project.yml
-.package(url: "https://github.com/google-ai-edge/LiteRT-LM", from: "0.12.0")
+.package(url: "https://github.com/google-ai-edge/LiteRT-LM", from: "0.13.0")
 // product: LiteRTLM
 ```
 
@@ -48,22 +48,29 @@ CocoaPod, no vendoring.
 
 ## Models targeted (`.litertlm`)
 
-| Model | HF repo | On-disk (standard variant) |
+| Model | HF repo | On-disk (variant used) |
 |-------|---------|---------------------------:|
+| **Qwen3 0.6B** | `litert-community/Qwen3-0.6B` | 0.50 GB (`qwen3_0_6b_mixed_int4.litertlm`) |
 | Gemma 4 E2B | `litert-community/gemma-4-E2B-it-litert-lm` | 2.59 GB |
 | Gemma 4 E4B | `litert-community/gemma-4-E4B-it-litert-lm` | 3.66 GB |
 | Gemma 3n E2B | `google/gemma-3n-E2B-it-litert-lm` | ~3 GB |
 
-The adapter prefers the standard (non-`-web`, non-NPU) `.litertlm` file. Each
-repo also ships `-web` (smaller, browser-tuned) and Intel/Qualcomm NPU variants
-that we skip for the Metal GPU comparison.
+Qwen3-0.6B is the model Lu's team is optimising; we use its **mixed blockwise-INT4**
+artifact (gs32 weights + INT8 embeddings, 498 MB) so the quant lines up with the 4-bit
+Qwen3-0.6B rows on MLX / CoreML / Core AI (the same repo also ships a dynamic-INT8
+`Qwen3-0.6B.litertlm`, 614 MB, and a MediaTek-NPU build we skip). For the Gemma repos the
+adapter prefers the standard (non-`-web`, non-NPU) `.litertlm`; each also ships `-web`
+(browser-tuned) and Intel/Qualcomm NPU variants we skip for the Metal GPU comparison.
 
 ## Status
 
-**Wired (v0.12.0), runs pending.** The adapter builds against `LiteRTLM` on
-Mac + iOS. Decode/TTFT/memory cells in [`RESULTS.md`](../RESULTS.md) are
-captured on real hardware (M4 Max + iPhone 17 Pro) — see
-[`Yardstick_USER_RUNS.md`](../../Yardstick_USER_RUNS.md) for the run commands.
+**Wired against v0.13.1.** The adapter builds against `LiteRTLM` on Mac + iOS.
+The published iPhone 17 Pro decode/TTFT/memory/energy cells were **captured on
+0.12.0**; re-measurement on 0.13.1 is pending — the Swift API is early-preview
+and signatures may shift between releases, so rebuild on device after
+`bootstrap.sh` and fix the adapter if needed. M4 Max LiteRT run still pending.
+Per-device package: [`docs/litert-lm/`](../docs/litert-lm/); run commands in
+[`Yardstick_USER_RUNS.md`](../../Yardstick_USER_RUNS.md).
 
 For reference, Google's own E2B model card reports **56.5 tok/s on iPhone 17
 Pro (GPU)** — a vendor figure, not a Yardstick measurement.

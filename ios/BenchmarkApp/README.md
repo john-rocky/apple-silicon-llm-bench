@@ -37,7 +37,7 @@ The `Vendored/` directory is git-ignored and re-fetched on demand.
 ### LiteRT-LM
 
 Wired via SPM — `xcodegen generate` picks it up from `project.yml`
-(`google-ai-edge/LiteRT-LM` ≥ 0.12.0, product `LiteRTLM`, macOS 12 / iOS 15).
+(`google-ai-edge/LiteRT-LM` ≥ 0.13, product `LiteRTLM`, macOS 12 / iOS 15).
 The adapter (`MediaPipeRuntime.swift`) is `#if canImport(LiteRTLM)`-gated, so it
 lights up automatically once the package resolves; no Xcode-UI or CocoaPods step.
 

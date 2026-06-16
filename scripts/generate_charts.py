@@ -281,7 +281,8 @@ def chart_tradeoff():
 def chart_iphone():
     runs = load_runs("iphone17pro", task="short-chat")
     models = ["Qwen 3.5 2B", "Gemma 4 E2B"]
-    # litert-lm first to spotlight the Gemma upset; it's Gemma-only (no Qwen bar).
+    # litert-lm first to spotlight the Gemma upset; no LiteRT Qwen bar captured yet
+    # (Qwen3-0.6B .litertlm is wired — its device run is pending).
     runtimes = ["litert-lm", "mlx-swift", "llama.cpp", "coreml-llm"]
     rt_label = {"litert-lm": "LiteRT-LM", "mlx-swift": "MLX-Swift",
                 "llama.cpp": "llama.cpp", "coreml-llm": "CoreML/ANE"}
@@ -309,7 +310,7 @@ def chart_iphone():
             for j, m in enumerate(models):
                 vals = data.get((m, rt))
                 if not vals:
-                    continue  # e.g. LiteRT-LM has no Qwen row (Gemma-only catalog)
+                    continue  # e.g. no LiteRT Qwen row captured yet (Qwen3-0.6B coming)
                 y = median(vals)
                 x = xs[j] + (i - 1.5) * width
                 ax.bar([x], [y], width,
@@ -335,7 +336,7 @@ def chart_iphone():
         fontsize=12.5, fontweight="bold", y=1.03,
     )
     fig.text(0.5, -0.03,
-             "Decode: LiteRT-LM wins Gemma, MLX wins Qwen  ·  Memory: CoreML/ANE as low as 241 MB (Qwen, ~5× leaner)  ·  LiteRT-LM is Gemma-only; CoreML/ANE trades speed for memory",
+             "Decode: LiteRT-LM wins Gemma, MLX wins Qwen  ·  Memory: CoreML/ANE as low as 241 MB (Qwen, ~5× leaner)  ·  LiteRT-LM Qwen3 row coming; CoreML/ANE trades speed for memory",
              ha="center", fontsize=8.5, color="#666")
     plt.tight_layout()
     plt.savefig(OUT / "iphone_decode_mem.png")
