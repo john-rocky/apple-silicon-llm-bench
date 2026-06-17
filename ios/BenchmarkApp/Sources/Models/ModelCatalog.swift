@@ -97,6 +97,24 @@ public enum ModelCatalog {
             onDiskSizeMB: 7000,
             hfRepoId: "mlx-community/gemma-4-12b-it-4bit"
         ),
+        // Comparators for Lu's models. mlx LFM2-350M is v2.0 (no 2.5 on mlx-community yet) —
+        // slight version skew vs our LFM2.5 litert; disclosed.
+        ModelInfo(
+            id: "mlx-community/LFM2-350M-4bit",
+            displayName: "LFM2-350M (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 0.35,
+            onDiskSizeMB: 200,
+            hfRepoId: "mlx-community/LFM2-350M-4bit"
+        ),
+        ModelInfo(
+            id: "mlx-community/MiniCPM5-1B-4bit",
+            displayName: "MiniCPM5-1B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 1.0,
+            onDiskSizeMB: 600,
+            hfRepoId: "mlx-community/MiniCPM5-1B-4bit"
+        ),
         ModelInfo(
             id: "mlx-community/Qwen3.5-0.8B-MLX-4bit",
             displayName: "Qwen 3.5 0.8B (4-bit)",
@@ -290,6 +308,16 @@ public enum ModelCatalog {
             hfFilePatterns: ["gemma-4-12b-it-Q4_K_M.gguf"],
             primaryFile: "gemma-4-12b-it-Q4_K_M.gguf"
         ),
+        ModelInfo(
+            id: "LiquidAI/LFM2.5-350M-GGUF/Q4_K_M",
+            displayName: "LFM2.5-350M Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 0.35,
+            onDiskSizeMB: 230,
+            hfRepoId: "LiquidAI/LFM2.5-350M-GGUF",
+            hfFilePatterns: ["LFM2.5-350M-Q4_K_M.gguf"],
+            primaryFile: "LFM2.5-350M-Q4_K_M.gguf"
+        ),
     ]
 
     /// Models the LiteRT-LM adapter can load.
@@ -331,6 +359,29 @@ public enum ModelCatalog {
             hfRepoId: "litert-community/Qwen3-0.6B",
             hfFilePatterns: ["qwen3_0_6b_mixed_int4.litertlm"],
             primaryFile: "qwen3_0_6b_mixed_int4.litertlm"
+        ),
+        // Lu's focus models (Liquid/LFM2 + MiniCPM) — NOT on litert-community, so these are
+        // OUR own .litertlm conversions, side-loaded (no HF download; hfRepoId is a local marker).
+        // See MODEL_AVAILABILITY.md / MODEL_MATRIX.md.
+        ModelInfo(
+            id: "litert-local/lfm2.5-350m",
+            displayName: "LFM2.5-350M (.litertlm, local)",
+            quantization: "INT4 (ekv1024)",
+            parameterCountB: 0.35,
+            onDiskSizeMB: 178,
+            hfRepoId: "litert-local/LFM2.5-350M",
+            hfFilePatterns: ["LFM2.5-350M_int4_ekv1024.litertlm"],
+            primaryFile: "LFM2.5-350M_int4_ekv1024.litertlm"
+        ),
+        ModelInfo(
+            id: "litert-local/minicpm5-1b",
+            displayName: "MiniCPM5-1B (.litertlm, local)",
+            quantization: "INT4 (ekv1024)",
+            parameterCountB: 1.0,
+            onDiskSizeMB: 532,
+            hfRepoId: "litert-local/MiniCPM5-1B",
+            hfFilePatterns: ["MiniCPM5-1B_int4_ekv1024.litertlm"],
+            primaryFile: "MiniCPM5-1B_int4_ekv1024.litertlm"
         ),
         // Qwen3 4B / 8B — same mixed-INT4 .litertlm line as 0.6B, for a size-scaling
         // curve (0.6B → 4B → 8B). 8B (~4.4 GB) is desktop/Mac-tier; on phones it can

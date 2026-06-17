@@ -28,10 +28,21 @@ LiteRT artifact = the GPU `mixed_int4` `.litertlm` on `litert-community` (each r
   the desktop tier runs the models phones can't, giving a full Qwen3 0.6→14B and Gemma E2B→12B
   scaling curve. (CoreML/llama on Mac use the xcodebuild target — see RUNBOOK.)
 
-## Not yet benchable (blocked on LiteRT publication)
-- **Liquid / LFM2:** no `.litertlm` anywhere on HF. **MiniCPM:** none official on `litert-community`
-  (one third-party `lyafence/MiniCPM5-1B-SFT-litertlm` exists). Both are on Lu's optimisation list —
-  ready to run within days of an official `.litertlm` release. See [`MODEL_AVAILABILITY.md`](MODEL_AVAILABILITY.md).
+## Lu's focus models — now benchable via OUR own `.litertlm` conversions
+LiteRT doesn't publish Liquid/LFM2 or MiniCPM on `litert-community`, so we converted them ourselves
+(`~/code/litertlm-convert/deliverables/`), side-loaded (no HF download). Mac preview (short-chat, M4 Max,
+median n=3 where it runs):
+
+| Model | LiteRT (`.litertlm`, ours) | MLX 4-bit | GGUF |
+|---|---|---|---|
+| **MiniCPM5-1B** | ✅ **runs — 239 tok/s** (CPU, ~610 MB) | `mlx-community/MiniCPM5-1B-4bit` ✅ **526 tok/s** | none on HF |
+| **LFM2.5-350M** | ⚠️ **loads but fails to invoke** (`INTERNAL: Failed to invoke the compiled model`, litert-lm 0.13.1 macOS) | `mlx-community/LFM2-350M-4bit` (v2.0 ✅ 1024 tok/s) | `LiquidAI/LFM2.5-350M-GGUF` ✅ |
+
+- **MiniCPM5-1B** is a genuine cross-runtime LiteRT-vs-MLX pair on a Lu-named model — the conversion works.
+- **LFM2.5-350M**: the litert bundle loads but the 0.13.1 runtime executor can't invoke it (LFM2's hybrid
+  conv/attention ops, likely). A finding for both the conversion and litert-lm's LFM2 support; the iPhone
+  Metal-GPU path is untested (may differ — that's what 実機 will tell us).
+- MLX LFM comparator is **LFM2-350M (v2.0)**, not 2.5 (no 2.5 on mlx-community) — a version skew, disclosed.
 
 > Quant is each runtime's native 4-bit (LiteRT mixed-INT4 / MLX Q4 / GGUF Q4_K_M) — disclosed per
 > row, never equalised. Sizes are approximate; the report uses the runtime-recorded counts.
