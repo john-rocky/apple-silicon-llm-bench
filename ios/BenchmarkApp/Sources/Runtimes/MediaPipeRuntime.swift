@@ -36,13 +36,13 @@ public actor MediaPipeRuntime: LLMRuntime {
 
     public init() {}
 
-    /// Size the LiteRT-LM context (KV pre-allocation) to the task's output budget so a
-    /// 128-token short-chat doesn't reserve a 2048-token KV — keeps peak memory honest
-    /// (it's still not directly comparable to a dynamic-KV runtime like MLX, but it's no
-    /// longer inflated by unused context). Generous prompt headroom; long-context tasks
-    /// pass a large `maxOutputTokens` and get a correspondingly large context.
-    public func prepareContext(maxOutputTokens: Int) {
-        contextBudget = max(256, maxOutputTokens + 384)
+    /// Size the LiteRT-LM context (KV pre-allocation = `maxNumTokens`) to ≈ prompt + output.
+    /// LiteRT-LM rejects any prompt longer than `maxNumTokens` (`INVALID_ARGUMENT: Input token
+    /// ids are too long`), so the runner passes prompt+output here; a 128-token short-chat still
+    /// gets a small KV, while a long-context task gets one sized to its prompt. (Still not
+    /// directly comparable to a dynamic-KV runtime like MLX — disclosed — but no longer wrong.)
+    public func prepareContext(maxContextTokens: Int) {
+        contextBudget = max(256, maxContextTokens)
     }
 
     public func loadModel(

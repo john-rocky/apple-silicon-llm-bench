@@ -110,10 +110,13 @@ public actor BenchmarkRunner {
         let currentLoaded = await configuration.runtime.loadedModelId
         if currentLoaded != configuration.model.id {
             emit(.loadingModel(progress: 0))
-            // Size the runtime's working context to this task's output budget (no-op for
-            // runtimes with dynamic KV) so peak memory isn't inflated by unused context.
+            // Size the runtime's working context to ≈ prompt + output (no-op for dynamic-KV
+            // runtimes). LiteRT-LM pre-allocates a fixed KV and rejects longer prompts, so
+            // long-context tasks must size it to the prompt. ~3 chars/token is a safe
+            // over-estimate (lorem-ish English); over-provisioning KV is harmless, under is fatal.
+            let promptTokenEstimate = configuration.task.prompt.count / 3 + 16
             await configuration.runtime.prepareContext(
-                maxOutputTokens: configuration.task.parameters.maxTokens)
+                maxContextTokens: promptTokenEstimate + configuration.task.parameters.maxTokens + 512)
             let loadStart = CFAbsoluteTimeGetCurrent()
             // Keep iOS from auto-locking + suspending the URLSession mid-download.
             let scope = await MainActor.run { DownloadActivityScope() }

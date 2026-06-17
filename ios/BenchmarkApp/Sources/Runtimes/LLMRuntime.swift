@@ -33,14 +33,16 @@ public protocol LLMRuntime: AnyObject, Sendable {
     ) -> AsyncThrowingStream<GenerationEvent, Error>
 
     /// Optional hint, called just before `loadModel`: size the runtime's working context
-    /// (e.g. KV pre-allocation) to this task's output budget, so it doesn't reserve a
-    /// larger context than the task needs and inflate peak memory. Runtimes that allocate
-    /// KV dynamically ignore it (default no-op).
-    func prepareContext(maxOutputTokens: Int) async
+    /// (e.g. KV pre-allocation) to roughly this many tokens (≈ prompt + output budget), so it
+    /// neither rejects a long prompt nor over-reserves for a short one. Runtimes that allocate
+    /// KV dynamically ignore it (default no-op). LiteRT-LM pre-allocates KV to a fixed
+    /// `maxNumTokens` and *rejects* any prompt longer than it, so long-context tasks must size
+    /// this to the prompt, not just the output.
+    func prepareContext(maxContextTokens: Int) async
 }
 
 public extension LLMRuntime {
-    func prepareContext(maxOutputTokens: Int) async {}
+    func prepareContext(maxContextTokens: Int) async {}
 }
 
 public enum GenerationEvent: Sendable {
