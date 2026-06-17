@@ -240,6 +240,19 @@ SUSTAINED_FAILURES = {
 }
 
 
+# Why a runtime is excluded from a fair throughput table, keyed (runtime key, model). Used
+# only when that runtime has data but isn't fair-consistent; otherwise a generic note is shown.
+CAPTURE_NOTES = {
+    ("coreml-llm", "gemma-4-e2b"):
+        "**CoreML / ANE**: a fair re-capture was attempted via a side-loaded bundle. One cold run "
+        "measured **25.3 tok/s**, but n=3 iso-runs were jetsam-killed (`signal 9`) — the gemma-3n "
+        "bundle peaks at **~3.3 GB** (4 INT8 decode chunks + the 2.35 GB per-layer embedding table), "
+        "which sits at iOS's per-app memory ceiling. Withheld from the median table pending a "
+        "memory-trimmed bundle; the ~3.3 GB footprint is itself a finding for on-device gemma-3n. "
+        "(The pre-fair Debug/iOS 26 row read 33 tok/s at 1187 MB on a lighter bundle.)",
+}
+
+
 def md_sustained_gap(rows, model):
     """Note runtimes that produced short-chat data but no sustained/energy run (fairness rule 4)."""
     have = {r["label"] for r in rows["throttle"]} | {r["label"] for r in rows["energy"]}
@@ -381,7 +394,7 @@ def main():
             section_fair = bool(lit_tp and lit_tp["fair"])
             pending_tp, withheld_en = [], []
             if section_fair:
-                pending_tp = [r["label"] for r in rows["throughput"] if not r["fair"]]
+                pending_tp = [(r["key"], r["label"]) for r in rows["throughput"] if not r["fair"]]
                 withheld_en = sorted({r["label"] for r in rows["throttle"] if r.get("build") != "Release"}
                                      | {r["label"] for r in rows["energy"] if r.get("build") != "Release"})
                 rows = {**rows,
@@ -404,8 +417,11 @@ def main():
             parts.append("### Throughput — short-chat, cold, median of n=3\n")
             parts.append(md_throughput(rows) + "\n")
             if pending_tp:
-                parts.append(f"> ⚠️ {', '.join(pending_tp)}: captured pre-fair (Debug / iOS 26) — excluded "
-                             f"from this same-conditions table pending a fair (Release / iOS 27) re-capture.\n")
+                lines = [CAPTURE_NOTES.get((k, model),
+                         f"{label}: captured pre-fair (Debug / iOS 26) — excluded from this "
+                         f"same-conditions table pending a fair (Release / iOS 27) re-capture.")
+                         for k, label in pending_tp]
+                parts.append("> ⚠️ " + "\n>\n> ".join(lines) + "\n")
 
             bw = md_bandwidth(rows, model, dev.get("modelIdentifier"))
             if bw:
