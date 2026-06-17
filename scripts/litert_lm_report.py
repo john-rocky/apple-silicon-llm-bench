@@ -143,21 +143,25 @@ def collect(device, model):
                 "gen": med([m["generatedTokenCount"] for m in ms]),
                 "build": ds[0]["device"].get("buildConfiguration", "?"),
                 "thermals": [m.get("initialThermalState") for m in ms],
+                "fair": (ds[0]["device"].get("buildConfiguration", "?") == "Release")
+                        and (med([m["generatedTokenCount"] for m in ms]) <= 130),
             })
             rows["raw"] += [p.name for p in scs]
         ef = energy_file(device, en_token, model)
         if ef:
             d = load(ef); m = d["metrics"]
             ts = throttle_stats(m)
+            ebuild = d["device"].get("buildConfiguration", "?")
             if ts:
                 ts["label"] = label
+                ts["build"] = ebuild
                 ts["burst"] = next((r["decode"] for r in rows["throughput"]
                                     if r["label"] == label), ts["start"])
                 ts["retained"] = ts["steady"] / ts["burst"] * 100 if ts["burst"] else 0
                 rows["throttle"].append(ts)
             dpct = m.get("batteryDeltaPercent") or 0
             rows["energy"].append({
-                "label": label, "jpt": m.get("energyJoulesPerToken"),
+                "label": label, "build": ebuild, "jpt": m.get("energyJoulesPerToken"),
                 "tok_per_pct": (m.get("generatedTokenCount") / dpct) if dpct else None,
                 "avg_w": m.get("averagePackagePowerW"), "delta_pct": dpct,
                 "peak": m.get("peakThermalState"), "init": m.get("initialThermalState")})
@@ -371,6 +375,19 @@ def main():
             dev = rows["meta"]["device"]
             mo = rows["meta"]["model"]
             tag, nominal, capped = conditions(rows)
+            # When the section is fair (LiteRT row is Release+capped), don't mix in pre-fair
+            # rows under a fair header: show only fair-consistent data, name the rest as pending.
+            lit_tp = next((r for r in rows["throughput"] if r["key"] == "litert-lm"), None)
+            section_fair = bool(lit_tp and lit_tp["fair"])
+            pending_tp, withheld_en = [], []
+            if section_fair:
+                pending_tp = [r["label"] for r in rows["throughput"] if not r["fair"]]
+                withheld_en = sorted({r["label"] for r in rows["throttle"] if r.get("build") != "Release"}
+                                     | {r["label"] for r in rows["energy"] if r.get("build") != "Release"})
+                rows = {**rows,
+                        "throughput": [r for r in rows["throughput"] if r["fair"]],
+                        "throttle": [r for r in rows["throttle"] if r.get("build") == "Release"],
+                        "energy": [r for r in rows["energy"] if r.get("build") == "Release"]}
             title = f"{MODEL_LABEL.get(model, model)} — {device} ({dev.get('modelIdentifier')} · iOS {dev.get('systemVersion')})"
             parts.append(f"\n---\n\n## {title}\n")
             parts.append(f"Conditions: {tag}. LiteRT file `{mo.get('primaryFile')}` · "
@@ -386,6 +403,9 @@ def main():
 
             parts.append("### Throughput — short-chat, cold, median of n=3\n")
             parts.append(md_throughput(rows) + "\n")
+            if pending_tp:
+                parts.append(f"> ⚠️ {', '.join(pending_tp)}: captured pre-fair (Debug / iOS 26) — excluded "
+                             f"from this same-conditions table pending a fair (Release / iOS 27) re-capture.\n")
 
             bw = md_bandwidth(rows, model, dev.get("modelIdentifier"))
             if bw:
@@ -409,6 +429,11 @@ def main():
             gap = md_sustained_gap(rows, model)
             if gap and (rows["throttle"] or rows["energy"]):
                 parts.append(gap + "\n")
+            if withheld_en:
+                parts.append(f"### Sustained throttling + energy\n\n"
+                             f"> ⚠️ Captured pre-fair (Debug / iOS 26) for {', '.join(withheld_en)} and withheld "
+                             f"here pending a fair (Release / iOS 27, unplugged) re-capture. Archived raw files "
+                             f"are still linked under Provenance.\n")
 
             all_raw += rows["raw"]
 

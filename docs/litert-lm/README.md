@@ -99,49 +99,37 @@ Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). Lit
 
 ---
 
-## Gemma 4 E2B — iphone17pro (iPhone18,1 · iOS 26.4.2)
+## Gemma 4 E2B — iphone17pro (iPhone18,1 · iOS 27.0)
 
-Conditions: **pre-fair** (Debug · ran to EOS · re-capture pending). LiteRT file `gemma-4-E2B-it.litertlm` · quant INT4 (QAT) · 2650 MB on disk.
+Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). LiteRT file `gemma-4-E2B-it.litertlm` · quant INT4 (QAT) · 2650 MB on disk.
 
 > ⚠️ Some runs started at `fair`, not `nominal` (device warmed mid-matrix). Decode is throttle-insensitive at `fair` and the per-run values are consistent, but flagged for full rigor.
 
-**Gemma 4 E2B:** LiteRT-LM **wins decode** (55 tok/s, fastest of 4) and **leanest memory** (641 MB) → _a clean LiteRT-LM win_. LiteRT's memory is its real footprint (INT4 decoder + the INT8 embedding table it keeps + Metal working buffers), not KV pre-allocation waste — so the gap to a dynamic-KV runtime like MLX is structural, and a fair thing to show rather than hide.
+**Gemma 4 E2B:** LiteRT-LM **wins decode** (58 tok/s, fastest of 3) and #2 on memory (483 MB) → _a decode win with a memory cost_. LiteRT's memory is its real footprint (INT4 decoder + the INT8 embedding table it keeps + Metal working buffers), not KV pre-allocation waste — so the gap to a dynamic-KV runtime like MLX is structural, and a fair thing to show rather than hide.
 
 ### Throughput — short-chat, cold, median of n=3
 
 | Runtime | Quant | n | Decode tok/s | TTFT ms | Prefill tok/s | Peak RAM MB | ITL p99 ms |
 |---|---|---:|---:|---:|---:|---:|---:|
-| LiteRT-LM / GPU | INT4 (QAT) | 3 | 55.4 🏆 | 267 | 458 | 641 | 19.0 |
-| MLX-Swift / GPU | Q4 | 3 | 47.5 | 144 | 180 | 2900 | 23.0 |
-| llama.cpp / GPU | Q4_K_M | 3 | 37.8 | 114 | 2087 | 3156 | 29.1 |
-| CoreML / ANE | INT4 palettized | 3 | 33.4 | 728 | — | 1187 | 33.4 |
+| LiteRT-LM / GPU | INT4 (QAT) | 3 | 58.4 🏆 | 58 | — | 483 | 18.5 |
+| MLX-Swift / GPU | Q4 | 3 | 46.2 | 155 | 170 | 3094 | 23.5 |
+| llama.cpp / GPU | Q4_K_M | 3 | 35.5 | 128 | 1456 | 253 | 36.4 |
+
+> ⚠️ CoreML / ANE: captured pre-fair (Debug / iOS 26) — excluded from this same-conditions table pending a fair (Release / iOS 27) re-capture.
 
 ### Why it's fast — decode is memory-bandwidth-bound
 
 | Runtime | Quant | Decode tok/s | Effective BW (GB/s) | % of peak BW |
 |---|---|---:|---:|---:|
-| LiteRT-LM / GPU | INT4 (QAT) | 55.4 | 43.8 🏆 | 57% |
-| MLX-Swift / GPU | Q4 | 47.5 | 37.5 | 49% |
-| llama.cpp / GPU | Q4_K_M | 37.8 | 29.8 | 39% |
-| CoreML / ANE | INT4 palettized | 33.4 | 26.4 | 34% |
+| LiteRT-LM / GPU | INT4 (QAT) | 58.4 | 46.1 🏆 | 60% |
+| MLX-Swift / GPU | Q4 | 46.2 | 36.5 | 48% |
+| llama.cpp / GPU | Q4_K_M | 35.5 | 28.1 | 37% |
 
 > _Decode reads ≈ all active weights once per token, so **tok/s × weight-bytes = effective read bandwidth** (~0.79 GB/token at 4-bit, scaled per row by quant — the **INT8** row reads ~2×). Against ~77 GB/s (LPDDR5X, public-teardown **estimate**), this ranks how well each runtime works the memory system. Absolute GB/s carries the byte estimate; the same-device ordering is robust._
 
-### Sustained throttling — 600 s continuous, unplugged
+### Sustained throttling + energy
 
-| Runtime | Cold burst tok/s | Sustained tok/s | Retained | t→−10% | t→−25% | Thermal (init→peak) |
-|---|---:|---:|---:|---:|---:|:--|
-| LiteRT-LM / GPU | 55.4 | 26.8 | 48% | 13s | 40s | fair→serious |
-| MLX-Swift / GPU | 47.5 | 17.9 | 38% | 5s | 35s | nominal→serious |
-| CoreML / ANE | 33.4 | 22.2 | 66% | 93s | 390s | nominal→serious |
-
-### Energy — battery-delta, 600 s run
-
-| Runtime | J / token | Tokens / 1% battery | Avg pkg power W | Δbattery | Thermal (init→peak) |
-|---|---:|---:|---:|---:|:--|
-| LiteRT-LM / GPU | 0.146 | 4,074 | 4.49 | 5% | fair→serious |
-| MLX-Swift / GPU | 0.232 | 2,560 | 4.92 | 5% | nominal→serious |
-| CoreML / ANE | 0.207 | 2,867 | 4.91 | 5% | nominal→serious |
+> ⚠️ Captured pre-fair (Debug / iOS 26) for CoreML / ANE, LiteRT-LM / GPU, MLX-Swift / GPU and withheld here pending a fair (Release / iOS 27, unplugged) re-capture. Archived raw files are still linked under Provenance.
 
 
 ---
