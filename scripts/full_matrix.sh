@@ -64,11 +64,30 @@ MAC_BIG=(
   "litert-lm|litert-community/gemma-4-12B-it-litert-lm|litert-community/gemma-4-12B-it-litert-lm|gemma-4-12B-it.litertlm"
   "mlx-swift|mlx-community/gemma-4-12b-it-4bit|mlx-community/gemma-4-12b-it-4bit|*"
 )
+# Lu's focus models (Liquid/LFM2 + MiniCPM) — OUR own .litertlm conversions (not on HF),
+# side-loaded; comparators on HF. Small → iPhone + Mac. (Mac preview: MiniCPM litert runs
+# 239 tok/s; LFM2.5 litert loads-but-fails-to-invoke on 0.13.1 — iPhone GPU will retest.)
+LU_MODELS=(
+  "litert-lm|litert-local/lfm2.5-350m|litert-local/LFM2.5-350M|LFM2.5-350M_int4_ekv1024.litertlm"
+  "mlx-swift|mlx-community/LFM2-350M-4bit|mlx-community/LFM2-350M-4bit|*"
+  "llama-cpp|LiquidAI/LFM2.5-350M-GGUF/Q4_K_M|LiquidAI/LFM2.5-350M-GGUF|LFM2.5-350M-Q4_K_M.gguf"
+  "litert-lm|litert-local/minicpm5-1b|litert-local/MiniCPM5-1B|MiniCPM5-1B_int4_ekv1024.litertlm"
+  "mlx-swift|mlx-community/MiniCPM5-1B-4bit|mlx-community/MiniCPM5-1B-4bit|*"
+)
+# Local .litertlm source for the side-loaded conversions (no HF download).
+litert_local_src() {
+  case "$1" in
+    litert-local/LFM2.5-350M) echo "$HOME/code/litertlm-convert/deliverables/LFM2.5-350M_int4_ekv1024.litertlm" ;;
+    litert-local/MiniCPM5-1B) echo "$HOME/code/litertlm-convert/deliverables/MiniCPM5-1B_int4_ekv1024.litertlm" ;;
+    *) echo "" ;;
+  esac
+}
 # coreml gemma is side-loaded from the local prebuilt bundle (no HF), see prefetch().
 COREML_LOCAL="$HOME/Documents/Models/gemma4-e2b"
 
-# iPhone runs the small/mid set (0.6/4B everywhere; 8B + E4B attempted, may jetsam = recorded).
-IPHONE_JOBS=( "${QWEN_LITERT[@]}" "${QWEN_MLX[@]}" "${QWEN_LLAMA[@]}" "${GEMMA[@]}" )
+# iPhone runs the small/mid set (0.6/4B everywhere; 8B + E4B attempted, may jetsam = recorded)
+# + Lu's models (LFM2.5 / MiniCPM, small).
+IPHONE_JOBS=( "${QWEN_LITERT[@]}" "${QWEN_MLX[@]}" "${QWEN_LLAMA[@]}" "${GEMMA[@]}" "${LU_MODELS[@]}" )
 # Mac runs everything + the big models; mac() filters to litert+mlx (CLI ships only those).
 MAC_JOBS=( "${IPHONE_JOBS[@]}" "${MAC_BIG[@]}" )
 
@@ -82,6 +101,8 @@ model_token() {
     *gemma-4-E4B*|*gemma-4-e4b*) echo "gemma-4-e4b" ;;
     *gemma-4-12B*|*gemma-4-12b*) echo "gemma-4-12b" ;;
     *gemma-4-E2B*|*gemma-4-e2b*) echo "gemma-4-e2b" ;;
+    *lfm2.5-350m*|*LFM2.5-350M*|*LFM2-350M*) echo "lfm2.5-350m" ;;
+    *minicpm5-1b*|*MiniCPM5-1B*) echo "minicpm5-1b" ;;
     *) echo "$(basename "$1" | tr 'A-Z' 'a-z')" ;;
   esac
 }
@@ -101,7 +122,9 @@ prefetch() {   # download on Mac + side-load iPhone-side models
     IFS='|' read -r rt mid repo glob <<<"$job"
     local dest_local="$SIDELOAD/$(echo "$repo" | tr '/' '__')"
     echo "-- $rt $repo ($glob)"
-    if [ "$glob" = "*" ]; then hf download "$repo" --local-dir "$dest_local" >/dev/null 2>&1
+    local lsrc="$(litert_local_src "$repo")"
+    if [ -n "$lsrc" ]; then mkdir -p "$dest_local"; cp "$lsrc" "$dest_local/"   # our local .litertlm (no HF)
+    elif [ "$glob" = "*" ]; then hf download "$repo" --local-dir "$dest_local" >/dev/null 2>&1
     else hf download "$repo" --include "$glob" --local-dir "$dest_local" >/dev/null 2>&1; fi
     case "$rt" in
       llama-cpp)

@@ -9,6 +9,7 @@ nothing runs by itself. Phases are idempotent. Find the UDID with `xcrun devicec
 | Runtimes | litert-lm · mlx-swift · llama-cpp · coreml-llm | litert-lm · mlx-swift¹ |
 | Qwen3 | 0.6B · 4B · (8B attempted²) | 0.6B · 4B · 8B |
 | Gemma | 4-E2B (litert/mlx/llama/coreml) | 4-E2B (litert/mlx) |
+| Lu's models³ | LFM2.5-350M · MiniCPM5-1B (our local `.litertlm` + mlx/gguf) | same (litert/mlx) |
 | Tasks | short-chat · **long-context sweep** (2K/8K/32K) · sustained-generation · energy (unplugged) | short-chat · long-context sweep · sustained-generation |
 
 **Continuous / long-context tasks** (the "does it hold up under load" axis):
@@ -28,6 +29,9 @@ target — but it currently can't co-build with LiteRT-macOS (an `executorch`×`
 *without* the LiteRT-macOS dep, or resolve the collision first. (TODO, P2.)
 ² Qwen3-8B (~4.5 GB) may exceed iOS's per-app memory ceiling and get jetsam-killed — that result
 is itself recorded (fairness rule 4), same as the gemma-3n CoreML case.
+³ Lu's focus models, converted by us (`~/code/litertlm-convert/deliverables/`) since LiteRT publishes
+neither on `litert-community`. `prefetch` side-loads them (no HF). Mac preview: MiniCPM5-1B litert runs
+(239 tok/s); LFM2.5-350M litert loads-but-fails-to-invoke on 0.13.1 — the iPhone run retests it.
 
 ## Known, expected outcomes (not bugs in the harness — record them, rule 4)
 - **litert energy/sustained hangs** on 0.13.x (`DEADLINE_EXCEEDED` in `callback_thread_pool`). The
