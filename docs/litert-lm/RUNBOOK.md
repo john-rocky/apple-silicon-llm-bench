@@ -73,7 +73,8 @@ is **required**, not optional.
 ## Extending the matrix
 Add a line to the `QWEN_*` / `GEMMA` arrays at the top of `full_matrix.sh`
 (`runtime|catalog-id|hf-repo|file-glob`) and the matching `ModelCatalog` entry, then re-`build`
-(Mac) / ⌘R (iPhone). Candidates already on `litert-community`: Qwen3-14B, Qwen3-4B-Instruct-2507,
-Gemma-4-E4B/12B, Gemma3-1B/4B (see [`MODEL_AVAILABILITY.md`](MODEL_AVAILABILITY.md)). 14B is Mac-tier
-only (phones jetsam). Quality-parity and a long-context *sweep* (multiple lengths) are still TODO
+(Mac) / ⌘R (iPhone). The full verified comparator set (litert/mlx/gguf per model + device fit) is in
+[`MODEL_MATRIX.md`](MODEL_MATRIX.md); availability/conversion notes in
+[`MODEL_AVAILABILITY.md`](MODEL_AVAILABILITY.md). Qwen3-14B and Gemma-12B are Mac-tier only
+(phones jetsam) and already wired as `MAC_BIG`. Quality-parity and a long-context *sweep* (multiple lengths) are still TODO
 (both need a Swift change + the one ⌘R).

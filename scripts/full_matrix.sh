@@ -49,25 +49,38 @@ QWEN_LLAMA=(
   "llama-cpp|unsloth/Qwen3-4B-GGUF/Q4_K_M|unsloth/Qwen3-4B-GGUF|Qwen3-4B-Q4_K_M.gguf"
   "llama-cpp|unsloth/Qwen3-8B-GGUF/Q4_K_M|unsloth/Qwen3-8B-GGUF|Qwen3-8B-Q4_K_M.gguf"
 )
-GEMMA=(
+GEMMA=(   # E2B + E4B (E4B ~3.75 GB 4-bit — iPhone borderline; attempt = recorded)
   "litert-lm|litert-community/gemma-4-E2B-it-litert-lm|litert-community/gemma-4-E2B-it-litert-lm|gemma-4-E2B-it.litertlm"
   "mlx-swift|mlx-community/gemma-4-e2b-it-4bit|mlx-community/gemma-4-e2b-it-4bit|*"
   "llama-cpp|unsloth/gemma-4-E2B-it-GGUF/Q4_K_M|unsloth/gemma-4-E2B-it-GGUF|gemma-4-E2B-it-Q4_K_M.gguf"
+  "litert-lm|litert-community/gemma-4-E4B-it-litert-lm|litert-community/gemma-4-E4B-it-litert-lm|gemma-4-E4B-it.litertlm"
+  "mlx-swift|mlx-community/gemma-4-e4b-it-4bit|mlx-community/gemma-4-e4b-it-4bit|*"
+  "llama-cpp|unsloth/gemma-4-E4B-it-GGUF/Q4_K_M|unsloth/gemma-4-E4B-it-GGUF|gemma-4-E4B-it-Q4_K_M.gguf"
+)
+# Mac-tier big models (≫ iOS per-app memory ceiling): litert + mlx only.
+MAC_BIG=(
+  "litert-lm|litert-community/Qwen3-14B|litert-community/Qwen3-14B|qwen3_14b_mixed_int4.litertlm"
+  "mlx-swift|mlx-community/Qwen3-14B-4bit|mlx-community/Qwen3-14B-4bit|*"
+  "litert-lm|litert-community/gemma-4-12B-it-litert-lm|litert-community/gemma-4-12B-it-litert-lm|gemma-4-12B-it.litertlm"
+  "mlx-swift|mlx-community/gemma-4-12b-it-4bit|mlx-community/gemma-4-12b-it-4bit|*"
 )
 # coreml gemma is side-loaded from the local prebuilt bundle (no HF), see prefetch().
 COREML_LOCAL="$HOME/Documents/Models/gemma4-e2b"
 
-# Mac CLI runs only litert + mlx (llama/coreml are xcodebuild-only — see RUNBOOK).
-MAC_JOBS=( "${QWEN_LITERT[@]}" "${QWEN_MLX[@]}" )
-# iPhone runs the full set (0.6B/4B everywhere; 8B attempted, may jetsam = recorded).
+# iPhone runs the small/mid set (0.6/4B everywhere; 8B + E4B attempted, may jetsam = recorded).
 IPHONE_JOBS=( "${QWEN_LITERT[@]}" "${QWEN_MLX[@]}" "${QWEN_LLAMA[@]}" "${GEMMA[@]}" )
+# Mac runs everything + the big models; mac() filters to litert+mlx (CLI ships only those).
+MAC_JOBS=( "${IPHONE_JOBS[@]}" "${MAC_BIG[@]}" )
 
 # model-id -> short file token (qwen3-0.6b etc.) used in results/raw filenames
 model_token() {
   case "$1" in
+    *Qwen3-14B*|*Qwen3-14b*)   echo "qwen3-14b" ;;
     *Qwen3-0.6B*|*Qwen3-0.6b*) echo "qwen3-0.6b" ;;
     *Qwen3-4B*|*Qwen3-4b*)     echo "qwen3-4b"  ;;
     *Qwen3-8B*|*Qwen3-8b*)     echo "qwen3-8b"  ;;
+    *gemma-4-E4B*|*gemma-4-e4b*) echo "gemma-4-e4b" ;;
+    *gemma-4-12B*|*gemma-4-12b*) echo "gemma-4-12b" ;;
     *gemma-4-E2B*|*gemma-4-e2b*) echo "gemma-4-e2b" ;;
     *) echo "$(basename "$1" | tr 'A-Z' 'a-z')" ;;
   esac
@@ -166,6 +179,7 @@ mac() {   # litert + mlx via the CLI; short-chat + long-context sweep + sustaine
     IFS=':' read -r task n to <<<"$spec"
     for job in "${MAC_JOBS[@]}"; do
       IFS='|' read -r rt mid repo glob <<<"$job"
+      [[ "$rt" != "litert-lm" && "$rt" != "mlx-swift" ]] && continue   # CLI ships litert+mlx only
       local out="m4max-$(rt_token "$rt")-$(model_token "$mid")-${task}"
       echo "########## mac $rt $mid ($task, n=$n) ##########"
       for run in $(seq 1 "$n"); do

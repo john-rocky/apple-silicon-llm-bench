@@ -82,6 +82,22 @@ public enum ModelCatalog {
             hfRepoId: "mlx-community/Qwen3-8B-4bit"
         ),
         ModelInfo(
+            id: "mlx-community/Qwen3-14B-4bit",
+            displayName: "Qwen3-14B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 14.0,
+            onDiskSizeMB: 8000,
+            hfRepoId: "mlx-community/Qwen3-14B-4bit"
+        ),
+        ModelInfo(
+            id: "mlx-community/gemma-4-12b-it-4bit",
+            displayName: "Gemma 4 12B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 12.0,
+            onDiskSizeMB: 7000,
+            hfRepoId: "mlx-community/gemma-4-12b-it-4bit"
+        ),
+        ModelInfo(
             id: "mlx-community/Qwen3.5-0.8B-MLX-4bit",
             displayName: "Qwen 3.5 0.8B (4-bit)",
             quantization: "Q4",
@@ -254,6 +270,26 @@ public enum ModelCatalog {
             hfFilePatterns: ["Qwen3-8B-Q4_K_M.gguf"],
             primaryFile: "Qwen3-8B-Q4_K_M.gguf"
         ),
+        ModelInfo(
+            id: "unsloth/Qwen3-14B-GGUF/Q4_K_M",
+            displayName: "Qwen3-14B Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 14.0,
+            onDiskSizeMB: 9000,
+            hfRepoId: "unsloth/Qwen3-14B-GGUF",
+            hfFilePatterns: ["Qwen3-14B-Q4_K_M.gguf"],
+            primaryFile: "Qwen3-14B-Q4_K_M.gguf"
+        ),
+        ModelInfo(
+            id: "unsloth/gemma-4-12B-it-GGUF/Q4_K_M",
+            displayName: "Gemma 4 12B Q4_K_M (GGUF)",
+            quantization: "Q4_K_M",
+            parameterCountB: 12.0,
+            onDiskSizeMB: 7000,
+            hfRepoId: "unsloth/gemma-4-12B-it-GGUF",
+            hfFilePatterns: ["gemma-4-12b-it-Q4_K_M.gguf"],
+            primaryFile: "gemma-4-12b-it-Q4_K_M.gguf"
+        ),
     ]
 
     /// Models the LiteRT-LM adapter can load.
@@ -318,6 +354,26 @@ public enum ModelCatalog {
             hfRepoId: "litert-community/Qwen3-8B",
             hfFilePatterns: ["qwen3_8b_mixed_int4.litertlm"],
             primaryFile: "qwen3_8b_mixed_int4.litertlm"
+        ),
+        ModelInfo(
+            id: "litert-community/Qwen3-14B",
+            displayName: "Qwen3 14B (.litertlm)",
+            quantization: "INT4 (mixed, blockwise gs32)",
+            parameterCountB: 14.0,
+            onDiskSizeMB: 8000,
+            hfRepoId: "litert-community/Qwen3-14B",
+            hfFilePatterns: ["qwen3_14b_mixed_int4.litertlm"],
+            primaryFile: "qwen3_14b_mixed_int4.litertlm"
+        ),
+        ModelInfo(
+            id: "litert-community/gemma-4-12B-it-litert-lm",
+            displayName: "Gemma 4 12B (.litertlm)",
+            quantization: "INT4 (QAT)",
+            parameterCountB: 12.0,
+            onDiskSizeMB: 7000,
+            hfRepoId: "litert-community/gemma-4-12B-it-litert-lm",
+            hfFilePatterns: ["gemma-4-12B-it.litertlm"],
+            primaryFile: "gemma-4-12B-it.litertlm"
         ),
         ModelInfo(
             id: "litert-community/gemma-4-E4B-it-litert-lm",
