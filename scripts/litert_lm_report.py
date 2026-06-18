@@ -40,6 +40,12 @@ RUNTIMES = [
     ("core-ai-ane", ["core-ai"], "core-ai", "Core AI / ANE", "-ane"),
 ]
 
+# Runtimes whose Metal pipeline kernel cache persists across process launches: even
+# fresh-process "cold" launches run warm after the first, so only launch 1 (post fresh
+# install) is truly cold. We put that true-cold figure in the cold table for iso-cold
+# parity and disclose the warm steady-state in a note (see collect()/md_kernelcache_note).
+KERNEL_CACHED = {"core-ai-gpu"}
+
 # Active weight bytes streamed per decode token at ~4-bit (GB). Decode is memory-bandwidth-
 # bound, so tok/s × this ≈ effective read bandwidth. Per-row quant scaling (below) adjusts
 # rows that aren't 4-bit. Gemma E2B = 0.79 GB INT4 decoder (litert catalog breakdown);
@@ -151,12 +157,27 @@ def collect(device, model):
             ms = [d["metrics"] for d in ds]
             if rows["meta"] is None and key == "litert-lm":
                 rows["meta"] = {"device": ds[0]["device"], "model": ds[0]["model"]}
+            decs = [m["decodeTokensPerSecond"] for m in ms]
+            # Core AI's Metal pipeline kernel cache persists across process launches, so only
+            # the FIRST launch after a fresh install is truly cold; later "cold" launches reuse
+            # the cached kernels and run warm. Report the true-cold value (the slowest) for
+            # iso-cold parity with the cold-consistent runtimes, and keep warm for a disclosure
+            # note — never a warm-biased median that would falsely outrank a cold competitor.
+            warm = None
+            if key in KERNEL_CACHED and len(decs) >= 2:
+                cold = min(decs)
+                rest = [d for d in decs if d != cold]
+                warm = med(rest) if rest else None
+                decode_val = cold
+            else:
+                decode_val = med(decs)
             rows["throughput"].append({
                 "label": label, "key": key, "n": len(scs),
                 "quant": ds[0]["model"].get("quantization", "?"),
                 "size": ds[0]["model"].get("onDiskSizeMB"),   # raw byte budget, shown so two
                                                               # "4-bit" rows of different size aren't conflated
-                "decode": med([m["decodeTokensPerSecond"] for m in ms]),
+                "decode": decode_val,
+                "warm": warm,                                 # warm steady-state for kernel-cached runtimes (note only)
                 "ttft": med([m["firstTokenLatencyMS"] for m in ms]),
                 "prefill": med([m["promptTokensPerSecond"] for m in ms]),
                 "peakmem": med([m["memoryPeakDuringDecodeMB"] for m in ms]),
@@ -197,10 +218,26 @@ def md_throughput(rows):
     best = max(r["decode"] for r in rows["throughput"])
     for r in rows["throughput"]:
         win = " 🏆" if abs(r["decode"] - best) < 1e-6 else ""
+        cold_mark = "†" if r.get("warm") else ""   # value shown is true-cold (n=1); warm in the note
         prefill = f"{r['prefill']:.0f}" if r["prefill"] else "—"
-        out.append(f"| {r['label']} | {r['quant']} | {r['n']} | {r['decode']:.1f}{win} | {r['ttft']:.0f} | "
+        out.append(f"| {r['label']} | {r['quant']} | {r['n']} | {r['decode']:.1f}{cold_mark}{win} | {r['ttft']:.0f} | "
                    f"{prefill} | {r['peakmem']:.0f} | {r['p99']:.1f} |")
     return "\n".join(out)
+
+
+def md_kernelcache_note(rows):
+    """Disclose warm steady-state for kernel-cached runtimes shown at true-cold (fairness)."""
+    notes = []
+    for r in rows["throughput"]:
+        if r.get("warm"):
+            notes.append(
+                f"**† {r['label']}** is shown at its **true cold** ({r['decode']:.0f} tok/s, n=1): its Metal "
+                f"pipeline kernel cache persists across launches, so only the first launch after a fresh install "
+                f"is genuinely cold — later iso-cold launches reuse the cached kernels. Its **warm steady-state is "
+                f"~{r['warm']:.0f} tok/s** (cache primed — what a user actually sees, and the fastest here). Cold "
+                f"is shown for iso-cold parity with the cold-consistent runtimes; warm is the real-world number. "
+                f"Both are disclosed rather than blended into a warm-biased median.")
+    return ("> " + "\n>\n> ".join(notes)) if notes else None
 
 
 def md_bandwidth(rows, model, device_id):
@@ -477,6 +514,9 @@ def main():
 
             parts.append("### Throughput — short-chat, cold, median of n=3\n")
             parts.append(md_throughput(rows) + "\n")
+            kc = md_kernelcache_note(rows)
+            if kc:
+                parts.append(kc + "\n")
             if pending_tp:
                 lines = [CAPTURE_NOTES.get((k, model),
                          f"{label}: captured pre-fair (Debug / iOS 26) — excluded from this "

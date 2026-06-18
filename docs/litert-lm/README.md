@@ -83,27 +83,29 @@ Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). Lit
 
 > ⚠️ Some runs started at `fair`, not `nominal` (device warmed mid-matrix). Decode is throttle-insensitive at `fair` and the per-run values are consistent, but flagged for full rigor.
 
-**Qwen3-0.6B:** LiteRT-LM is **#2 on decode** (119 vs MLX-Swift 130, −9%) and **heaviest memory** (1071 MB vs MLX-Swift 487) → _room to grow_. LiteRT's memory is its real footprint (INT4 decoder + the INT8 embedding table it keeps + Metal working buffers), not KV pre-allocation waste — so the gap to a dynamic-KV runtime like MLX is structural, and a fair thing to show rather than hide.
+**Qwen3-0.6B:** LiteRT-LM is **#3 on decode** (119 vs Core AI 144, −17%) and #4 on memory (1071 MB) → _room to grow_. LiteRT's memory is its real footprint (INT4 decoder + the INT8 embedding table it keeps + Metal working buffers), not KV pre-allocation waste — so the gap to a dynamic-KV runtime like MLX is structural, and a fair thing to show rather than hide.
 
 ### Throughput — short-chat, cold, median of n=3
 
 | Runtime | Quant | n | Decode tok/s | TTFT ms | Prefill tok/s | Peak RAM MB | ITL p99 ms |
 |---|---|---:|---:|---:|---:|---:|---:|
 | LiteRT-LM / GPU | INT4 (mixed, blockwise gs32) | 3 | 118.6 | 239 | — | 1071 | 10.1 |
-| MLX-Swift / GPU | Q4 | 3 | 130.5 🏆 | 48 | 453 | 487 | 10.3 |
+| MLX-Swift / GPU | Q4 | 3 | 130.5 | 48 | 453 | 487 | 10.3 |
 | CoreML / ANE | INT8 palettized | 3 | 37.7 | 572 | 33 | 987 | 30.1 |
+| Core AI / GPU | INT4 (dynamic) | 3 | 76.5† | 16 | 1700 | 196 | 5.9 |
+| Core AI / ANE | 4-bit palettized (uniform g32) | 3 | 143.7 🏆 | 41 | 511 | 1158 | 9.5 |
 
-> ⚠️ **Core AI / GPU** (`coreai-pipelined`): a pre-fair Debug / iOS 27 preview exists — **71 tok/s cold → ~180 warm**, 524 MB peak, INT4 (dynamic), the fastest of any runtime here once its 3-deep pipeline is warm. Withheld from the same-conditions table because it is Debug and not captured as 3 fresh-cold launches (run 1 cold, runs 2–4 warm) — a fair Release / iso-cold re-capture against this LiteRT-LM row is pending. Full method + the cold-vs-warm breakdown: [`methodology/coreai-ios.md`](../../methodology/coreai-ios.md).
->
-> **Core AI / ANE** (`static-shape`): pre-fair Debug / iOS 27 preview — **~50 tok/s**, 1166 MB peak, mixed 4/8-bit palettized. Steady cold-to-warm, the Neural-Engine corner (vs CoreML-LLM's leaner-but-slower ANE path). The next fair Release re-capture switches this row to the leaner **uniform-4bit palettized** ANE export (389 vs 434 MB on disk) — pure 4-bit on the ANE is reachable, but the GPU's *linear* INT4 scheme is not (it crashes the ANE pre-compiler). See [`COREAI_INT4_EXPORT.md`](COREAI_INT4_EXPORT.md) and [`methodology/coreai-ios.md`](../../methodology/coreai-ios.md).
+> **† Core AI / GPU** is shown at its **true cold** (77 tok/s, n=1): its Metal pipeline kernel cache persists across launches, so only the first launch after a fresh install is genuinely cold — later iso-cold launches reuse the cached kernels. Its **warm steady-state is ~194 tok/s** (cache primed — what a user actually sees, and the fastest here). Cold is shown for iso-cold parity with the cold-consistent runtimes; warm is the real-world number. Both are disclosed rather than blended into a warm-biased median.
 
 ### Why it's fast — decode is memory-bandwidth-bound
 
 | Runtime | Quant | Weight MB on disk | Decode tok/s | Effective BW (GB/s) | % of peak BW |
 |---|---|---:|---:|---:|---:|
 | LiteRT-LM / GPU | INT4 (mixed, blockwise gs32) | 498 | 118.6 | 41.5 | 54% |
-| MLX-Swift / GPU | Q4 | 350 | 130.5 | 45.7 🏆 | 59% |
+| MLX-Swift / GPU | Q4 | 350 | 130.5 | 45.7 | 59% |
 | CoreML / ANE | INT8 palettized | 900 | 37.7 | 26.4 | 34% |
+| Core AI / GPU | INT4 (dynamic) | 327 | 76.5 | 26.8 | 35% |
+| Core AI / ANE | 4-bit palettized (uniform g32) | 389 | 143.7 | 50.3 🏆 | 65% |
 
 > _Decode reads ≈ all active weights once per token, so **tok/s × weight-bytes = effective read bandwidth** (~0.35 GB/token at 4-bit, scaled per row by quant — the **INT8** row reads ~2×). Against ~77 GB/s (LPDDR5X, public-teardown **estimate**), this ranks how well each runtime works the memory system. Absolute GB/s carries the byte estimate; the same-device ordering is robust._
 
@@ -170,12 +172,9 @@ Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). Lit
 - [`iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run1.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run1.jsonl)
 - [`iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run2.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run2.jsonl)
 - [`iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run3.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run3.jsonl)
-- [`iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run4.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run4.jsonl)
-- [`iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run5.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-ane-short-chat-run5.jsonl)
 - [`iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run1.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run1.jsonl)
 - [`iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run2.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run2.jsonl)
 - [`iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run3.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run3.jsonl)
-- [`iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run4.jsonl`](../../results/raw/iphone17pro-core-ai-qwen3-0.6b-gpu-short-chat-run4.jsonl)
 - [`iphone17pro-coreml-llm-gemma-4-e2b-energy-tg128.jsonl`](../../results/raw/iphone17pro-coreml-llm-gemma-4-e2b-energy-tg128.jsonl)
 - [`iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run1.jsonl`](../../results/raw/iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run1.jsonl)
 - [`iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run2.jsonl`](../../results/raw/iphone17pro-coreml-llm-gemma-4-e2b-short-chat-run2.jsonl)
