@@ -67,18 +67,24 @@ PY
 }
 
 prep_coreai() {
-  log "export + AOT-compile Core AI bundles (ANE static, GPU dynamic)"
+  log "export + AOT-compile Core AI bundles (ANE static pure-4bit, GPU dynamic)"
+  # ANE row uses the uniform-4bit PALETTIZED static export (~389 MB), not mixed-4/8 and not
+  # linear INT4: the GPU's linear-INT4 program SIGSEGVs the ANE pre-compiler, so palettized
+  # 4-bit is the leanest scheme that actually runs on the ANE (docs/litert-lm/COREAI_INT4_EXPORT.md).
+  # The pinned bundle is reused if present — re-export is not guaranteed reproducible (lowering instability).
   ( cd "$HOME/code/coreai/coreai-models"
-    [ -d "$EXPORTS/qwen3_0_6b_ios" ]     || uv run coreai.llm.export qwen3-0.6b --platform iOS  --output-name qwen3_0_6b_ios
-    [ -d "$EXPORTS/qwen3_0_6b_dynamic" ] || uv run coreai.llm.export qwen3-0.6b --platform macOS --output-name qwen3_0_6b_dynamic )
-  assemble "$EXPORTS/qwen3_0_6b_ios/qwen3_0_6b_ios.aimodel"         neural-engine "$EXPORTS/qwen3_0_6b_ane" qwen3_0_6b_ios
-  assemble "$EXPORTS/qwen3_0_6b_dynamic/qwen3_0_6b_dynamic.aimodel" gpu           "$EXPORTS/qwen3_0_6b_gpu" qwen3_0_6b_dynamic
+    [ -d "$EXPORTS/qwen3_0_6b_ios_pure4bit" ] || uv run coreai.llm.export qwen3-0.6b --platform iOS \
+        --compression 4bit_weight_palettized_group32 --output-name qwen3_0_6b_ios_pure4bit
+    [ -d "$EXPORTS/qwen3_0_6b_dynamic" ]      || uv run coreai.llm.export qwen3-0.6b --platform macOS --output-name qwen3_0_6b_dynamic )
+  [ -d "$EXPORTS/qwen3_0_6b_ane_pure4bit" ] || \
+    assemble "$EXPORTS/qwen3_0_6b_ios_pure4bit/qwen3_0_6b_ios_pure4bit.aimodel" neural-engine "$EXPORTS/qwen3_0_6b_ane_pure4bit" qwen3_0_6b_ios_pure4bit
+  assemble "$EXPORTS/qwen3_0_6b_dynamic/qwen3_0_6b_dynamic.aimodel" gpu "$EXPORTS/qwen3_0_6b_gpu" qwen3_0_6b_dynamic
 }
 
 # ---- 3. side-load -----------------------------------------------------------
 sideload() {
   log "side-load Core AI (ANE + GPU) + CoreML + MLX"
-  copy_to "$EXPORTS/qwen3_0_6b_ane" "Documents/CoreAIModels/qwen3_0_6b_ane"
+  copy_to "$EXPORTS/qwen3_0_6b_ane_pure4bit" "Documents/CoreAIModels/qwen3_0_6b_ane"
   copy_to "$EXPORTS/qwen3_0_6b_gpu" "Documents/CoreAIModels/qwen3_0_6b_gpu"
   copy_to "$COREML_SRC" "Documents/Models/qwen3-0.6b/qwen3_0_6b_stateful_chunks"
   if [ -d "$MLX_CACHE/blobs" ]; then

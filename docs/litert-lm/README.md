@@ -47,12 +47,16 @@ Release build, `phys_footprint`, one device per table. **Disclosed, not equalise
   4-bit artifacts of different size (Core AI ~327 MB vs LiteRT ~498 MB) — read BW with the size column.
 - **Compute unit** — LiteRT / MLX / Core AI-GPU run on the **GPU**, CoreML / Core AI-ANE on the **ANE**.
   An intentional axis, but a real difference; read an ANE row as the memory/power-efficiency corner, not a GPU peer.
-- **Core AI couples compute unit *and* quant** — its compute unit is fixed by the **export shape**, and
-  the two shapes carry different quant: the dynamic export → **GPU / INT4** (~327 MB), the static iOS
-  export → **ANE / mixed 4/8-bit palettized** (~434 MB). You cannot request "ANE + pure INT4". So a Core AI
-  GPU-vs-ANE row is a **shipped-config** comparison (engine *and* quant together, as Apple exports it),
-  **not** a clean engine A/B — stated outright rather than smoothed over. A matched-INT4 export to
-  decouple the two is tracked in [`COREAI_INT4_EXPORT.md`](COREAI_INT4_EXPORT.md).
+- **Core AI couples compute unit *and* quant scheme** — its compute unit is fixed by the **export shape**,
+  and the two shapes carry a different 4-bit *scheme*: the dynamic export → **GPU / linear INT4** (~327 MB),
+  the static iOS export → **ANE / palettized 4-bit** (mixed-4/8 ~434 MB, or uniform-4bit ~389 MB). This is a
+  **confirmed platform constraint, not a choice**: the GPU's linear-INT4 program **SIGSEGVs the ANE
+  pre-compiler** (`anePreCompileBinary`), while the byte-identical palettized program compiles to the ANE
+  cleanly — so "ANE + the GPU's INT4 scheme" is unobtainable (crash evidence in
+  [`COREAI_INT4_EXPORT.md`](COREAI_INT4_EXPORT.md)). A Core AI GPU-vs-ANE row is therefore a
+  **shipped-config** comparison (engine *and* quant scheme together, as Apple ships it), **not** a clean
+  engine A/B — now proven, not just asserted. The uniform-4bit ANE export trims the byte confound (389 vs
+  434 MB) but cannot remove the linear-vs-palettized scheme difference.
 - **Memory model** — LiteRT-LM keeps an INT8 embedding table + Metal buffers, so its footprint is
   structurally higher than a dynamic-KV 4-bit runtime like MLX. Real, disclosed — not a thumb on the scale.
 
@@ -67,7 +71,7 @@ growth (MLX) and litert's long-context blockers are in [`LONG_CONTEXT.md`](LONG_
 **Companion docs:** [quality parity (correctness + degeneracy)](QUALITY.md) ·
 [sustained-generation hang bug report](LITERT_SUSTAINED_HANG.md) ·
 [model coverage matrix](MODEL_MATRIX.md) · [LiteRT model availability](MODEL_AVAILABILITY.md) ·
-[Core AI matched-INT4 export (open)](COREAI_INT4_EXPORT.md) ·
+[Core AI INT4-on-ANE — platform-constraint finding](COREAI_INT4_EXPORT.md) ·
 [reproduce / methods](METHODS.md) · [one-shot runbook (iPhone + Mac)](RUNBOOK.md).
 
 
@@ -91,7 +95,7 @@ Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). Lit
 
 > ⚠️ **Core AI / GPU** (`coreai-pipelined`): a pre-fair Debug / iOS 27 preview exists — **71 tok/s cold → ~180 warm**, 524 MB peak, INT4 (dynamic), the fastest of any runtime here once its 3-deep pipeline is warm. Withheld from the same-conditions table because it is Debug and not captured as 3 fresh-cold launches (run 1 cold, runs 2–4 warm) — a fair Release / iso-cold re-capture against this LiteRT-LM row is pending. Full method + the cold-vs-warm breakdown: [`methodology/coreai-ios.md`](../../methodology/coreai-ios.md).
 >
-> **Core AI / ANE** (`static-shape`): pre-fair Debug / iOS 27 preview — **~50 tok/s**, 1166 MB peak, mixed 4/8-bit palettized. Steady cold-to-warm, the Neural-Engine corner (vs CoreML-LLM's leaner-but-slower ANE path). Withheld pending the same fair Release re-capture as the GPU export; see [`methodology/coreai-ios.md`](../../methodology/coreai-ios.md).
+> **Core AI / ANE** (`static-shape`): pre-fair Debug / iOS 27 preview — **~50 tok/s**, 1166 MB peak, mixed 4/8-bit palettized. Steady cold-to-warm, the Neural-Engine corner (vs CoreML-LLM's leaner-but-slower ANE path). The next fair Release re-capture switches this row to the leaner **uniform-4bit palettized** ANE export (389 vs 434 MB on disk) — pure 4-bit on the ANE is reachable, but the GPU's *linear* INT4 scheme is not (it crashes the ANE pre-compiler). See [`COREAI_INT4_EXPORT.md`](COREAI_INT4_EXPORT.md) and [`methodology/coreai-ios.md`](../../methodology/coreai-ios.md).
 
 ### Why it's fast — decode is memory-bandwidth-bound
 
