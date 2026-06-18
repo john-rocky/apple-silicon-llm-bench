@@ -40,6 +40,7 @@ copy_to() { xcrun devicectl device copy to --device "$UDID" \
 
 # ---- 1. build + install -----------------------------------------------------
 build_install() {
+  if [ "${SKIP_BUILD:-0}" = "1" ]; then log "SKIP_BUILD=1 -> using already-installed app on $UDID"; return; fi
   log "build + install BenchmarkApp ($CONFIG) -> $UDID"
   xcodebuild -project "$PROJ" -scheme BenchmarkApp -configuration "$CONFIG" \
     -destination "platform=iOS,id=$UDID" -derivedDataPath "$DD" \
@@ -51,14 +52,23 @@ build_install() {
 # Assemble a loadable bundle from a compiled `.aimodelc`: the device-arch file +
 # tokenizer + a metadata.json whose assets.main points at the compiled file.
 assemble() { # <ir.aimodel> <compute: gpu|neural-engine> <out-bundle-dir> <base>
-  local ir="$1" compute="$2" out="$3" base="$4" tmp
+  local ir="$1" compute="$2" out="$3" base="$4" tmp srcdir tok md c
   tmp="$(mktemp -d)"
   xcrun coreai-build compile "$ir" --platform iOS --preferred-compute "$compute" \
     --architecture "$ARCH" --output "$tmp"
   rm -rf "$out"; mkdir -p "$out"
   cp -R "$tmp/${base}.${ARCH}.aimodelc" "$out/"
-  cp -R "$(dirname "$ir")/../tokenizer" "$out/" 2>/dev/null || cp -R "$(dirname "$(dirname "$ir")")/tokenizer" "$out/"
-  python3 - "$(dirname "$ir")/../metadata.json" "$out/metadata.json" "${base}.${ARCH}.aimodelc" <<'PY'
+  # tokenizer + metadata.json: current exports keep them NEXT TO the .aimodel; older/shared
+  # layouts kept them one level up. Search same-dir first, then ../, ../../ — fail loudly if absent.
+  srcdir="$(dirname "$ir")"
+  tok=""; for c in "$srcdir/tokenizer" "$srcdir/../tokenizer" "$srcdir/../../tokenizer"; do
+    [ -d "$c" ] && { tok="$c"; break; }; done
+  [ -n "$tok" ] || { echo "assemble: no tokenizer found near $ir" >&2; rm -rf "$tmp"; return 1; }
+  cp -R "$tok" "$out/"
+  md=""; for c in "$srcdir/metadata.json" "$srcdir/../metadata.json"; do
+    [ -f "$c" ] && { md="$c"; break; }; done
+  [ -n "$md" ] || { echo "assemble: no metadata.json found near $ir" >&2; rm -rf "$tmp"; return 1; }
+  python3 - "$md" "$out/metadata.json" "${base}.${ARCH}.aimodelc" <<'PY'
 import json,sys
 m=json.load(open(sys.argv[1])); m["assets"]["main"]=sys.argv[3]
 json.dump(m,open(sys.argv[2],"w"),indent=2)
@@ -76,9 +86,12 @@ prep_coreai() {
     [ -d "$EXPORTS/qwen3_0_6b_ios_pure4bit" ] || uv run coreai.llm.export qwen3-0.6b --platform iOS \
         --compression 4bit_weight_palettized_group32 --output-name qwen3_0_6b_ios_pure4bit
     [ -d "$EXPORTS/qwen3_0_6b_dynamic" ]      || uv run coreai.llm.export qwen3-0.6b --platform macOS --output-name qwen3_0_6b_dynamic )
-  [ -d "$EXPORTS/qwen3_0_6b_ane_pure4bit" ] || \
+  # guard on metadata.json (= a COMPLETE bundle), not just the dir, so a half-assembled
+  # bundle from an aborted run is rebuilt rather than silently reused.
+  [ -f "$EXPORTS/qwen3_0_6b_ane_pure4bit/metadata.json" ] || \
     assemble "$EXPORTS/qwen3_0_6b_ios_pure4bit/qwen3_0_6b_ios_pure4bit.aimodel" neural-engine "$EXPORTS/qwen3_0_6b_ane_pure4bit" qwen3_0_6b_ios_pure4bit
-  assemble "$EXPORTS/qwen3_0_6b_dynamic/qwen3_0_6b_dynamic.aimodel" gpu "$EXPORTS/qwen3_0_6b_gpu" qwen3_0_6b_dynamic
+  [ -f "$EXPORTS/qwen3_0_6b_gpu/metadata.json" ] || \
+    assemble "$EXPORTS/qwen3_0_6b_dynamic/qwen3_0_6b_dynamic.aimodel" gpu "$EXPORTS/qwen3_0_6b_gpu" qwen3_0_6b_dynamic
 }
 
 # ---- 3. side-load -----------------------------------------------------------

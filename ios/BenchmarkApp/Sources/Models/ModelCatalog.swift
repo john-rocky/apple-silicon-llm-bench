@@ -591,9 +591,9 @@ public enum ModelCatalog {
         ModelInfo(
             id: "core-ai/qwen3-0.6b-ane",
             displayName: "Qwen3-0.6B (Core AI, ANE)",
-            quantization: "mixed 4/8-bit palettized",
+            quantization: "4-bit palettized (uniform g32)",
             parameterCountB: 0.6,
-            onDiskSizeMB: 434,
+            onDiskSizeMB: 389,
             hfRepoId: ""
         ),
         ModelInfo(
