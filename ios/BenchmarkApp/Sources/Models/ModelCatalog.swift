@@ -66,6 +66,14 @@ public enum ModelCatalog {
             hfRepoId: "mlx-community/Qwen3-0.6B-4bit"
         ),
         ModelInfo(
+            id: "mlx-community/Qwen3-1.7B-4bit",
+            displayName: "Qwen3-1.7B (4-bit)",
+            quantization: "Q4",
+            parameterCountB: 1.7,
+            onDiskSizeMB: 1000,
+            hfRepoId: "mlx-community/Qwen3-1.7B-4bit"
+        ),
+        ModelInfo(
             id: "mlx-community/Qwen3-4B-4bit",
             displayName: "Qwen3-4B (4-bit)",
             quantization: "Q4",
@@ -383,6 +391,23 @@ public enum ModelCatalog {
             hfFilePatterns: ["MiniCPM5-1B_int4_ekv1024.litertlm"],
             primaryFile: "MiniCPM5-1B_int4_ekv1024.litertlm"
         ),
+        // Qwen3-1.7B — litert-community has NO 1.7B (only 0.6B/4B/8B/14B), so this is
+        // OUR own conversion (scripts/export_coreai_qwen3.sh has the Core AI side; the
+        // LiteRT side is `litertlm-convert/export_simple_template.py … dynamic_wi8_afp32`).
+        // INT8, not INT4: PTQ INT4 collapses sub-2B models (the convert pipeline's banked
+        // finding) — so this row is disclosed as int8 vs the official 0.6B/4B int4-QAT rows.
+        // Side-loaded (no HF download); the 1.7B is the iPhone-ceiling probe between the
+        // 0.6B that invokes and the 4B that invoke-fails on iOS.
+        ModelInfo(
+            id: "litert-local/qwen3-1.7b",
+            displayName: "Qwen3-1.7B (.litertlm, local int8)",
+            quantization: "INT8 (dynamic, ekv1024)",
+            parameterCountB: 1.7,
+            onDiskSizeMB: 1900,
+            hfRepoId: "litert-local/Qwen3-1.7B",
+            hfFilePatterns: ["*.litertlm"],
+            primaryFile: ""
+        ),
         // Qwen3 4B / 8B — same mixed-INT4 .litertlm line as 0.6B, for a size-scaling
         // curve (0.6B → 4B → 8B). 8B (~4.4 GB) is desktop/Mac-tier; on phones it can
         // exceed the per-app memory ceiling (gemma-3n-style jetsam), so it stays Mac-only.
@@ -602,6 +627,22 @@ public enum ModelCatalog {
             quantization: "INT4 (dynamic)",
             parameterCountB: 0.6,
             onDiskSizeMB: 327,
+            hfRepoId: ""
+        ),
+        ModelInfo(
+            id: "core-ai/qwen3-1.7b-ane",
+            displayName: "Qwen3-1.7B (Core AI, ANE)",
+            quantization: "4-bit palettized (uniform g32)",
+            parameterCountB: 1.7,
+            onDiskSizeMB: 1400,
+            hfRepoId: ""
+        ),
+        ModelInfo(
+            id: "core-ai/qwen3-1.7b-gpu",
+            displayName: "Qwen3-1.7B (Core AI, GPU)",
+            quantization: "INT4 (dynamic)",
+            parameterCountB: 1.7,
+            onDiskSizeMB: 940,
             hfRepoId: ""
         ),
         ModelInfo(

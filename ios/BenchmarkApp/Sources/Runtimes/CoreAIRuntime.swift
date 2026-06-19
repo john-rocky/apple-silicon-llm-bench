@@ -70,6 +70,8 @@ public final class CoreAIRuntime: LLMRuntime, @unchecked Sendable {
         switch id {
         case "core-ai/qwen3-0.6b-ane": return ("qwen3_0_6b_ane", "static-shape")
         case "core-ai/qwen3-0.6b-gpu": return ("qwen3_0_6b_gpu", "coreai-pipelined")
+        case "core-ai/qwen3-1.7b-ane": return ("qwen3_1_7b_ane", "static-shape")
+        case "core-ai/qwen3-1.7b-gpu": return ("qwen3_1_7b_gpu", "coreai-pipelined")
         case "core-ai/qwen3-4b-ane":   return ("qwen3_4b_ane", "static-shape")
         case "core-ai/qwen3-4b-gpu":   return ("qwen3_4b_gpu", "coreai-pipelined")
         case "core-ai/qwen3-8b-ane":   return ("qwen3_8b_ane", "static-shape")
@@ -236,11 +238,20 @@ public final class CoreAIRuntime: LLMRuntime, @unchecked Sendable {
             accumIds.append(Int(tid))
             // Incremental decode → emit only the new text so the runner gets
             // real per-token timing for inter-token-latency percentiles.
+            // Diff by COMMON PREFIX, never by slicing `current` with an index
+            // taken from `emitted`: a String.Index is only valid for the string
+            // it came from, so `current[emitted.endIndex...]` is undefined and
+            // can crash or corrupt on byte-level tokenizers where a multi-byte
+            // character straddles two tokens (a partial "�" that resolves on the
+            // next token). dropFirst(sharedCount) is index-safe for any tokenizer.
             let current = tokenizer.decode(tokens: accumIds)
-            if current.count > emitted.count {
-                let delta = String(current[emitted.endIndex...])
+            if current != emitted {
+                let shared = current.commonPrefix(with: emitted).count
+                if current.count > shared {
+                    let delta = String(current.dropFirst(shared))
+                    continuation.yield(.chunk(delta))
+                }
                 emitted = current
-                continuation.yield(.chunk(delta))
             }
         }
 
