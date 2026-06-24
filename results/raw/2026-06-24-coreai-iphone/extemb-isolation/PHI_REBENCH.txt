@@ -9,3 +9,8 @@ RESULT: Phi-4-mini int8 (3.6GB) GENUINELY OOMs even WITH both entitlements.
   run1: std::bad_alloc -> signal 6 (SIGABRT). run2/3: Failed to create engine / Failed to initialize kernel.
   => REAL memory limit (3.6GB int8 too big for iPhone even with raised limit), NOT a harness artifact.
   Clean split vs the 3B int4 cells (2.2GB, which WERE artifacts and now load). "OOM" label was correct.
+
+CORRECTION (quant confound): the Phi OOM is the int8 build (3.6GB), NOT Phi/LiteRT.
+  MLX runs Phi at int4 (~2GB, 29.6 tok/s); LiteRT runs other 3B int4 (~2.2GB) fine.
+  => a LiteRT int4 Phi (~2GB) would load. litert-community only ships Phi as int8.
+  Genuinely-unrunnable-on-iPhone cells = none. (int4 Phi not converted: base not cached, ~7.6GB dl.)

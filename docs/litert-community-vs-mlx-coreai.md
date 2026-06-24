@@ -133,9 +133,11 @@ entitlements fixed it: Ministral-3-3B 3/3 (~18 tok/s), Llama-3.2-3B 5/5 (~18.4).
 hypotheses on the way — an `externalize_embedder` bug, then a "LiteRT mmap-loader limitation" — **both refuted.**
 MLX only *appeared* to "load 3B where LiteRT couldn't" because its lower load-peak stayed under the default limit.
 **LiteRT-LM is not at fault for the iPhone 3B failures; it was our app config.** (Lesson: the iPhone harness needs
-both entitlements for any ≳2 GB model. We then re-checked the other large iPhone cells: **Phi-4-mini LiteRT
-(3.6 GB int8) genuinely OOMs even *with* the entitlements** — `std::bad_alloc` → SIGABRT — so that one is a real
-memory limit, not an artifact. Clean split: the 3B int4 cells were harness artifacts (now load); Phi int8 wasn't.)
+both entitlements for any ≳2 GB model. We then re-checked Phi-4-mini LiteRT: its **int8 build (3.6 GB) OOMs even
+*with* the entitlements** (`std::bad_alloc` → SIGABRT) — but that's the **quant, not Phi or LiteRT**. MLX runs Phi
+at int4 (~2 GB, 29.6 tok/s) and LiteRT runs other 3B int4 builds (~2.2 GB) fine, so a LiteRT int4 Phi (~2 GB) would
+load too — litert-community just only ships Phi as int8. So the iPhone "OOM" cells split: **3B int4 = harness
+artifacts (now load); Phi int8 = too big at *that quant* (int4 would fit); genuinely-unrunnable on-device = none.**)
 
 **Core AI iOS:** measured (ANE + GPU) for the qwen-arch ≤1.7B set — see the iPhone table above (DeepSeek-R1, TinySwallow, Qwen3-1.7B; VibeThinker GPU). Core AI ≥ MLX ≫ LiteRT on-device, ANE the trump card.
 
