@@ -107,9 +107,9 @@ qwen2 / qwen3 / gemma3 / mistral wrappers. `†` Gemma3-1B Core AI via a local t
 | Gemma3-1B | ✗ no iOS class | — | **97.6** | gated |
 | Phi-4-mini | ✗ no wrapper | — | **29.6** | OOM |
 | OLMo-2-1B | ✗ no wrapper | — | — | **24.6** |
-| Llama-3.2-3B | ✗ 3B OOM | — | **34.0** | **19.5**† |
+| Llama-3.2-3B | ✗ no iOS class | — | **34.0** | **19.5**† |
 | SmolLM3-3B | ✗ no wrapper | — | **36.8** | **22.8** |
-| Ministral-3-3B | ✗ 3B/arch | — | ✗ | ✗ |
+| Ministral-3-3B | ✗ arch | — | ✗ | ✗ |
 
 **On-device, Core AI ≥ MLX ≫ LiteRT-LM — and Core AI's ANE is the trump card MLX/LiteRT structurally can't use.**
 For the qwen-arch ≤1.7B that Core AI iOS covers: DeepSeek-R1 **ANE 83.3** / GPU 75.9 vs MLX 73.0 vs LiteRT 30.7;
@@ -118,7 +118,8 @@ ANE tops MLX on DeepSeek-R1, 83 vs 73), and both are ~2.5× LiteRT-LM.** The **A
 reachable only via Core AI / CoreML** — MLX and LiteRT-LM are GPU-only on Apple — so it's also the most
 power-efficient path; this is Core AI's real on-device edge, invisible on Mac. The MLX-vs-LiteRT gap is 1.6–2.7×
 iso-int4 (Qwen3-1.7B 62.8 vs 23.2; Llama-3.2-3B 34.0 vs 19.5; SmolLM3-3B 36.8 vs 22.8). Core AI iOS coverage here
-= qwen2/qwen3 ≤1.7B (mistral-3B OOMs on-device; gemma3 has no iOS export class; phi3/olmo2/smollm3 no wrapper);
+= qwen2/qwen3/mistral classes only; **3B iOS Core AI bundles were not built** (no llama/smollm3 iOS class,
+ministral3 arch unsupported) so 3B Core-AI-on-iPhone is **untested, not measured-OOM**; gemma3 no iOS class, phi3/olmo2/smollm3 no wrapper;
 iPhone MLX-Swift can't load `ministral3`, and OLMo-2/VibeThinker lack mlx-community repos. (VibeThinker ANE bundle
 pending — its compile was interrupted by a Mac crash; everything else is measured.)
 
@@ -134,8 +135,13 @@ at the boundary (→ intermittent 1/3), Ministral's is over (→ 0/3), the 1.7B 
 externalized-embedding init path works; the failure is the documented size ceiling. **The engine log names it
 directly:** `Failed to map section … Cannot allocate memory` (an `mmap` ENOMEM, graceful exit — no jetsam kill),
 and the *same* Ministral-3B bundle even **loaded on 1 of 3 cold launches** (18.96 tok/s) — a structural/init bug
-could not intermittently succeed. The embedding-section error is a downstream symptom. **Not a filable LiteRT
-bug** — an expected 3B-int4-on-device memory constraint.
+could not intermittently succeed. The embedding-section error is a downstream symptom. So it is **not** an
+`externalize_embedder` bug. **It *is* a LiteRT-LM iOS loader limitation, though:** MLX loads the *same*
+Llama-3.2-3B (and SmolLM3-3B) **reliably (3/3) at ~1.9–2.1 GB peak** on this device — the RAM is there — so it's
+LiteRT's **single-section `mmap`** that fails where MLX's non-mmap weight loading succeeds. (LiteRT's own
+SmolLM3-3B, 2.00 GB, loads; Llama/Ministral, 2.2–2.3 GB, don't — the failure tracks largest-section size vs the
+~2 GB mmap ceiling.) A correctly-scoped enhancement (chunked/multiple mmaps, read fallback, or finer
+section-splitting), **distinct from the refuted embedder bug.**
 
 **Core AI iOS:** measured (ANE + GPU) for the qwen-arch ≤1.7B set — see the iPhone table above (DeepSeek-R1, TinySwallow, Qwen3-1.7B; VibeThinker GPU). Core AI ≥ MLX ≫ LiteRT on-device, ANE the trump card.
 

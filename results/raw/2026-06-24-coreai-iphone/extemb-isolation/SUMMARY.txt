@@ -34,3 +34,12 @@ run3 OK  : loaded, decode 18.96 tok/s.
 => SAME 3B bundle is intermittent (1/3 success) and the engine literally reports
    "Cannot allocate memory" on mmap. A structural/init bug cannot intermittently succeed.
    DEFINITIVE: memory-bound (mmap ENOMEM), not an externalize_embedder/multi-section bug.
+
+===== MLX vs LiteRT 3B LOAD (from committed decode-cells.jsonl) =====
+MLX  Llama-3.2-3B iPhone: 34.0 tok/s, peak 1945 MB, runs_ok 3/3   <- loads reliably
+MLX  SmolLM3-3B   iPhone: 36.8 tok/s, peak 2096 MB, runs_ok 3/3   <- loads reliably
+LiteRT Llama-3.2-3B iPhone: 19.5, peak 1722 MB, runs_ok 1/3 (mmap ENOMEM)
+=> Device HAS the RAM (MLX runs 3B at ~1.9-2.1GB). LiteRT's single-section mmap fails
+   where MLX's non-mmap loader succeeds => LiteRT iOS loader limitation (correctly scoped),
+   NOT the refuted externalize_embedder bug. (Core AI 3B iPhone = no llama/smollm3 iOS
+   class, untested -- earlier "3B OOM" label was unverified, corrected.)
