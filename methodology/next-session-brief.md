@@ -44,22 +44,16 @@ Driver: `scripts/comprehensive_bench.sh`.
 4. Energy (UNPLUGGED, selective, battery-limited): `… energy <model-id> <runtime>` then unplug, wait, `… collect`.
    **The money shot = Core AI ANE vs GPU J/token on the same model** (`qwen3-1.7b-ane` vs `-gpu`).
 
-## STREAM B — Core AI export to fill every blank (no device until measure)
-Goal: 6 export classes/shims → all 10 models become 3-way Core AI on Mac + iPhone. Full per-model spec +
-commands: **`methodology/coreai-export-todo.md`**. Work in `~/code/coreai/coreai-models` (NOT a git repo — hand-edit).
+## STREAM B — Core AI export to fill every blank (split into two separate sessions)
+6 export classes/shims → all 10 models become 3-way Core AI (Mac + iPhone); only 3 MLX cells stay permanently
+blank (Ministral iPhone-MLX hard block; VibeThinker/OLMo MLX = no repo). Run as **two independent sessions:**
 
-Recommended order (low→high effort, each independently shippable):
-1. **Ministral-3-3B** — config shim only: map `model_type "ministral3" → mistral` in `MODEL_TYPE_REMAPPING`
-   (mistral already has macOS+iOS classes). Fills 2 cells fastest.
-2. **Gemma3-1B iOS** + **Llama-3.2-3B iOS** — macOS classes exist; write `models/ios/gemma3.py` / `ios/llama.py`
-   mirroring `ios/gemma4.py` + `ios/qwen3.py`. Fills the iPhone cells (Mac already done: 327.2 / 198.3).
-3. **Phi-4-mini (phi3)**, **OLMo-2-1B (olmo2)**, **SmolLM3-3B (smollm3)** — new archs, write macOS + iOS classes
-   + register. SmolLM3 has a **NoPE** quirk (some layers skip RoPE) — handle in the class.
-
-After each export: assemble both bundles (mirror `scripts/export_coreai_qwen3.sh`), then in THIS repo add a
-`ModelCatalog.swift` entry + `CoreAIRuntime.swift` bundleSpec case + a `manifest.tsv` row, rebuild (keep
-entitlements), side-load, measure 3×. Only 3 cells stay permanently blank (Ministral iPhone-MLX hard block;
-VibeThinker/OLMo MLX = no repo).
+1. **Export session** → `methodology/coreai-export-session.md` — self-contained, works only in
+   `~/code/coreai/coreai-models` (no device, no bench knowledge). Writes the classes, produces the bundles.
+   Order: Ministral (config shim) → Gemma3-iOS, Llama-iOS (macOS done) → Phi3, OLMo-2, SmolLM3 (new archs; SmolLM3
+   has a NoPE quirk).
+2. **Gap-fill session** → `methodology/gap-fill-session.md` — runs after, with the iPhone. Wires the bundles into
+   the app (catalog + bundleSpec + manifest), rebuilds (keep entitlements), side-loads, measures, updates the report.
 
 ---
 
