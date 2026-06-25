@@ -185,25 +185,45 @@ The decode tables above are short-chat snapshots. This axis asks the on-device *
 *which runtime delivers the most tokens per joule under a sustained load?* Instrument: `UIDevice.batteryLevel`
 (1% steps) sampled across a **600 s `energy` task** that re-prompts to keep the runtime busy; the ~5% drop →
 joules via the device pack (iPhone 17 Pro = 16.5 Wh). Whole-system (display + radios + OS included), **±~12% per
-run** at 1% resolution — compare *within device* only. Method: [`energy-ios.md`](../methodology/energy-ios.md). One
-model, the dense 3B flagship, all four runtimes (same `.litertlm`/4-bit weights, unplugged, 85–95% start, screen on):
+run** at 1% resolution — compare *within device* only. Method: [`energy-ios.md`](../methodology/energy-ios.md). **Two
+models** — the dense **Llama-3.2-3B** and **DeepSeek-R1-1.5B** (Google's own litert-community model) — all four
+runtimes (4-bit unless noted; unplugged, screen on, mid-band battery):
 
-| Runtime | **J/token** ↓ | avg W | sustained tok/s | (short-chat tok/s) | tokens/Wh |
+**Llama-3.2-3B** (all int4) — adds a peak-memory column (`memoryPeakDuringDecodeMB`):
+
+| Runtime | **J/token** ↓ | avg W | sustained tok/s | (short-chat) | **peak MB** | tokens/Wh |
+|---|--:|--:|--:|--:|--:|--:|
+| **Core AI GPU** | **0.224** | 4.67 | 21.0 | 19.3 | **732** | 16 058 |
+| **Core AI ANE** | **0.225** | 4.62 | 20.6 | 24.2 | 2,577 | 16 019 |
+| **MLX** | **0.245** | 4.70 | 19.3 | 34.0 | 3,221 | 14 681 |
+| **LiteRT-LM** | **0.324** | 4.31 | 13.6 | 18.4 | 3,263 | 11 120 |
+
+**DeepSeek-R1-1.5B** (Core AI / MLX int4; LiteRT int8* = its litert-community quant):
+
+| Runtime | **J/token** ↓ | sustained tok/s | (short-chat) | **peak MB** | tokens/Wh |
 |---|--:|--:|--:|--:|--:|
-| **Core AI GPU** | **0.224** | 4.67 | 21.0 | 19.3 | 16 058 |
-| **Core AI ANE** | **0.225** | 4.62 | 20.6 | 24.2 | 16 019 |
-| **MLX** | **0.245** | 4.70 | 19.3 | 34.0 | 14 681 |
-| **LiteRT-LM** | **0.324** | 4.31 | 13.6 | 18.4 | 11 120 |
+| **Core AI ANE** | **0.097** | 49.0 | 83.3 | 1,368 | 37,236 |
+| **MLX** | **0.105** | 44.8 | 73.0 | 1,434 | 34,315 |
+| **Core AI GPU** | **0.132** | 36.2 | 75.9 | **374** | 27,307 |
+| **LiteRT-LM** | **0.204** | 24.2 | 30.7 | 1,000 | 17,678 |
 
-**Core AI (ANE ≈ GPU) is the most energy-efficient — ~9% better than MLX, ~44% better than LiteRT-LM.** Three
-things drive it, and all four runtimes drained exactly the same 5% (1 quantum), so **J/token is governed by
-*sustained* throughput** (joules are constant; tokens differ):
+**Memory (peak during decode) — Core AI GPU is in a class of its own:** 732 MB (Llama) / 374 MB (DeepSeek) via
+mmap-pipelined weights (resident set ~280 MB), vs ~3.2 GB (Llama) / ~1.4 GB (DeepSeek) for MLX & LiteRT and the
+weights-resident Core AI ANE (2.6 / 1.4 GB) — a **~4× memory-headroom advantage** the pipelined-mmap path alone
+delivers, widening with model size (decisive for fitting larger models on-device).
+
+**Across both models, Core AI is the most energy-efficient and LiteRT-LM the least** (Llama: Core AI ANE≈GPU
+~0.224 vs MLX 0.245 vs LiteRT 0.324; DeepSeek: Core AI ANE 0.097 vs MLX 0.105 vs GPU 0.132 vs LiteRT 0.204). All
+runtimes drained the same 5% (1 quantum), so **J/token is governed by *sustained* throughput** (joules constant,
+tokens differ):
 1. **Sustained load reorders the short-chat ranking — MLX is hit hardest.** MLX's 34 tok/s short-chat lead collapses
    to **19.3** under 10 min of thermal load (peak `serious`), *below* Core AI; LiteRT 18.4→13.6; Core AI is the most
    thermally stable (ANE 24→20.6, GPU 19.3→21.0). The energy task is the realistic long-generation regime.
-2. **ANE ≈ GPU on-device** — the ANE's short-chat edge vanishes under throttling, and **whole-system power is
-   display/OS-dominated (~4.6 W for all)**, so the ANE's *chip*-level power advantage doesn't surface in
-   whole-system J/token.
+2. **ANE-vs-GPU is size-dependent.** At **3B (Llama) they tie** (ANE 0.225 ≈ GPU 0.224) — the ANE's short-chat lead
+   is erased by throttling and whole-system power is display/OS-dominated (~4.6 W for all). But at **1.5B (DeepSeek)
+   the ANE keeps its lead and wins** (0.097 vs GPU 0.132, sustaining 49 vs 36 tok/s). So the ANE's energy edge is
+   real for smaller models and shrinks to a tie as the model grows — while **Core AI GPU always wins on memory**
+   (above), making GPU the better-rounded choice at 3B and ANE the efficiency pick at ≤1.5B.
 3. **The "low-power-but-slow → worst J/token" role belongs to LiteRT here** (lowest draw 4.31 W, but slowest 13.6
    tok/s → worst 0.324) — the same shape the ANE showed *on the Mac* (below).
 
@@ -219,6 +239,26 @@ things drive it, and all four runtimes drained exactly the same 5% (1 quantum), 
   first-class kernels, mirroring the decode-speed thesis.
 - **Model size dominates the absolute number.** qwen3-0.6B on MLX hit **0.066 J/token** (99 tok/s, stayed `fair`) —
   ~4× more efficient than any 3B cell; a smaller model is the biggest energy lever, ahead of runtime choice.
+
+**"How many tokens does 1% of iPhone battery buy?"** Re-cast as the headline metric (tokens ÷ battery-Δ%), the
+**battery-efficiency crown flips with the model** — tracking first-class-kernel support, not the runtime:
+
+| Model (LiteRT quant) | **LiteRT-LM** | **Core AI** (ANE / GPU) | **MLX** | greenest |
+|---|--:|--:|--:|---|
+| Gemma-4-E2B (int4, gemma kernels) | **4,074** | 2,867 (ANE) | 2,560 | **LiteRT-LM** |
+| DeepSeek-R1-1.5B (int8*, generic) | 2,917 | **6,144** / 4,506 | 5,662 | **Core AI (ANE)** |
+| Llama-3.2-3B (int4, generic) | 1,835 | 2,643 / **2,650** | 2,422 | **Core AI (GPU)** |
+
+tokens per 1% battery — the **battery-efficiency *ranking* flips with the model.** For **Gemma — Google's first-class
+model — LiteRT-LM is the greenest runtime on Apple's phone (4,074 tok/1%)**. For a **generic model it falls to LAST
+and Core AI wins** — confirmed across **two independent non-gemma models**: Google's own **DeepSeek-R1-1.5B** (Core AI
+ANE **6,144** = **2.1×** LiteRT's 2,917) and **Llama-3.2-3B** (Core AI 2,650 vs LiteRT 1,835). The flip is robust to
+the obvious confounds — it holds whether LiteRT ships **int4** (Llama) or **int8** (DeepSeek), and whether the rows
+are Debug/iOS 26.4.2 (Gemma) or Release/iOS 27.0 (DeepSeek, Llama) — so the cause is the **first-class-kernel gap**,
+not a quant or build artifact (LiteRT decodes Gemma at 30.8 tok/s sustained vs DeepSeek 24.2, Llama 13.6). **Even on
+a model Google itself distributes via litert-community (DeepSeek-R1), LiteRT-LM is the least battery-efficient of the
+four.** (Absolute tok/1% rises for the smaller DeepSeek-1.5B — model size is the biggest lever — so compare the
+*ranking* within a row, not magnitudes across rows.)
 
 > ⚠️ Single-run, 1% battery resolution: treat ±0.02–0.03 J/token gaps (ANE vs GPU) as ties; the MLX and LiteRT
 > gaps are larger than the error bar. All rows verified `batteryState=unplugged` with a non-nil drop.
