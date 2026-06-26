@@ -276,10 +276,12 @@ struct HeadlessRunnerView: View {
                 )
                 _ = try? await ResultStore.shared.save(result)
                 await log(String(
-                    format: "YARDSTICK_RUN_OK run=%d cold=%d decode_tok_s=%.2f ttft_ms=%d peak_mb=%.0f tokens=%d",
+                    format: "YARDSTICK_RUN_OK run=%d cold=%d decode_tok_s=%.2f ttft_ms=%d prefill_tok_s=%.1f prompt_tokens=%d peak_mb=%.0f tokens=%d",
                     i, cold ? 1 : 0,
                     result.metrics.decodeTokensPerSecond,
                     result.metrics.firstTokenLatencyMS,
+                    result.metrics.promptTokensPerSecond,
+                    result.metrics.promptTokenCount,
                     result.metrics.memoryPeakDuringDecodeMB,
                     result.metrics.generatedTokenCount
                 ))
