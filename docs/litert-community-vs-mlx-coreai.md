@@ -202,16 +202,31 @@ comparison stays inside one quant: **LiteRT int4 (45.0) is only ~0.6× of Core A
 LiteRT-LM's on-device gap is **both** int8 bytes (~1.5×, with an accuracy cost) **and** the delegate (~1.7×, iso-int4,
 quality-neutral) — "it's just int8" does not explain it, and the native-Metal kernel path is the larger, cleaner lever.
 
-**Core AI static-GPU 3-way — deferred (coverage gap).** A planned static-shape-on-GPU export (to isolate ANE-vs-GPU
-*engine* at matched static shape AND palettized quant) was compiled for all 10 dense models (`*_static_gpu`, verified
-0 ANE regions) but **does not load** in the app's Core AI runtime: every engine variant (`static-shape` /
-`coreai-pipelined` / auto) fails `EngineFactory` with POSIX Code 2 `No such file` — the GPU compile emits an
-`mpsExecutable.mpsgraphpackage` (original/specialized model + resources.bin) that lacks the per-bucket
-`binary_0.llir.bundle/…/extend_*` artifacts the static engine consumes. Fixing it is export-side (full GPU bucket
-specialization, or the gemma4-bucketed port) — **deferred to a separate session**. So the ANE-vs-GPU decode rows
-stand as stated: ≈ tie, sign-flipping by model (DeepSeek ANE>GPU, Qwen3-1.7B/VibeThinker GPU>ANE) = an
-export-shape + cold-launch effect, **not** a stable engine ranking — and ANE's defensible edge remains energy +
-exclusivity (MLX/LiteRT can't target the ANE at all), not raw decode tok/s.
+**Core AI ANE-vs-GPU — answered by a warm re-run, not a static-GPU bundle.** The clean way to isolate the ANE/GPU
+*engine* would be a static-shape GPU export (matched shape + quant vs the ANE). All 10 `*_static_gpu` bundles
+compiled (0 ANE regions) but are **un-runnable**: the GPU/MPSGraph compile emits only **one** specialized graph while
+the static structure declares all 15 `extend_*` shape buckets, so the engine resolves a declared bucket and hits a
+missing artifact → `EngineFactory` POSIX Code 2 `No such file`. This is an **artifact absence**, not a metadata or
+loader issue — verified: re-compiling with `--expect-frequent-reshapes` is byte-identical, and the low-level
+`PreparedModel` runner (which runs other GPU bundles) only rescues *dynamic* single-`main` graphs, a different
+structure. A genuinely fixed-shape GPU export (the `qwen2_bucketed` host-cache port) is real but low-ROI and
+Mac-unverifiable, so it is dropped.
+
+Instead the engine-vs-cold question is answered directly by **re-running the existing dynamic-GPU bundle warm** (2nd
+run, same shape — no new bundle needed). DeepSeek-R1-1.5B, iPhone, one session, run 1 cold → runs 2–4 warm:
+
+| DeepSeek-R1-1.5B | decode cold | decode warm | TTFT cold → warm |
+|---|--:|--:|--:|
+| dynamic-GPU | 76.1 | 74.5 | 195 → 39 ms |
+| static-ANE (control) | 82.7 | 82.3 | 79 → 26 ms |
+
+**Cold re-specialization lands in TTFT (GPU 195 → 39 ms), not the decode rate** (GPU cold 76 ≈ warm 74.5; the ANE is
+flat, as a static-AOT control should be). So **warm-GPU does not approach the ANE — the ~10% ANE>GPU decode delta is
+steady-state, not a cold artifact.** Combined with the sign-flip (DeepSeek ANE>GPU, but Qwen3-1.7B / VibeThinker
+GPU>ANE), that small steady-state delta is best read as the **static-vs-dynamic export shape** (model-specific), **not**
+a stable engine ranking — a clean engine isolation (static-GPU) being un-runnable, this is as far as the data cleanly
+goes. The defensible headline is unchanged: throughput is **ANE ≈ GPU**; ANE's consistent, real win is **energy +
+exclusivity** (MLX/LiteRT can't target the ANE at all), not raw decode tok/s.
 
 ## Energy — iPhone 17 Pro, sustained decode (battery-delta, J/token)
 
