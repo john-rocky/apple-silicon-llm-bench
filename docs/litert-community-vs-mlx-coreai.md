@@ -256,6 +256,43 @@ the ANE. (The current h18p/27β static-GPU rebuild is un-runnable, but this earl
 direction.) The defensible headline is unchanged: throughput is **ANE ≈ GPU**; ANE's consistent, real win is **energy +
 exclusivity** (MLX/LiteRT can't target the ANE at all), not raw decode tok/s.
 
+## Context-length sweep + prefill — Qwen3-4B (iso-int4)
+
+How each runtime holds up as the prompt grows (decode-at-depth) and how fast it ingests that prompt (prefill).
+Qwen3-4B, **all four runtimes at iso-int4** (no quant confound), iPhone 17 Pro, a short reply after a prompt of
+{19, 666, 2681, 3977} tokens, 2 cold/cell.
+
+**Decode-at-depth — the ANE's short-context lead inverts by ~2K.**
+
+| context (prompt tok) | Core AI ANE | Core AI GPU | MLX | LiteRT-LM |
+|---|--:|--:|--:|--:|
+| 19 | **27.4** | 17.0 | 20.3 | 15.3 |
+| 666 | **26.3** | 16.1 | 18.0 | 15.5 |
+| 2,681 | 11.6 | 13.0 | **14.6** | 13.7 |
+| 3,977 | 10.5 | **11.9** | ✗ ceiling | ✗ ceiling |
+
+![Decode-at-depth — the ANE's short-context lead vanishes by ~2K (Qwen3-4B iso-int4, iPhone 17 Pro)](charts/iphone_context_sweep_decode.png)
+
+ANE is fastest at short context (27.4) but its **static-bucket KV attention degrades steeply** — by 2.7K it is
+**last** (11.6), behind MLX 14.6 / LiteRT 13.7 / GPU 13.0; the GPU/MLX/LiteRT paths degrade gently. So the
+"ANE is the fastest decoder" caveat is now sharper: it holds **only for short prompts**; at depth the ranking inverts.
+(MLX and LiteRT fail at the 3,977-token point — it brushes the 4,096 context ceiling — so that column is Core-AI-only.)
+
+**Prefill — LiteRT-LM's 25-second wall.**
+
+| Qwen3-4B @ 2.7K ctx | Core AI ANE | MLX | Core AI GPU | LiteRT-LM |
+|---|--:|--:|--:|--:|
+| prefill tok/s (prompt ÷ TTFT) | **671** | 514 | 359 | **~108** |
+| TTFT (time to first token) | 4.0 s | 5.2 s | 7.6 s | **24.9 s** |
+
+![Prefill — LiteRT-LM's 25-second wall (Qwen3-4B iso-int4, iPhone 17 Pro)](charts/iphone_context_sweep_prefill.png)
+
+ANE prefills fastest (671 tok/s); **LiteRT-LM is ~5–6× slower (~108 tok/s)** → **25 seconds to the first token** at
+2.7K context, vs 4–8 s for the others. Note the split personality: LiteRT's **decode**-at-depth is fine (flat ~14,
+the gentlest curve), but its **prefill** is the on-device weakness — the same WebGPU(Dawn)→Metal delegate cost the
+BW-ceiling section quantified, now visible as latency a user feels. (LiteRT-LM exposes no prompt-token count, so its
+prefill rate is TTFT-derived; 2 cold/cell, some cells single-run after cold-load timeouts.)
+
 ## Energy — iPhone 17 Pro, sustained decode (battery-delta, J/token)
 
 The decode tables above are short-chat snapshots. This axis asks the on-device **efficiency** question:
