@@ -47,6 +47,40 @@ def which(tool):
 
 # ---------- common ----------
 
+# A Mac run fails differently from an iPhone run: there is no jetsam kill, the model just
+# pages and the decode number silently becomes a measurement of swap. What bounds it is not
+# total RAM but total minus what is already unavailable -- wired pages plus whatever the
+# compressor holds, which on a long-lived desktop session is the larger of the two.
+#
+# Measured on a Mac16,8 (24 GB) on 2026-09-18: 3.6 GB wired + 1.3 GB compressor left 19.1 GB
+# usable, and a 4-bit 20B (11.3 GB resident) ran. The same machine nine days earlier, after a
+# long session, held 9.8 GB in the compressor alone: 10.7 GB usable, and that same model no
+# longer fit. Same hardware, same model, opposite outcome -- so a preflight that reads only
+# `hw.memsize` would have cleared both.
+USABLE_RAM_FLOOR_GB = 12.0
+
+
+def mac_memory_gb():
+    """(total_gb, usable_gb) on macOS, else None. usable = total - wired - compressor."""
+    if sys.platform != "darwin":
+        return None
+    try:
+        total = int(subprocess.run(["sysctl", "-n", "hw.memsize"],
+                                   capture_output=True, text=True).stdout.strip())
+        vm = subprocess.run(["vm_stat"], capture_output=True, text=True).stdout
+    except (OSError, ValueError):
+        return None
+    page = 4096
+    m = re.search(r"page size of (\d+) bytes", vm)
+    if m:
+        page = int(m.group(1))
+    def pages(label):
+        mm = re.search(label + r":\s+(\d+)", vm)
+        return int(mm.group(1)) * page if mm else 0
+    unavailable = pages(r"Pages wired down") + pages(r"Pages occupied by compressor")
+    return total / 1e9, max(0.0, (total - unavailable) / 1e9)
+
+
 def check_common():
     v = sys.version_info
     check(OK if v >= (3, 10) else FAIL, f"python {v.major}.{v.minor}",
@@ -64,6 +98,14 @@ def check_common():
     free_gb = st.f_bavail * st.f_frsize / 1e9
     check(OK if free_gb > 20 else WARN, f"disk free {free_gb:.0f} GB",
           "" if free_gb > 20 else "multi-GB models + a ~10 GB build tree land here")
+    mem = mac_memory_gb()
+    if mem:
+        total_gb, usable_gb = mem
+        check(OK if usable_gb >= USABLE_RAM_FLOOR_GB else WARN,
+              f"RAM {total_gb:.0f} GB total, {usable_gb:.1f} GB usable now",
+              "" if usable_gb >= USABLE_RAM_FLOOR_GB else
+              "wired + compressor already hold the rest; a 4-bit ~20B needs ~12 GB "
+              "resident and will page instead of running")
 
 
 # ---------- mac ----------

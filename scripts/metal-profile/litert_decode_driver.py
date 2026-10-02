@@ -31,6 +31,20 @@ import litert_lm
 from litert_lm import interfaces
 
 
+def _sysctl_int(name):
+    """Integer sysctl, 0 when unavailable.
+
+    `hw.memsize` is what makes a Mac row interpretable: the same `hw.model` ships in
+    several RAM configurations, so without it a reader cannot tell whether a model was
+    resident or paging — which is the difference the decode numbers actually show.
+    """
+    try:
+        out = subprocess.run(['sysctl', '-n', name], capture_output=True, text=True)
+        return int(out.stdout.strip())
+    except (ValueError, OSError):
+        return 0
+
+
 def _opt_version(pkg):
     try:
         return importlib.metadata.version(pkg)
@@ -162,6 +176,7 @@ def main():
             'python': platform.python_version(),
             'model': subprocess.run(['sysctl', '-n', 'hw.model'], capture_output=True,
                                     text=True).stdout.strip(),
+            'memsizeBytes': _sysctl_int('hw.memsize'),
         },
     }
     with open(args.out, 'w') as f:
