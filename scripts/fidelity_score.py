@@ -197,6 +197,8 @@ def report(arms, cases_by_id, out_path):
                 for cid, _, _, _ in rows:
                     for r in casemap[cid]:
                         for ev in r["evidence"]:
+                            if "got" not in ev:  # FORMAT_DRIFT evidence carries no "got"
+                                continue
                             lines.append(f"- `{cid}` rep {r['rep']}: `{ev['expected']}` → `{ev['got']}`")
                             shown += 1
                             if shown >= 20:

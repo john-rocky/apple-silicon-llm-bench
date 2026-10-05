@@ -35,7 +35,7 @@ GPU numerics (fp16 accumulation) rather than one runtime's kernels.
 
 | # | Runtime | A/B | Device | Model | Status |
 |---|---|---|---|---|---|
-| 1a | LiteRT-LM | cpu vs gpu (Metal) | Mac (M4 Max) | official Gemma 4 E2B/E4B `.litertlm` | runner ready (`litert-mac-verify --suite`) |
+| 1a | LiteRT-LM | cpu vs gpu (Metal) | Mac (M4 Max) | official Gemma 4 E2B/E4B `.litertlm` | run 2026-10-06 on v0.17.1: `results/fidelity/claims-gemma4-v0.17.1-mac.md` |
 | 1b | LiteRT-LM | cpu vs gpu (Metal) | iPhone 17 Pro | same bundles | next: BenchmarkApp suite task (the exact #2814 config) |
 | 2 | llama.cpp | cpu (`-ngl 0`) vs Metal | same Mac/iPhone | Gemma QAT GGUF | localizes Metal-wide vs LiteRT-specific |
 | 3 | MLX / Core AI | (no clean in-runtime A/B — GPU/ANE only) | Mac/iPhone | scoreboard rows only | optional |

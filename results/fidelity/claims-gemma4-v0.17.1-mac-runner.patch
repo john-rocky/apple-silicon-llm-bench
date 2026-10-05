@@ -1,0 +1,118 @@
+# Runner used for claims-gemma4-v0.17.1-mac: ~/code/litert-mac-verify (untracked) + swift-litert-lm @ 84b5df7, with the two diffs below.
+--- litert-mac-verify/Sources/litert-mac-verify/main.swift	2026-09-01 18:58:18
++++ litert-mac-verify/Sources/litert-mac-verify/main.swift	2026-10-06 01:09:40
+@@ -33,6 +33,8 @@
+ var suiteMaxNumTokens: Int? = nil
+ var suiteResume = false
+ var suiteTimeout: Double = 300
++var suiteRuntimeVersion: String? = nil  // --runtime-version V → recorded per generation
++var suiteActivation: String? = nil  // --activation f32 → FLOAT32 activations; recorded backend becomes "<backend>-f32"
+ var i = 1
+ let argv = CommandLine.arguments
+ while i < argv.count {
+@@ -67,6 +69,12 @@
+   } else if a == "--suite-max-num-tokens", i + 1 < argv.count {
+     suiteMaxNumTokens = Int(argv[i + 1])
+     i += 2
++  } else if a == "--runtime-version", i + 1 < argv.count {
++    suiteRuntimeVersion = argv[i + 1]
++    i += 2
++  } else if a == "--activation", i + 1 < argv.count {
++    suiteActivation = argv[i + 1]
++    i += 2
+   } else if a == "--resume" {
+     suiteResume = true
+     i += 1
+@@ -164,6 +172,17 @@
+   }
+   outHandle.seekToEndOfFile()
+   let modelName = (modelPath as NSString).lastPathComponent
++  if let act = suiteActivation {
++    guard act == "f32" else {
++      FileHandle.standardError.write(Data("--activation must be f32\n".utf8))
++      exit(2)
++    }
++    liteRTLMActivationDataTypeOverride = 0
++  }
++  // Scorer arms are keyed on the backend label, so a non-default activation type gets its own.
++  var backendLabel = suiteActivation.map { "\(bk)-\($0)" } ?? bk
++  // An explicit context size is a separate arm too (context-sizing control).
++  if let m = suiteMaxNumTokens { backendLabel += "-ctx\(m)" }
+ 
+   struct SuiteTimeout: Error {}
+   func generate(_ conv: Conversation, _ prompt: String, _ deadline: Double) async throws -> (
+@@ -216,10 +235,12 @@
+           engineSeq += 1
+           var record: [String: Any] = [
+             "suite": "fidelity-v1", "case_id": c.id, "runtime": "litert-lm",
+-            "model": modelName, "backend": bk, "device": "mac",
++            "model": modelName, "backend": backendLabel, "device": "mac",
+             "rep": rep, "engine_seq": engineSeq,
+             "ts": ISO8601DateFormatter().string(from: Date()),
+           ]
++          if let v = suiteRuntimeVersion { record["runtime_version"] = v }
++          record["max_num_tokens"] = engineMaxTokens
+           do {
+             let conv = try await engine.createConversation(
+               with: ConversationConfig(samplerConfig: sampler))
+@@ -230,6 +251,7 @@
+             record["stream_yields"] = yields
+             if let b = try? conv.getBenchmarkInfo() {
+               record["decode_tokens"] = b.lastDecodeTokenCount
++              record["prefill_tokens"] = b.lastPrefillTokenCount
+               record["prefill_tps"] = b.lastPrefillTokensPerSecond
+               record["decode_tps"] = b.lastDecodeTokensPerSecond
+             }
+diff --git a/Package.swift b/Package.swift
+index ee4d659..6c117ea 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -19,7 +19,7 @@
+ 
+ import PackageDescription
+ 
+-let liteRTLMVersion = "v0.15.0"
++let liteRTLMVersion = "v0.17.1"
+ 
+ let package = Package(
+   name: "swift-litert-lm",
+@@ -40,13 +40,13 @@ let package = Package(
+       name: "CLiteRTLM",
+       url:
+         "https://github.com/google-ai-edge/LiteRT-LM/releases/download/\(liteRTLMVersion)/CLiteRTLM.xcframework.zip",
+-      checksum: "d6ccf6b54362d894ff71a7580c7e446d36767dab908aecfbb16ffca0fa0bc59b"
++      checksum: "c94fc12aa0403cb47208e419cc3bfe258214ea17035f7a63c16de536869f2186"
+     ),
+     .binaryTarget(
+       name: "CLiteRTLM_mac",
+       url:
+         "https://github.com/google-ai-edge/LiteRT-LM/releases/download/\(liteRTLMVersion)/CLiteRTLM_mac.xcframework.zip",
+-      checksum: "d23cf189ce8f6bb2556c0a023805e245d1ec862434e501eb60f353488033c1b5"
++      checksum: "83efd536485c9d58fcd7fb7d4556ddb16ca46bb775b0449d08d9825c6836c1a4"
+     ),
+ 
+     // ── Vendored official Swift wrapper (Apache-2.0, see NOTICE) ─────────────
+diff --git a/Sources/LiteRTLM/Engine.swift b/Sources/LiteRTLM/Engine.swift
+index b690035..3a44319 100644
+--- a/Sources/LiteRTLM/Engine.swift
++++ b/Sources/LiteRTLM/Engine.swift
+@@ -120,6 +120,10 @@ public actor Engine {
+     } else if ExperimentalFlags.enableBenchmark {
+       litert_lm_engine_settings_enable_benchmark(settings)
+     }
++    if let activation = liteRTLMActivationDataTypeOverride {
++      litert_lm_engine_settings_set_activation_data_type(
++        settings, LiteRtLmActivationDataType(rawValue: activation))
++    }
+     if let enableSpeculativeDecoding = ExperimentalFlags.enableSpeculativeDecoding {
+       litert_lm_engine_settings_set_enable_speculative_decoding(settings, enableSpeculativeDecoding)
+     }
+@@ -277,3 +281,8 @@ public actor Engine {
+     }
+   }
+ }
++
++/// Fidelity-run addition (not upstream API): when set, passed to
++/// `litert_lm_engine_settings_set_activation_data_type` (0 = FLOAT32, 1 = FLOAT16).
++/// nil leaves the engine default untouched.
++public var liteRTLMActivationDataTypeOverride: UInt32? = nil
