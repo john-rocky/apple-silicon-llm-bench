@@ -1,0 +1,53 @@
+diff --git a/Package.swift b/Package.swift
+index ee4d659..6c117ea 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -19,7 +19,7 @@
+ 
+ import PackageDescription
+ 
+-let liteRTLMVersion = "v0.15.0"
++let liteRTLMVersion = "v0.17.1"
+ 
+ let package = Package(
+   name: "swift-litert-lm",
+@@ -40,13 +40,13 @@ let package = Package(
+       name: "CLiteRTLM",
+       url:
+         "https://github.com/google-ai-edge/LiteRT-LM/releases/download/\(liteRTLMVersion)/CLiteRTLM.xcframework.zip",
+-      checksum: "d6ccf6b54362d894ff71a7580c7e446d36767dab908aecfbb16ffca0fa0bc59b"
++      checksum: "c94fc12aa0403cb47208e419cc3bfe258214ea17035f7a63c16de536869f2186"
+     ),
+     .binaryTarget(
+       name: "CLiteRTLM_mac",
+       url:
+         "https://github.com/google-ai-edge/LiteRT-LM/releases/download/\(liteRTLMVersion)/CLiteRTLM_mac.xcframework.zip",
+-      checksum: "d23cf189ce8f6bb2556c0a023805e245d1ec862434e501eb60f353488033c1b5"
++      checksum: "83efd536485c9d58fcd7fb7d4556ddb16ca46bb775b0449d08d9825c6836c1a4"
+     ),
+ 
+     // ── Vendored official Swift wrapper (Apache-2.0, see NOTICE) ─────────────
+diff --git a/Sources/LiteRTLM/Engine.swift b/Sources/LiteRTLM/Engine.swift
+index b690035..3a44319 100644
+--- a/Sources/LiteRTLM/Engine.swift
++++ b/Sources/LiteRTLM/Engine.swift
+@@ -120,6 +120,10 @@ public actor Engine {
+     } else if ExperimentalFlags.enableBenchmark {
+       litert_lm_engine_settings_enable_benchmark(settings)
+     }
++    if let activation = liteRTLMActivationDataTypeOverride {
++      litert_lm_engine_settings_set_activation_data_type(
++        settings, LiteRtLmActivationDataType(rawValue: activation))
++    }
+     if let enableSpeculativeDecoding = ExperimentalFlags.enableSpeculativeDecoding {
+       litert_lm_engine_settings_set_enable_speculative_decoding(settings, enableSpeculativeDecoding)
+     }
+@@ -277,3 +281,8 @@ public actor Engine {
+     }
+   }
+ }
++
++/// Fidelity-run addition (not upstream API): when set, passed to
++/// `litert_lm_engine_settings_set_activation_data_type` (0 = FLOAT32, 1 = FLOAT16).
++/// nil leaves the engine default untouched.
++public var liteRTLMActivationDataTypeOverride: UInt32? = nil

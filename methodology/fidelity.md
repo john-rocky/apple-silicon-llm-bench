@@ -144,6 +144,6 @@ ride edge-llm-bench's device fleet.
 - `scripts/fidelity_score.py` — scorer + report (`--selftest` included);
   report → `results/fidelity/report.md`
 - `results/fidelity/*.jsonl` — runner outputs, one file per arm
-- runner, LiteRT-LM Mac: `litert-mac-verify --suite <jsonl> --out <jsonl>
+- runner, LiteRT-LM Mac (`tools/litert-fidelity-runner/`, build with `./setup.sh`): `litert-mac-verify --suite <jsonl> --out <jsonl>
   --backend cpu|gpu [--reps N] [--tier smoke|core|full] [--resume]
   [--timeout S] [--suite-max-num-tokens M]` (additive batch mode, 2026-09-01)

@@ -76,8 +76,9 @@ No timeouts, no errors, no resumes. Median prefill tok/s (cpu / gpu / gpu f32): 
 
 ## Repro
 
-Runner: `litert-mac-verify` built against swift-litert-lm with the xcframework pins moved to
-v0.17.1; the exact diffs are in `claims-gemma4-v0.17.1-mac-runner.patch`.
+Runner: `tools/litert-fidelity-runner/` (`./setup.sh` builds it against swift-litert-lm with the
+xcframework pins moved to v0.17.1). The diffs against the pre-run runner are kept in
+`claims-gemma4-v0.17.1-mac-runner.patch`.
 
 ```bash
 litert-mac-verify gemma-4-E2B-it.litertlm --suite evaldata/fidelity_suite_v1.jsonl \
