@@ -489,7 +489,7 @@ Per `(runtime, model, device, build)` tuple:
 - **Jitter** — inter-token latency `p50` / `p95` / `p99` ms, captured from the gap between consecutive `.chunk` events. Surfaces the worst-case stall a chat UI will perceive even when the average decode rate looks smooth.
 - **Energy** — joules per token. iOS uses the 1%-battery-step API; Mac uses `scripts/measure_energy.py` (wraps `powermetrics`, see "Optional: capture Mac energy" below).
 - **Lifecycle** — survives background → foreground, cancellation latency, streaming.
-- **Quality** *(roadmap)* — WER / CER for ASR, perplexity / MMLU for LLM, byte-identical comparison vs Python references.
+- **Quality** — one GSM8K score per build today (n=100, one harness for every build; the iPhone 17 Pro Gemma 4 E2B table above). WER / CER for ASR, perplexity / MMLU for LLM and byte-identical comparison vs Python references are on the roadmap (Phase 4).
 
 Methodology lives under [`methodology/`](methodology/). The numbers we publish follow [`methodology/fairness-rules.md`](methodology/fairness-rules.md).
 
@@ -635,7 +635,7 @@ in [`LEADERBOARD.md`](LEADERBOARD.md).
 - **Phase 2** — Mac CLI runs end-to-end via plain SPM (`swift run yardstick`; mlx-swift #349 resolved on 0.31.3 — no Xcode-target workaround), first M4 Max numbers committed to `RESULTS.md`.
 - **Phase 2.5** — All 5 buildable backends (MLX, llama.cpp, CoreML, ExecuTorch, ANEMLL) wired into the Mac tool target; first cross-backend row (Gemma 4 E2B: MLX vs llama.cpp).
 - **Phase 3** *(in progress)* — fill remaining adapter row gaps (downloader + model-format work, mostly upstream), MacBook Air M3 + iPhone 17 Pro numbers via `[Yardstick_USER_RUNS.md](../Yardstick_USER_RUNS.md)`.
-- **Phase 4** — quality / accuracy tasks: WER + CER (reusing `swift-transformers` Whisper normalizer), perplexity, MMLU subset. ASR + TTS adapters (WhisperKit, Apple Speech, system TTS).
+- **Phase 4** — quality / accuracy tasks: WER + CER (reusing `swift-transformers` Whisper normalizer), perplexity, MMLU subset. ASR + TTS adapters (WhisperKit, Apple Speech, system TTS). Scores are reported per task, not as one quality number: [quantcost](https://github.com/Ani-2003-HD/quantcost) found Qwen2.5-1.5B (llama.cpp) breaking on GSM8K at Q3 and on TriviaQA at Q2 while its JSON-schema conformance stayed at 100%.
 - **Phase 5** — public results dashboard, regeneration CI, comparison plots.
 
 ## License

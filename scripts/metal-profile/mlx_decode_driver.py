@@ -18,6 +18,20 @@ from mlx_lm import load, stream_generate
 from mlx_lm.sample_utils import make_sampler
 
 
+def _sysctl_int(name):
+    """Integer sysctl, 0 when unavailable.
+
+    `hw.memsize` is what makes a Mac row interpretable: the same `hw.model` ships in
+    several RAM configurations, so without it a reader cannot tell whether a model was
+    resident or paging — which is the difference the decode numbers actually show.
+    """
+    try:
+        out = subprocess.run(['sysctl', '-n', name], capture_output=True, text=True)
+        return int(out.stdout.strip())
+    except (ValueError, OSError):
+        return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('model')
@@ -94,7 +108,8 @@ def main():
         'host': {'machine': platform.machine(), 'macos': platform.mac_ver()[0],
                  'python': platform.python_version(),
                  'model': subprocess.run(['sysctl', '-n', 'hw.model'], capture_output=True,
-                                         text=True).stdout.strip()},
+                                         text=True).stdout.strip(),
+                 'memsizeBytes': _sysctl_int('hw.memsize')},
     }
     with open(args.out, 'w') as f:
         json.dump(rec, f, separators=(',', ':'), sort_keys=True)
