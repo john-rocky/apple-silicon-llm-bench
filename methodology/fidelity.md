@@ -35,7 +35,7 @@ GPU numerics (fp16 accumulation) rather than one runtime's kernels.
 
 | # | Runtime | A/B | Device | Model | Status |
 |---|---|---|---|---|---|
-| 1a | LiteRT-LM | cpu vs gpu (Metal) | Mac (M4 Max) | official Gemma 4 E2B/E4B `.litertlm` | run 2026-10-06 on v0.17.1: `results/fidelity/claims-gemma4-v0.17.1-mac.md`; run 2026-10-15 on v0.18.0 with the LiteRT-LM #3913 rotary-position patches (PowerBeef's cases and runner, fp16 / FLOAT32 / cpu controls): `results/fidelity/claims-gemma4-v0.18.0-mac-rope.md` |
+| 1a | LiteRT-LM | cpu vs gpu (Metal) | Mac (M4 Max) | official Gemma 4 E2B/E4B `.litertlm` | run 2026-10-06 on v0.17.1: `results/fidelity/claims-gemma4-v0.17.1-mac.md`; run 2026-10-15 on v0.18.0 with the LiteRT-LM #3913 rotary-position patches (PowerBeef's cases and runner, fp16 / FLOAT32 / cpu controls): `results/fidelity/claims-gemma4-v0.18.0-mac-rope.md`; run 2026-10-18 on v0.18.0 with an own E2B export carrying litert-torch's `odml.rope` composite against the same export without it (litert-torch #1343 question 1): `results/fidelity/claims-gemma4-v0.18.0-mac-ropecomposite.md` |
 | 1b | LiteRT-LM | cpu vs gpu (Metal) | iPhone 17 Pro | same bundles | next: BenchmarkApp suite task (the exact #2814 config) |
 | 1c | LiteRT-LM | cpu vs gpu (OpenCL) | Pixel 8a (Mali-G715) | Gemma 4 E2B `.litertlm`, unmodified and #3913-patched | run 2026-10-15 with the Android CLI from `main` b7c40ea81: `results/fidelity/claims-gemma4-pixel8a-rope.md` |
 | 2 | llama.cpp | cpu (`-ngl 0`) vs Metal | same Mac/iPhone | Gemma QAT GGUF | localizes Metal-wide vs LiteRT-specific |

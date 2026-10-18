@@ -1,0 +1,155 @@
+# count.py — Gemma 4 E2B rope-composite export vs default export, LiteRT-LM v0.18.0 (M4 Max), recount of raw/
+arms 10, replies 262, files ['ropecomposite', 'ltdefault', 'original']
+integrity: OK (line counts, expected = LCG(seed), recomputed exact = runner exact, firstMismatchPosition, record model/backend/activation = file name)
+prefill identity across arms: 112/112 case ids have one prefill value
+prefill vs the 10-15 run of the public gemma-4-E2B-it.litertlm (same runner, cases, build; same case id): 112 equal, 0 differ
+prefill vs PowerBeef's M6 original records (same case id): 82 equal, 0 differ
+
+## 1. exact / total (M4 Max, LiteRT-LM v0.18.0, PowerBeef's runner and cases)
+
+| model | file | backend-precision | `short` | `baseline` | `long` | `cross4096` |
+|---|---|---|---|---|---|---|
+| E2B | ropecomposite | gpu-fp16 | 15/15 | 42/42 | 25/25 | 30/30 |
+| E2B | ropecomposite | gpu-fp32 | – | – | 25/25 | – |
+| E2B | ropecomposite | cpu-fp32 | – | – | 25/25 | – |
+| E2B | ltdefault | gpu-fp16 | – | – | 1/25 | – |
+| E2B | ltdefault | gpu-fp32 | – | – | 25/25 | – |
+| E2B | ltdefault | cpu-fp32 | – | – | 25/25 | – |
+| E2B | original | gpu-fp16 | – | – | 0/25 | – |
+- `short`: prompts 237–1639 tokens (engine prefill count)
+- `baseline`: prompts 1705–2592 tokens (engine prefill count)
+- `long`: prompts 2094–3983 tokens (engine prefill count)
+- `cross4096`: prompts 3983–4449 tokens (engine prefill count)
+- short E2B-ropecomposite gpu-fp16: decode tokens 49–49, replies at the 80-token cap 0
+- baseline E2B-ropecomposite gpu-fp16: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-ropecomposite cpu-fp32: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-ropecomposite gpu-fp16: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-ropecomposite gpu-fp32: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-ltdefault cpu-fp32: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-ltdefault gpu-fp16: decode tokens 43–64, replies at the 80-token cap 0
+- long E2B-ltdefault gpu-fp32: decode tokens 49–49, replies at the 80-token cap 0
+- long E2B-original gpu-fp16: decode tokens 44–80, replies at the 80-token cap 2
+- cross4096 E2B-ropecomposite gpu-fp16: decode tokens 49–49, replies at the 80-token cap 0
+
+## 2. `baseline` by reply digit positions (prefill − 1 … prefill + 46), exact / total
+
+| model | file | backend-precision | 1704–1751 | 1904–1951 (incl. late) | 1952–2044 | 2011–2638 |
+|---|---|---|---|---|---|---|
+| E2B | ropecomposite | gpu-fp16 | 3/3 | 6/6 | 9/9 | 24/24 |
+
+## 3. text identity (same case ids)
+
+- E2B ropecomposite gpu fp16 vs gpu fp32 (same file), `long`: identical text 25/25
+- E2B ropecomposite cpu fp32 vs gpu fp32 (same file), `long`: identical text 25/25
+- E2B ropecomposite gpu fp16 vs cpu fp32 (same file), `long`: identical text 25/25
+- E2B ltdefault gpu fp16 vs gpu fp32 (same file), `long`: identical text 1/25
+- E2B ltdefault cpu fp32 vs gpu fp32 (same file), `long`: identical text 25/25
+- E2B ltdefault gpu fp16 vs cpu fp32 (same file), `long`: identical text 1/25
+- E2B ropecomposite vs ltdefault, gpu-fp16, `long`: identical text 1/25
+- E2B ropecomposite vs original, gpu-fp16, `long`: identical text 0/25
+- E2B ltdefault vs original, gpu-fp16, `long`: identical text 2/25
+- E2B ropecomposite vs ltdefault, gpu-fp32, `long`: identical text 25/25
+- E2B ropecomposite vs ltdefault, cpu-fp32, `long`: identical text 25/25
+- E2B ropecomposite vs the public file (10-15 run), gpu-fp16, `baseline`: identical text 20/42
+- E2B ropecomposite vs the public file (10-15 run), gpu-fp16, `cross4096`: identical text 0/30
+- E2B ropecomposite vs the public file (10-15 run), gpu-fp16, `long`: identical text 0/25
+- E2B ltdefault vs the public file (10-15 run), gpu-fp16, `long`: identical text 2/25
+- E2B original vs the public file (10-15 run), gpu-fp16, `long`: identical text 25/25
+- E2B ropecomposite vs the public file (10-15 run), gpu-fp32, `long`: identical text 25/25
+- E2B ltdefault vs the public file (10-15 run), gpu-fp32, `long`: identical text 25/25
+- E2B ropecomposite vs the public file (10-15 run), gpu-fp16, `short`: identical text 15/15
+
+## 4. failures by position
+
+- E2B ropecomposite gpu-fp16 `short`: 0 fail
+- E2B ropecomposite gpu-fp16 `baseline`: 0 fail
+- E2B ropecomposite gpu-fp16 `long`: 0 fail
+- E2B ropecomposite gpu-fp16 `cross4096`: 0 fail
+  = E2B ropecomposite gpu-fp16: 0 fail; highest last-digit position among exact replies 4495
+- E2B ropecomposite gpu-fp32 `long`: 0 fail
+  = E2B ropecomposite gpu-fp32: 0 fail; highest last-digit position among exact replies 4029
+- E2B ropecomposite cpu-fp32 `long`: 0 fail
+  = E2B ropecomposite cpu-fp32: 0 fail; highest last-digit position among exact replies 4029
+- E2B ltdefault gpu-fp16 `long`: 24 fail, firstMismatchPosition 2097–3998; prefill 2094–3983; ids ['s129-seed1', 's129-seed2', 's129-seed3', 's129-seed4', 's129-seed5', 's142-seed1', 's142-seed2', 's142-seed3']
+  = E2B ltdefault gpu-fp16: min firstMismatchPosition 2097 (s129-seed5), highest last-digit position among exact replies 2638
+- E2B ltdefault gpu-fp32 `long`: 0 fail
+  = E2B ltdefault gpu-fp32: 0 fail; highest last-digit position among exact replies 4029
+- E2B ltdefault cpu-fp32 `long`: 0 fail
+  = E2B ltdefault cpu-fp32: 0 fail; highest last-digit position among exact replies 4029
+- E2B original gpu-fp16 `long`: 25 fail, firstMismatchPosition 2097–3998; prefill 2094–3983; ids ['s129-seed1', 's129-seed2', 's129-seed3', 's129-seed4', 's129-seed5', 's142-seed1', 's142-seed2', 's142-seed3']
+  = E2B original gpu-fp16: min firstMismatchPosition 2097 (s129-seed5), highest last-digit position among exact replies -
+
+## 5. runner-recorded prefill / decode tok/s, medians (recorded by the runner, not a speed benchmark)
+
+- `short` E2B ropecomposite gpu-fp16: prefill 3558, decode 63.1, seconds/reply 0.98 (n=15)
+- `baseline` E2B ropecomposite gpu-fp16: prefill 5110, decode 63.3, seconds/reply 1.17 (n=42)
+- `long` E2B ropecomposite gpu-fp16: prefill 5060, decode 60.5, seconds/reply 1.38 (n=25)
+- `long` E2B ropecomposite gpu-fp32: prefill 4303, decode 58.2, seconds/reply 1.51 (n=25)
+- `long` E2B ropecomposite cpu-fp32: prefill 1087, decode 28.2, seconds/reply 4.15 (n=25)
+- `long` E2B ltdefault gpu-fp16: prefill 5045, decode 61.2, seconds/reply 1.38 (n=25)
+- `long` E2B ltdefault gpu-fp32: prefill 4303, decode 57.8, seconds/reply 1.52 (n=25)
+- `long` E2B ltdefault cpu-fp32: prefill 1115, decode 28.7, seconds/reply 4.08 (n=25)
+- `long` E2B original gpu-fp16: prefill 6739, decode 136.4, seconds/reply 0.79 (n=25)
+- `cross4096` E2B ropecomposite gpu-fp16: prefill 5329, decode 63.3, seconds/reply 1.53 (n=30)
+
+## 6. own fidelity suite (verbatim-substring pass test, recounted here)
+
+| file | model | backend | version | reps | pass / gens | failing cases / cases | failing by bucket | max distinct outputs |
+|---|---|---|---|---|---|---|---|---|
+| claims-gemma-4-E2B-ltdefault-v0.18.0-mac-gpu.jsonl | ['gemma-4-E2B-it-ltdefault.litertlm'] | ['gpu'] | ['v0.18.0'] | 1–10 | 390/490 | 10/49 | 128: 1/6, 1024: 0/17, 2048: 2/17, 4096: 7/9 | 1 |
+  - FAIL `copy-amount-c4096-mid-de-50` bucket 4096 prefill [4542]: expected {'amount': '8.674.342,07 €'} got '867436734007 €'
+  - FAIL `copy-date_iso-c128-mid-en-11` bucket 128 prefill [129]: expected {'date': '2033-04-09'} got 'Fog settled over the river crossing, and the early convoy waited for the signal to proceed.'
+  - FAIL `copy-date_iso-c4096-mid-en-42` bucket 4096 prefill [3157]: expected {'date': '2031-02-21'} got '2031-2-21'
+  - FAIL `copy-date_text-c2048-mid-de-50` bucket 2048 prefill [2294]: expected {'date': '2. Juli 2029'} got '2. Juli 209'
+  - FAIL `copy-date_text-c4096-mid-de-50` bucket 4096 prefill [4558]: expected {'date': '5. Februar 2038'} got 'REFERENCE: 5. Februar 2 3088'
+  - FAIL `copy-id_digits-c2048-mid-de-50` bucket 2048 prefill [2306]: expected {'account_id': '743486394834120'} got '74343486394834120'
+  - FAIL `copy-id_digits-c4096-mid-de-50` bucket 4096 prefill [4588]: expected {'account_id': '648733850143053'} got 'REFERENCE: 4883 3 8 5 0 4 3'
+  - FAIL `copy-id_digits-c4096-mid-en-42` bucket 4096 prefill [3126]: expected {'account_id': '650094782026699'} got 'REFERENCE: 65094782026699'
+  - FAIL `extract-mixed-c4096-spr-en-40` bucket 4096 prefill [3196]: expected {'order_id': 'ORD-Y5VW-74744-S', 'date': '2032-07-17', 'amount': '$3,214,827.01', 'account_id': '226035159556500'} got '```json\n{\n  "_order_id": "ORD-Y5VW-7444-S",\n  "date": "2032-07-17",  "amount": "$3,2,214874474",  "a'
+  - FAIL `extract-mixed-c4096-spr-en-41` bucket 4096 prefill [3205]: expected {'order_id': 'ORD-FG9Y-64875-W', 'date': '2038-08-05', 'amount': '$1,494,483.00', 'account_id': '425010443854807'} got '```json\n{\n  "order_id": "ORD-FG9Y-64875-W",\n  "date": "208-05",\n  \n  "amount": "$1,494,483.00",\n  \n '
+| claims-gemma-4-E2B-ropecomposite-v0.18.0-mac-cpu.jsonl | ['gemma-4-E2B-it-ropecomposite.litertlm'] | ['cpu'] | ['v0.18.0'] | 1–1 | 49/49 | 0/49 | 128: 0/6, 1024: 0/17, 2048: 0/17, 4096: 0/9 | 1 |
+| claims-gemma-4-E2B-ropecomposite-v0.18.0-mac-gpu.jsonl | ['gemma-4-E2B-it-ropecomposite.litertlm'] | ['gpu'] | ['v0.18.0'] | 1–10 | 480/490 | 1/49 | 128: 1/6, 1024: 0/17, 2048: 0/17, 4096: 0/9 | 1 |
+  - FAIL `copy-date_iso-c128-mid-en-11` bucket 128 prefill [129]: expected {'date': '2033-04-09'} got 'Fog settled over the river crossing, and the early convoy waited for the signal to proceed.'
+
+## 7. engine log lines (verbatim, deduplicated; count = logs containing the line)
+
+logs: 13
+- [13/13] INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+- [13/13] INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=…, name=GPU WebGPU
+- [13/13] INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=…, name=CpuAccelerator
+- [13/13] INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=…, name=GPU WebGPU
+- [13/13] INFO: [cpu_registry.cc:75] XNNPACK CPU accelerator registered.
+- [13/13] INFO: [gpu_registry.cc:113] Statically linked GPU accelerator registered.
+- [13/13] WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered: kLiteRtStatusErrorNotFound.
+- [12/13] litert_lm_loader.cc:532] TFLite model type: tf_lite_audio_encoder_hw not found for prefer activation type. Use system's default backend activation type. System's default activation type for Text decoder is fp16. Vision e
+- [12/13] litert_lm_loader.cc:532] TFLite model type: tf_lite_vision_encoder not found for prefer activation type. Use system's default backend activation type. System's default activation type for Text decoder is fp16. Vision enc
+- [10/13] INFO: [delegate_webgpu.cc:342] Create WebGPU environment (use_low_power=0, enable_host_mapped_pointer=1)
+- [10/13] INFO: [delegate_webgpu.cc:363] Created a WebGPU environment.
+- [10/13] INFO: [gpu_environment.cc:408] Created default Metal device.
+- [10/13] INFO: [gpu_environment.cc:436] Failed to create OpenCL context.
+- [10/13] delegate_kernel.cc:979] Initializing WebGPU-based API from serialized data.
+- [10/13] delegate_webgpu.cc:751] # of threads to upload weights = 2
+- [10/13] delegate_webgpu.cc:759] # of threads to compile kernels = 1
+- [10/13] engine loaded in <t> s
+- [10/13] environment.cc:532] Selected adapter: Apple M4 Max, arch=metal-3, vendor=apple, backend=Metal, adapterType=Integrated GPU
+- [10/13] sampler_factory.cc:492] WebGPU sampler not available, falling back to statically linked C API.
+- [2/13] …80 generations (at copy-version-c1024-mid-en-07)
+- [1/13] INFO: [magic_number_utils.cc:101] Loaded: num_subgraphs=1, num_signatures=1
+- [1/13] INFO: [magic_number_utils.cc:101] Loaded: num_subgraphs=976, num_signatures=4
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=decode, subgraph_index=0, num_tensors=2703, num_inputs=35, num_outputs=32, num_ops=2068
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=embedder, subgraph_index=0, num_tensors=16, num_inputs=1, num_outputs=1, num_ops=8
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=eoa, subgraph_index=0, num_tensors=1, num_inputs=0, num_outputs=1, num_ops=0
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=eoi, subgraph_index=0, num_tensors=1, num_inputs=0, num_outputs=1, num_ops=0
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=per_layer_embedder, subgraph_index=0, num_tensors=83, num_inputs=1, num_outputs=1, num_ops=42
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=prefill_1024, subgraph_index=1, num_tensors=1454, num_inputs=35, num_outputs=30, num_ops=1107
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=prefill_128, subgraph_index=2, num_tensors=1454, num_inputs=35, num_outputs=30, num_ops=1107
+- [1/13] INFO: [magic_number_utils.cc:109]   signature=verify, subgraph_index=3, num_tensors=2887, num_inputs=35, num_outputs=32, num_ops=2243
+- [1/13] INFO: [magic_number_utils.cc:113] Magic number configs: num_configs=1
+- [1/13] INFO: [magic_number_utils.cc:120]   config[0]: magic_number=32003, target_number=8192, signature_prefix=null
+- [1/13] INFO: [magic_number_utils.cc:536] 270 tensors of signature prefill_128 have been updated for magic number  32003 to target number 8192
+- [1/13] INFO: [magic_number_utils.cc:536] 271 tensors of signature prefill_1024 have been updated for magic number  32003 to target number 8192
+- [1/13] INFO: [magic_number_utils.cc:536] 439 tensors of signature decode have been updated for magic number  32003 to target number 8192
+- [1/13] INFO: [magic_number_utils.cc:536] 444 tensors of signature verify have been updated for magic number  32003 to target number 8192
+- [1/13] suite[cpu] done → ~/models/litertlm/ropecomposite3913/suite/claims-gemma-4-E2B-ropecomposite-v0.18.0-mac-cpu.jsonl
+- [1/13] suite[gpu] done → ~/models/litertlm/ropecomposite3913/suite/claims-gemma-4-E2B-ltdefault-v0.18.0-mac-gpu.jsonl
+- [1/13] suite[gpu] done → ~/models/litertlm/ropecomposite3913/suite/claims-gemma-4-E2B-ropecomposite-v0.18.0-mac-gpu.jsonl

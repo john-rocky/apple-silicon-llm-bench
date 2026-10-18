@@ -1,0 +1,11 @@
+# sha256 of the files behind claims-gemma4-v0.18.0-mac-ropecomposite (2026-10-18 11:10:14 JST, shasum -a 256). Paths as they were on the Mac (home = ~).
+# gemma-4-E2B-it-ropecomposite / -ltdefault: own litert-torch export_hf exports (see the claims md); gemma-4-E2B-it-original: the public litert-community file b3ca0d2f (symlink into the HF cache).
+7b1e36f01371b0ec4cd75e83290cc142e2ef3d01796e36b414ad0af162db0302  ~/models/litertlm/ropecomposite3913/models/gemma-4-E2B-it-ropecomposite.litertlm
+b0d12ee6d1afdcabe0822b5315e707b2fa99625646d596ad7666630bdd2e57ee  ~/models/litertlm/ropecomposite3913/models/gemma-4-E2B-it-ltdefault.litertlm
+181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c  ~/models/litertlm/ropecomposite3913/models/gemma-4-E2B-it-original.litertlm
+# gemma-4-E2B-it-ropecomposite.litertlm  5085831824 B
+# gemma-4-E2B-it-ltdefault.litertlm  5082964624 B
+# gemma-4-E2B-it-original.litertlm  2588147712 B
+234e19b6fd2275c93cbb187a5570d240ab6ed4cb1f6ffed626ef5b4275c257fd  research/issue-3913/runner/.build/release/runner
+9526db9ee35e7eb4a5a58ac1e53330032f22a13890bd4ee01818fb380a57a362  CLiteRTLM_mac.xcframework (LiteRT-LM v0.18.0) libCLiteRTLM_mac.dylib
+aa15cdb83acc8f1e79dfb5f49f115e861c9ff41737531d0bd73e6679379dd2f0    tools/litert-fidelity-runner/.build/release/litert-mac-verify
