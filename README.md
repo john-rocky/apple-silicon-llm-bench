@@ -45,7 +45,8 @@ From the repo root:
 ```sh
 cd ios/BenchmarkApp
 ./scripts/bootstrap.sh           # fetches the runtimes the app builds against
-open BenchmarkApp.xcodeproj      # set your Team in Signing & Capabilities
+open BenchmarkApp.xcodeproj      # set your Team in Signing & Capabilities, and change
+                                 # the bundle identifier to one your team can register
                                  # ⌘R on a connected iPhone
 ```
 
