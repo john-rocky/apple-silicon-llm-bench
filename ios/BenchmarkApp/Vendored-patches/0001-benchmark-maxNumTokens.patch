@@ -8,7 +8,7 @@ index a08eeca..b417eee 100644
    decodeTokens: Int = 256,
 +  // LOCAL PATCH (yardstick; Vendored-patches/0001-benchmark-maxNumTokens.patch
 +  // re-applied to v0.16.0): the context budget is a benchmark variable the
-+  // LiteRT team pins independently of prefill/decode (2048 for Gemma-4); the
++  // protocol pins independently of prefill/decode (2048 for Gemma-4); the
 +  // stock signature derives it and cannot express the protocol.
 +  maxNumTokens: Int? = nil,
    cacheDir: String? = nil,

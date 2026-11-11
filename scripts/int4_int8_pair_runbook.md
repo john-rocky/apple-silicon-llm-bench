@@ -1,6 +1,6 @@
 # int8-vs-int4 same-session pair capture — runbook (prepared 2026-07-20, awaiting device)
 
-**Purpose.** The all-int4 answer for Shuangfeng needs int4/int8 uplift *ratios*, and
+**Purpose.** The all-int4 comparison needs int4/int8 uplift *ratios*, and
 cross-session ratios are invalid on this device (build/state drift; see
 `results/raw/2026-07-13-mlx-variance/README.md`). The 2026-07-20 own-int4 cells
 (commit 613f8f2) and the 07-13/14 official-int8 cells are different sessions AND
@@ -25,7 +25,7 @@ session: 4 pairs × (official int8 + own BOCTAV4 int4), interleaved per model.
   session-local (ratio evidence only; RESULTS.md keeps the 07-14 warm-matrix int8
   rows) or (b) supersede the 07-14 int8 rows — pick (b) only if re-rendering the
   whole litert-community cluster story on the new build is wanted.
-- Post format for the Doc: extend the existing "LiteRT int8 vs int4 — measured
+- Post format: extend the existing "LiteRT int8 vs int4 — measured
   (supplementary)" pattern (per-model table, parity caveats: DeepSeek −8 pt GSM8K /
   VibeThinker degenerate → int8 stays the parity row; TinySwallow + Phi-4-mini are
   8/8 int4-clean).

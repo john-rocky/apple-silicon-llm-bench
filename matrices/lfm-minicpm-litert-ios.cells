@@ -1,5 +1,5 @@
-# LiteRT team's focus models (LFM2.5 / MiniCPM) + DeepSeek-R1 on iPhone 17 Pro —
-# the iOS leg of the model-agnostic demo (Pixel leg: lu-focus-litert-android.cells).
+# LFM2.5, MiniCPM and DeepSeek-R1 on iPhone 17 Pro —
+# the iOS leg of the model-agnostic demo (Pixel leg: lfm-minicpm-litert-android.cells).
 # Catalog entries pin the same litert-community artifacts as the Android leg
 # (gpu-opt file where one is published); backend is the litert-lm iOS default (GPU Metal).
 #

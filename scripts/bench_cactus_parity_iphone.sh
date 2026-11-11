@@ -76,12 +76,12 @@ cmd_stage() {
 cmd_run() {
     mkdir -p "$OUT"
     # LiteRT's own benchmark entry point: prefill exactly 1024 tokens (8×128, on the
-    # prefill-chunk boundary so it stays fixed under future chunk-selection changes),
-    # decode 256 — the LiteRT team's standard decode length (Marissa, 2026-07-15).
-    # It uses createConversation()'s default sampler, which also matches their setup.
+    # prefill-chunk boundary),
+    # decode 256 — the protocol's decode length.
+    # It uses createConversation()'s default sampler.
     # Context is NOT settable here: LiteRTLM.benchmark hardcodes
-    # maxNumTokens = max(prefill, decode) + 32 = 1056, where the team forces 2048 for
-    # Gemma-4 internally. That bounds KV-cache size (a memory effect), not decode rate.
+    # maxNumTokens = max(prefill, decode) + 32 = 1056, where the protocol forces 2048 for
+    # Gemma-4. That bounds KV-cache size (a memory effect), not decode rate.
     # Three cold process launches (it builds its own Engine each time), so no warm/cold
     # split to drop.
     for i in 1 2 3; do

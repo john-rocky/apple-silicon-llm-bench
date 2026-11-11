@@ -55,7 +55,7 @@ CocoaPod, no vendoring.
 | Gemma 4 E4B | `litert-community/gemma-4-E4B-it-litert-lm` | 3.66 GB |
 | Gemma 3n E2B | `google/gemma-3n-E2B-it-litert-lm` | ~3 GB |
 
-Qwen3-0.6B is the model Lu's team is optimising; we use its **mixed blockwise-INT4**
+For Qwen3-0.6B we use the **mixed blockwise-INT4**
 artifact (gs32 weights + INT8 embeddings, 498 MB) so the quant lines up with the 4-bit
 Qwen3-0.6B rows on MLX / CoreML / Core AI (the same repo also ships a dynamic-INT8
 `Qwen3-0.6B.litertlm`, 614 MB, and a MediaTek-NPU build we skip). For the Gemma repos the

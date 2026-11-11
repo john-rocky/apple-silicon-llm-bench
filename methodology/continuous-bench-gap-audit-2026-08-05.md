@@ -1,7 +1,7 @@
 # Continuous-bench gap audit — ① one-command reproduction / ② machine-readable results
 
 2026-08-05. Context: promoting this repo from manual measurement campaigns to a standing
-benchmark a team can adopt as infrastructure (the direction Lu proposed in the doc:
+benchmark a team can adopt as infrastructure (the direction:
 continuous, automated competitive benchmarking — LiteRT-LM / llama.cpp / Core AI / MLX /
 Cactus × Android / iOS / macOS). This audit covers conditions ① and ② of six
 (③ release regression tracking, ④ gate codification, ⑤ Android, ⑥ leaderboard output

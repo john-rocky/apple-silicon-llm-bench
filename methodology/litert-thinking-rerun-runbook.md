@@ -82,8 +82,7 @@ unzip -oq /tmp/m.zip -d /tmp/m && nm -gU /tmp/m/CLiteRTLM_mac.xcframework/macos-
 5. **Docs**: add the LiteRT thinking cell to the campaign table; replace the
    "LiteRT is structurally locked out of thinking" phrasing with an
    "as of v0.14.0 (released artifacts)" caveat wherever it survives
-   (post-v2 / xpost drafts / Shuangfeng doc — the latter is meeting-session-managed,
-   propose, don't edit).
+   (post-v2 / xpost drafts).
 6. **iPhone** (the campaign's one missing thinking cell): `MediaPipeRuntime.swift` can
    take the same `ThinkingConfig` for an on-device thinking decode/depth check
    (campaign expectation: flat, unlike Core AI's 34→12 collapse). Verified 2026-08-04:
@@ -112,7 +111,7 @@ OFF 87.0 ≈ the published v0.13.1/GPU 86.0 (cross-build sanity). ON 90.0 = MLX-
 thinking; band: Core AI 92 / bf16 anchor 92. Decode flat OFF↔ON (no depth penalty).
 Reports: `results/quality/gsm8k_litert-gemma4-e2b-maincpu-{off,thinking}.json`.
 These are **reference numbers, not table rows** (main build + CPU vs the table's
-v0.13.1 + GPU) — the reply to Yu-hui (2026-07-21) says exactly this.
+v0.13.1 + GPU).
 
 ## Gotchas rediscovered the hard way
 

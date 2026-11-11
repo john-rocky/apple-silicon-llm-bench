@@ -77,7 +77,7 @@ struct YardstickApp {
         var outputPath: String? = nil
         var coldRun = true
         var runs = 1
-        // The agreed protocol has a context length as an independent axis (2048 for Gemma-4).
+        // The protocol has a context length as an independent axis (2048 for Gemma-4).
         // Until 2026-07-28 this CLI had no way to express it, so every Mac cell ran at whatever
         // `prepareContext` derived from the prompt — which is deviation #2 of
         // methodology/agreed-protocol-gemma4.md, fixed on iOS months earlier and still open
@@ -207,7 +207,7 @@ struct YardstickApp {
         let ctx = contextTokens ?? (max(spec.prefill, spec.decode) + 32)
         if contextTokens == nil {
             FileHandle.standardError.write(Data(
-                "yardstick: WARNING native benchmark context_tokens=\(ctx) (litert stock default; the agreed Gemma-4 protocol is 2048 — pass --context-tokens)\n".utf8))
+                "yardstick: WARNING native benchmark context_tokens=\(ctx) (litert stock default; the Gemma-4 protocol is 2048 — pass --context-tokens)\n".utf8))
         }
         FileHandle.standardError.write(Data(
             "yardstick: native benchmark model=\(model.id) prefill=\(spec.prefill) decode=\(spec.decode) context_tokens=\(ctx)\n".utf8))

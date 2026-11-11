@@ -1,4 +1,4 @@
-# LiteRT team's focus models (LFM2.5 / MiniCPM) on Pixel 8a — now measurable
+# LFM2.5 and MiniCPM on Pixel 8a — now measurable
 # straight from litert-community (published 2026-08; the older litert-local
 # side-load path is no longer needed for these). Per-backend artifacts as the
 # repos intend; quant labels carry the filename recipe descriptors verbatim.

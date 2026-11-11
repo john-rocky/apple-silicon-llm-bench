@@ -1,11 +1,11 @@
 # Cross-runtime model matrix (verified)
 
 What the bench can run, per runtime, with comparators **verified to exist on HuggingFace**
-(checked with `huggingface_hub`, not guessed). Focus = the families LiteRT optimises (Qwen, Gemma).
+(checked with `huggingface_hub`, not guessed). Focus = Qwen and Gemma.
 LiteRT artifact = the GPU `mixed_int4` `.litertlm` on `litert-community` (each repo also ships
 `channelwise_int8`, `-web`, and vendor NPU variants — `mediatek.mt6993`, `Google_Tensor_G5`).
 
-## Qwen3 (Lu's lead family)
+## Qwen3
 | Model | LiteRT `.litertlm` | MLX 4-bit | GGUF Q4_K_M | ~4-bit size | Device fit |
 |---|---|---|---|---:|---|
 | Qwen3-0.6B | `qwen3_0_6b_mixed_int4` ✅ | `mlx-community/Qwen3-0.6B-4bit` ✅ | `unsloth/Qwen3-0.6B-GGUF` ✅ | ~0.4 GB | iPhone + Mac |
@@ -28,7 +28,7 @@ LiteRT artifact = the GPU `mixed_int4` `.litertlm` on `litert-community` (each r
   the desktop tier runs the models phones can't, giving a full Qwen3 0.6→14B and Gemma E2B→12B
   scaling curve. (CoreML/llama on Mac use the xcodebuild target — see RUNBOOK.)
 
-## Lu's focus models — now benchable via OUR own `.litertlm` conversions
+## LFM2.5 and MiniCPM — now benchable via OUR own `.litertlm` conversions
 LiteRT doesn't publish Liquid/LFM2 or MiniCPM on `litert-community`, so we converted them ourselves
 (`~/code/litertlm-convert/deliverables/`), side-loaded (no HF download). Mac preview (short-chat, M4 Max,
 median n=3 where it runs):

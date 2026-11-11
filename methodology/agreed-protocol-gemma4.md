@@ -1,47 +1,20 @@
-# Agreed measurement protocol — Gemma-4-E2B (LiteRT team, 2026-07-13→15)
+# Measurement protocol — Gemma-4-E2B (pinned 2026-07-15)
 
-This is the protocol Marissa Ikonomidis (Google, LiteRT) specified and we confirmed in the
-collab doc. It is not a house convention we can revise on our own: numbers published against
-the LiteRT team, or compared with the HF model card, have to be captured this way or labelled
-as something else.
-
-Source: collab doc comment thread, ids 36→43. Quoted verbatim below so nobody has to re-open
-the doc to check a premise.
+This is the protocol this repo measures Gemma-4-E2B under. Numbers published against LiteRT-LM, or
+compared with the HF model card, have to be captured this way or labelled as something else.
 
 ## The spec
 
-| axis | agreed value | source |
-|---|---|---|
-| **prefill** | **exactly 1024**, via LiteRT-LM's `benchmark()` entry point (force-prefill, **no prompt**) | Marissa 7/13 |
-| **decode** | **256 tokens** | Marissa 7/14 |
-| **context length** | **forced to 2048** for Gemma-4 (per-card for other models) | Marissa 7/14 |
-| **sampler** | defaults, unchanged | Marissa 7/14 |
-| **memory** | the card's definitions (`task_vm_info::phys_footprint` on iOS/macOS) | Marissa 7/14 |
-| **thermal** | not started throttled — fans or a few minutes between runs | Marissa 7/14 |
-| **GPU API** | Android OpenCL · Windows/Linux/Web WebGPU · **iOS Metal** · **macOS historically WebGPU**, moving to Metal | Marissa 7/14 |
-| **regime** | **warm** for the card-comparable side-by-side; cold is reported separately as first-use | Daisuke 7/12, 7/14 |
-
-Verbatim, Marissa 7/13:
-
-> We would normally benchmark it at 1024 tokens for prefill. We would typically use LiteRT-LM's
-> benchmark model to force 1024 prefill tokens without having to provide a prompt. I believe
-> this 2B model shipped with fixed chunk sizes of 128 and 1024 ... if you benchmark with 1024
-> or 128 exactly, my upcoming changes shouldn't impact any of your metrics.
-
-Verbatim, Marissa 7/14:
-
-> We typically decode with 256 tokens. Often for benchmarking we force the context length to
-> either 1280 or 2048. For the Gemma 4 models, we have been using 2048 ... I don't believe we
-> change any default sampler settings for benchmarking ... When we measure memory, we typically
-> use these definitions [the HF card's] ... iOS uses Metal — macOS has historically used WebGPU
-> but is starting to move to using Metal directly.
-
-Our confirmation, 7/15 (comment id 43):
-
-> Standardizing on: prefill exactly 1024 via benchmark(), decode 256, context forced to 2048
-> for Gemma 4 (per-card for others), default sampler, memory per the card's definitions, and
-> cool-start discipline between runs. On GPU APIs I'm matching your preferred set — iOS on
-> Metal, macOS currently on WebGPU in my numbers ... Fresh warm side-by-side coming.
+| axis | value |
+|---|---|
+| **prefill** | **exactly 1024**, via LiteRT-LM's `benchmark()` entry point (force-prefill, **no prompt**) |
+| **decode** | **256 tokens** |
+| **context length** | **forced to 2048** for Gemma-4 (per-card for other models) |
+| **sampler** | defaults, unchanged |
+| **memory** | the card's definitions (`task_vm_info::phys_footprint` on iOS/macOS) |
+| **thermal** | not started throttled — fans or a few minutes between runs |
+| **GPU API** | Android OpenCL · Windows/Linux/Web WebGPU · **iOS Metal** · **macOS WebGPU** |
+| **regime** | **warm** for the card-comparable side-by-side; cold is reported separately as first-use |
 
 ## Where the harness deviated, and what was done about it (2026-07-27)
 
@@ -52,8 +25,8 @@ closing them, and each one is larger than the deviation that led to it.
 |---|---|---|
 | 1 | **decode measured at 128 tokens**, not 256 — `ShortChatTask`, the published ① column | open by design: ① *is* the short-chat column. The 256-token figure is the ④ column, `long-context-1024-gen256`. Two columns, both labelled. |
 | 2 | **context never forced to 2048** — `prepareContext` sized it to `prompt + maxTokens + 512` (≈660 short-chat, ≈1,849 at p=1024) | **fixed**: `--context-tokens`, recorded per run as `contextTokensConfigured`. |
-| 3 | **the promised warm side-by-side was never delivered** — every published cell is cold | **addressed by the re-capture**: `--runs 4`, run 1 discarded, median of 2–4. |
-| 4 | **LiteRT-LM's `benchmark()` cannot express the agreed context.** The Swift helper hardcodes `maxNumTokens: max(prefill, decode) + 32` — **1056** at 1024x256, not 2048. So the entry point the protocol names could never produce the configuration the protocol specifies. | **fixed** by a patch to the vendored package (`ios/BenchmarkApp/Vendored-patches/`). `Engine.initializeForBenchmark` is module-internal, so no wrapper could do it. **Worth raising upstream.** |
+| 3 | **no warm side-by-side was captured** — every published cell is cold | **addressed by the re-capture**: `--runs 4`, run 1 discarded, median of 2–4. |
+| 4 | **LiteRT-LM's `benchmark()` cannot express the protocol context.** The Swift helper hardcodes `maxNumTokens: max(prefill, decode) + 32` — **1056** at 1024x256, not 2048. So the entry point the protocol names could never produce the configuration the protocol specifies. | **fixed** by a patch to the vendored package (`ios/BenchmarkApp/Vendored-patches/`). `Engine.initializeForBenchmark` is module-internal, so no wrapper could do it. **Worth raising upstream.** |
 | 5 | **`prepareContext` was implemented by exactly one runtime.** LiteRT-LM sized its KV from the task; **llama.cpp was pinned at `n_ctx = 4096`**; MLX is dynamic-KV. The published memory column therefore compared three arms at three different context budgets, in one column, without saying so. | **partly fixed**: llama.cpp now honours it. MLX allocates what it uses and has no budget to force — that has to be *disclosed*, not fixed. |
 | 6 | **The deep-context cells had no cross-arm instrument.** `benchmark()` forces prefill without a prompt and only LiteRT-LM has it, so it cannot produce the other four arms' cells at all. | **fixed**: `long-context-1024-gen256` runs every arm, LiteRT-LM included, on one instrument. The vendor `benchmark()` number is reported as its own row — card-comparable, not column-comparable. |
 
@@ -100,7 +73,7 @@ drains the stream and stamps `cappedAt`; `~/code/apple-silicon-llm-bench` breaks
 leaves the callback task queued and wedges the *next in-process run* for ~10 minutes
 (`callback_thread_pool DEADLINE_EXCEEDED`). Measure from this checkout.
 
-**A `--runs N` launch runs back-to-back, and the protocol does not.** Marissa's spec says
+**A `--runs N` launch runs back-to-back, and the protocol does not.** The spec says
 "fans or **a few minutes between runs**". Our launches put ~18 s between runs and 180 s only
 between launches, so run 4 of every 4-run launch is measurably throttled — LiteRT-LM −12.9%,
 −23.3%, −25.0% and llama.cpp −7.1%, −11.0% against run 2 of the same launch (2026-07-27,
@@ -139,7 +112,7 @@ arm; the seam only opens on EOS-terminated runs.
 ## What a compliant capture looks like
 
 ```bash
-# prefill + decode, the agreed way (LiteRT only — no other arm has an equivalent entry point).
+# prefill + decode, the protocol way (LiteRT only — no other arm has an equivalent entry point).
 # --context-tokens is required here too: without it benchmark() runs at 1056, not 2048.
 --yardstick-autorun --runtime litert-lm --model-id <id> \
     --litert-native-benchmark 1024x256 --context-tokens 2048

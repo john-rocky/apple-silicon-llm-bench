@@ -179,7 +179,7 @@ instrumentation*.
   callbacks (e.g. 128–512 tokens per turn, looped), instead of one 600 s turn. Avoids both A and B —
   this is our likely interim path to get a LiteRT-LM energy/throttle row.
 
-## What would let the LiteRT team confirm this quickly
+## What would confirm this quickly
 
 - Log which sampler path is taken (Metal GPU vs CPU fallback) at `RegisterNewSession`.
 - Log `callback_thread_pool` queue depth + per-callback latency during sustained decode.

@@ -73,7 +73,7 @@ Consequences:
 - More ticks per window (longer cap) or repeated cells tighten this; a single
   2-tick cell never resolves a <10% gap.
 
-## Thermal gate (agreed protocol)
+## Thermal gate (protocol)
 
 Energy cells must start `nominal`. The gate lives **in the app**: at launch it
 checks `ProcessInfo.thermalState` and, if not nominal, prints

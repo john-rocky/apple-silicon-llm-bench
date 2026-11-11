@@ -1,12 +1,12 @@
 # LiteRT model availability — what's benchmarkable today
 
 > Inventory of the `litert-community` HF org's **text-generation LLMs**, mapped to the model
-> families the LiteRT team optimises (Qwen, Liquid/LFM2, MiniCPM — plus Gemma), and to whether a
+> families Qwen, Liquid/LFM2, MiniCPM and Gemma, and to whether a
 > **deployable bundle** (`.litertlm` / `.task`) actually ships. Snapshot **2026-06-17**, queried live
 > via `huggingface_hub` (see *Reproduce* below). Part of the
 > [LiteRT-LM package](README.md) / [Apple Silicon LLM Benchmark](../../README.md).
 
-## TL;DR vs the LiteRT team's target families
+## TL;DR by model family
 
 | Family | litert-community status | Benchmarkable now? |
 |---|---|:--:|
@@ -51,7 +51,7 @@ Also present in the org (text-gen, **bundle format not individually re-verified 
 > `FastVLM-0.5B` / `SmolVLM-256M` (vision-language), and the large vision/segmentation/detection zoo
 > (MobileNet, EfficientNet, ConvNeXt, DeepLab, …).
 
-## Not yet available — the contractor value-add
+## Not yet available
 
 - **Liquid / LFM2:** no LFM2 or Liquid model is published by `litert-community`, and a hub-wide
   search returns **no `.litertlm` LFM2 anywhere** (2026-06-17).

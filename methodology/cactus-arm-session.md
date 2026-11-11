@@ -7,9 +7,9 @@ Self-contained. Launch in `~/code/apple-silicon-llm-bench`. Read `CLAUDE.md` and
 
 ## Why this session exists
 
-Lu's engine list for the continuous-benchmarking tool is **LiteRT-LM / llama.cpp /
+The engine list for the continuous-benchmarking tool is **LiteRT-LM / llama.cpp /
 Core AI / MLX / Cactus** — Cactus is the only listed engine with no arm in this app.
-Separately, Shuangfeng (LiteRT team) already asked for a Cactus comparison once
+A Cactus comparison already exists
 (2026-07-10 session, measurement DONE — see "Prior assets"). The deliverable now is a
 **Cactus row in the 5-axis table** (decode / GSM8K / J/tok / deep-context / memory), same
 protocols as the other six rows, plus the in-app arm that makes it repeatable.
@@ -82,7 +82,7 @@ in-app captures (same-session re-run, cross-session pooling ban applies).
   `chart_iphone`, `chart_thinking` n/a unless thinking measured, `chart_deepcontext`),
   `render_results.py` LOGICAL_MODELS already collapses gemma-4-e2b IDs — verify the
   cactus HF ids collapse correctly (add patterns if not).
-- The Lu reports (`~/Downloads/meeting/gemma4-e2b-post-v2-{ja,en}.md`) only if the user
+- The written reports (`~/Downloads/meeting/gemma4-e2b-post-v2-{ja,en}.md`) only if the user
   asks — they may already be sent by the time this session runs.
 - Thinking mode: probe whether cactus exposes a thinking toggle (their template handling
   is their own). The thinking table has a LiteRT "locked out" precedent — either result slots in.
@@ -110,6 +110,5 @@ in-app captures (same-session re-run, cross-session pooling ban applies).
 2. Cactus row in the README table with ≥3 of 5 cells measured at protocol parity, every
    remaining cell annotated in-cell with its reason.
 3. Charts regenerated with the 7th row; RESULTS.md re-rendered.
-4. A one-paragraph "Cactus arm status" the user can forward to Lu (his engine list is
-   the reason this exists).
+4. A one-paragraph "Cactus arm status".
 5. Commits with findings as messages, raw JSONs + SUMMARY addendum in results/raw/.

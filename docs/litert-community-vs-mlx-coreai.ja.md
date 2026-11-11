@@ -1,6 +1,6 @@
 # Apple Silicon 上の litert-community / official-converter 製 LLM — Core AI vs MLX vs LiteRT-LM
 
-**LiteRT-LM チーム向けの、フレームワーク横断 decode/prefill ベンチマーク。** `falcon3-comparison.md`（Falcon3 のみを対象としていた）を、次の 2 つのモデル群に拡張したもの:
+**フレームワーク横断 decode/prefill ベンチマーク。** `falcon3-comparison.md`（Falcon3 のみを対象としていた）を、次の 2 つのモデル群に拡張したもの:
 
 1. **litert-community（未ベンチ）** — Google 公式の `litert-community/*` `.litertlm` モデルのうち、まだ Core AI / MLX との比較がなかったもの: **DeepSeek-R1-Distill-Qwen-1.5B, Phi-4-mini,
    Gemma3-1B-IT, TinySwallow-1.5B, VibeThinker-1.5B**。
@@ -338,7 +338,7 @@ GPU カーネル層を開放すること** であり、加えて dense 経路の
 を実行する。この *dense における手軽さ* の論点は、**新しいアーキテクチャの限界費用** — LiteRT はゼロ、Core AI はクラス 1 つ — であって、恒久的な
 カバレッジの天井ではない。2026-06-25 の pass が示したとおりである。）
 
-## LiteRT-LM チームへの提言（インパクト順）
+## LiteRT-LM への提言（インパクト順）
 1. **weight-only int4 + FLOAT 演算（int4→fp16 dequant + fp16 GEMM）を実際に動作させる** — 現状では
    変換はできるが WebGPU デリゲートでハングする（`deliverables/litert-float-gpu-hang/`）。これは MLX/Core AI の
    演算モデルであり、Apple-GPU の decode 同等性への単一で最もインパクトの大きい経路である。

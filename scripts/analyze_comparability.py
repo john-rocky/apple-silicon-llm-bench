@@ -237,7 +237,7 @@ def main(root: Path, all_thermal: bool, since: str | None, harness: str | None =
               " They are handled by the positional rule below, not by their thermal flag —"
               " flag-based exclusion favours whichever arm happens to cross `fair` first."
               " The underlying cause is that a `--runs N` launch runs back-to-back, while the"
-              " agreed protocol asks for a few minutes BETWEEN RUNS, not only between launches.")
+              " protocol asks for a few minutes BETWEEN RUNS, not only between launches.")
 
     # More than one measurement contract in the set means the medians below pool cells that
     # do not measure the same thing. This is the check the 92 MB deep-context cell needed and
@@ -377,12 +377,12 @@ def main(root: Path, all_thermal: bool, since: str | None, harness: str | None =
             ctx_s = "pre-2026-07-27 (unrecorded)" if ctx[0] is None else f"{ctx[0]:,.0f}"
             print(f"  {task:26s} ctx={ctx_s:>27s}  prompt={('' if p[0] is None else f'{p[0]:,.0f}'):>6s} tok   footprint={cell(f, 0)}")
         print("  card (iPhone 17 Pro, GPU, 2048 ctx, phys_footprint)                1,450 MB"
-              "   <-- STALE, confirmed 2026-07-27: not a target, do not read a gap from it")
+              "   <-- not a target, do not read a gap from it")
         print("\nRule: a forced context is a CEILING, not an occupancy. LiteRT-LM grows into its KV\n"
               "rather than pre-allocating maxNumTokens — measured 2026-07-27, three cells all at\n"
               "ctx 2048 read 497 / 663 / 732 MB, tracking the tokens actually used (21 / 1,024 /\n"
               "1,098). So a memory cell must state the PROMPT LENGTH it was measured at; 'at a 2048\n"
-              "context' does not pin a footprint. The card row above is stale and is printed for\n"
+              "context' does not pin a footprint. The card row above is not a target and is printed for\n"
               "reference only — no claim may be built on the distance from it.\n")
 
 

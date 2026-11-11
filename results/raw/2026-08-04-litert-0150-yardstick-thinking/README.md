@@ -14,7 +14,7 @@ Protocol: pinned n=100, greedy (topK1/topP1.0/temp0), canonical extractor
 
 | cell | ctx (total) | GSM8K | note |
 |---|---|---:|---|
-| OFF | 2048 (the agreed-protocol budget) | **88.0** | the version re-check of the published 86.0 row: +2.0 build delta v0.13.1→v0.15.0, same surface, same protocol (`run.log`) |
+| OFF | 2048 (the protocol budget) | **88.0** | the version re-check of the published 86.0 row: +2.0 build delta v0.13.1→v0.15.0, same surface, same protocol (`run.log`) |
 | ON | 2048 | 88.0 (±0) | **honest footnote, not the thinking row**: at 2048 *total* context the thinking trace (~800 tok median) eats the budget — 2 runs died at the ceiling (pred=None q9/q22), 4 fresh wrongs vs the 4096 run. Thinking needs context headroom to pay off |
 | OFF | 4096 (headroom; budget semantics comparable to the other thinking-table arms) | **89.0** | wrong set identical to the pip-0.15 pair's OFF (11 questions, same list) (`run-ctx4096.log`) |
 | ON | 4096 | **92.0 (+3.0)** | = Core AI thinking / bf16 anchor. Wrong set identical to the pip pair's ON (8 questions incl. runaway-thinking q9/q44 counted wrong) |

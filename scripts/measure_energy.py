@@ -164,7 +164,7 @@ def main() -> int:
         "--context-tokens",
         type=int,
         default=None,
-        help="Forced context budget passed through to `yardstick run` — the agreed "
+        help="Forced context budget passed through to `yardstick run` — the "
         "protocol pins Gemma-4 at 2048. Without it the cell derives its context from "
         "the prompt and records no contextTokensConfigured, so it is not card-comparable.",
     )

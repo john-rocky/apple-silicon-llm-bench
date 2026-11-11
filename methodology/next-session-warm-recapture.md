@@ -12,8 +12,8 @@
 
 Context: the published iPhone/Mac benchmark tables report **cold (first-launch) medians**, which
 are not comparable with vendor model cards (warm/steady-state). This was confirmed a real
-methodology mistake on 2026-07-13 and disclosed to the LiteRT team in the shared Google doc
-(re-run promised, cc fengwuyao/marissaw). This session's job: **re-capture the full matrix warm,
+methodology mistake on 2026-07-13.
+This session's job: **re-capture the full matrix warm,
 persist it properly, and update the tables to show warm alongside cold.** Do NOT publish any
 warm number until the three blockers below are cleared — the last session got burned repeatedly
 by claiming from insufficient data.
@@ -56,19 +56,13 @@ mlx-swift version, re-run 0.6B MLX cold+warm x2 on a cooled device, and diff `de
 2. Rebuild README.md / RESULTS.md / docs/litert-community-vs-mlx-coreai.md tables as **warm
    (in-process, median of runs 2-4) alongside cold**, per fairness-rules §2. Flag any ranking
    flip vs the old cold tables.
-3. Update the Google doc's iPhone/Mac tables the same way (browser: the tables live in the
-   "Core AI Comparison" tab; the E2B card reconciliation and the CPU-only retraction are already
-   posted there).
-4. Post ONE consolidated correction comment on the doc's 185.7 / Fengwu status thread with the
-   warm numbers and any ranking changes (cc fengwuyao/marissaw). Fix the specific stale claim in
-   my earlier "showcase models" reply (Qwen3-0.6B "within ~10% of MLX" — likely wrong: warm is
+3. Publish ONE consolidated correction with the
+   warm numbers and any ranking changes. Fix the specific stale claim in
+   the earlier note (Qwen3-0.6B "within ~10% of MLX" — likely wrong: warm is
    ~0.67x if MLX 179 holds).
-5. Also still open (non-warm): create the HF collections Lu asked for (13:00 today — GenAI /
-   Vision models / Audio, directly on litert-community) and reply to that thread.
 
 ## Provenance / what already shipped today (do not redo)
 - Mac E2B warm reproduces the card (152/7.5k vs 160/7,835): `results/raw/2026-07-13-e2b-mac-webgpu/`.
 - Repo retractions pushed (commit f876a14): cactus-vs-litert{,.ja}.md, MACOS_DESKTOP.md,
-  fairness-rules.md §2. Google doc body caveat corrected in place + comment cc yuhuic.
+  fairness-rules.md §2.
 - Partial warm console + this session's blockers: `results/raw/2026-07-13-iphone-warm-partial/`.
-- 12 doc-comment replies posted; see memory [[warm-cold-recapture]].

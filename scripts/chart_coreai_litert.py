@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Meeting chart: Core AI vs LiteRT-LM vs MLX/CoreML/llama decode on iPhone 17 Pro.
+"""Chart: Core AI vs LiteRT-LM vs MLX/CoreML/llama decode on iPhone 17 Pro.
 
 Two panels from results/raw (medians of the 3 cold runs, never hand-typed):
   - Qwen3-0.6B  — Core AI GPU shown cold→warm (Metal kernel cache), ANE cold-consistent.

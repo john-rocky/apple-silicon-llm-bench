@@ -1,6 +1,6 @@
 # litert-community & official-converter LLMs on Apple Silicon — Core AI vs MLX vs LiteRT-LM
 
-**A cross-framework decode/prefill benchmark for the LiteRT-LM team.** Extends
+**A cross-framework decode/prefill benchmark.** Extends
 `falcon3-comparison.md` (which covered only Falcon3) to two model sets:
 
 1. **litert-community (un-benched)** — official Google `litert-community/*` `.litertlm` models
@@ -486,7 +486,7 @@ contributors can extend it the way they extend Core AI** — alongside closing t
 class per arch but, once written, also runs **9/10** on Mac. The *ease-for-dense* point is the **marginal cost of a new
 architecture** — zero for LiteRT vs a class for Core AI — not a permanent coverage ceiling, as the 2026-06-25 pass showed.)
 
-## Recommendations to the LiteRT-LM team (impact-ordered)
+## Recommendations for LiteRT-LM (impact-ordered)
 1. **Make weight-only int4 + FLOAT compute (int4→fp16 dequant + fp16 GEMM) actually execute** — today it
    converts but hangs in the WebGPU delegate (`deliverables/litert-float-gpu-hang/`). This is the MLX/Core AI
    compute model and the single highest-impact route to Apple-GPU decode parity.

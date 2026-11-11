@@ -80,7 +80,7 @@ earlier today — the June-measured originals remain in `_artifact_archive/` and
   Gives TWO ANE lineages to measure: June mixed-4/8 vs ct041 pure4bit.
 - `~/code/coreai/leaderboard/models/device/gemma4_e2b_..._aotc_h18p` — compiled E2B decode core.
 - `~/Documents/Models/litert-lm/` — staged litert dirs incl. LFM2.5-350M / MiniCPM5-1B
-  (Lu-model era) + E2B/0.6B/4B/8B community dirs.
+  + E2B/0.6B/4B/8B community dirs.
 - `~/Downloads/CoreML-LLM/conversion/build_qwen3_0_6b_stateful_chunks.py` — the CoreML 0.6B
   chunks builder exists; rebuild is possible locally (optional queue item).
 

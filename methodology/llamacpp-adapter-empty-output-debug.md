@@ -12,7 +12,7 @@
 > ("llama.cpp adapter empty-output bug — ROOT-CAUSED + FIXED"). Kept for methodology.
 
 Self-contained. Launch the session in `~/code/apple-silicon-llm-bench`. The bug blocks two
-cells of the published Gemma-4-E2B table (README + the Lu report), both annotated ⓕ —
+cells of the published Gemma-4-E2B table (README + the written report), both annotated ⓕ —
 fixing it and filling those cells is the deliverable.
 
 ## The symptom — exactly what is known

@@ -5,14 +5,14 @@ one device, one session, unplugged, harness `2026-07-27-agreed-protocol-r2`, con
 2048. Method and caveats: `README.md` beside this file. Protocol:
 `methodology/agreed-protocol-gemma4.md`.
 
-The draft doc itself is edited in the meeting session; this file is the numbers and the
+The doc itself is edited elsewhere; this file is the numbers and the
 sentences they support, not a diff against the doc.
 
 **What is a decision here and what is not.** The numbers, the n, the MADs, and the
 *constraints* ("this may not be claimed, because …") come from the measurement and are settled.
 The **prose is not**: the footnote wording and the X-thread drafts below are suggestions from
-someone who does not have the doc's context, the thread history, or the tone constraints the
-LiteRT-team channel runs under. Rewrite them freely — but the constraints they encode are not
+someone who does not have the doc's context or the thread history.
+Rewrite them freely — but the constraints they encode are not
 negotiable without new measurement.
 
 One in particular. The X drafts lead with a **14× memory ratio**. The number is correct
@@ -41,8 +41,8 @@ context *occupancy*, and only the ceiling is something a flag can set.
 at**, not just the context it was configured with. Two cells at "ctx 2048" are not the same
 measurement if one used 128 tokens and the other 1,354.
 
-→ The model card's 1,450 MB is **not** used as a target here: it is a stale figure (confirmed
-2026-07-27) and the difference from it is not evidence of anything. The card-reconciliation
+→ The model card's 1,450 MB is **not** used as a target here,
+and the difference from it is not evidence of anything. The card-reconciliation
 block in `scripts/analyze_comparability.py` still prints it and should be updated or dropped.
 
 **2. The resident column cannot carry a three-arm ranking.** MLX's resident median swings 46%
@@ -117,7 +117,7 @@ should be marked in the legend.
 
 **"Decode-at-depth stays flat" is confirmed** — measured short-chat → depth on the wall-clock
 column, every arm is within 7%. The sheet already established the original wording was right and
-the planned correction was wrong; this reproduces it under the agreed protocol with a third arm.
+the planned correction was wrong; this reproduces it under the protocol with a third arm.
 
 ## 【10】 Note 8 (c)
 
@@ -178,7 +178,7 @@ is the actual finding.
 ## 【15】 decode-at-depth
 
 No change. The sheet already established the published wording was correct and the planned
-correction was based on a 15–33-token measuring window. Reproduced here at the agreed 256-token
+correction was based on a 15–33-token measuring window. Reproduced here at the protocol 256-token
 window, wall-clock, with a third arm: LiteRT-LM 60.0→56.4, MLX 48.4→46.2, llama.cpp 38.8→37.4.
 
 ---

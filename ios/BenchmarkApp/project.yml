@@ -49,7 +49,7 @@ packages:
   Anemll:
     path: Vendored/Anemll/anemll-swift-cli
   # CoreML-LLM (the CoreML/ANE arm) is OFF by default as of 2026-07-17.
-  #   * It is not one of the engines this tool is being asked to track
+  #   * It is not one of the engines this tool tracks
   #     (LiteRT-LM, llama.cpp, Core AI, MLX, Cactus).
   #   * It is this repo author's own library, which sits badly in a benchmark that
   #     presents itself as neutral.

@@ -80,11 +80,11 @@ the energy branch (edit only after the driver is not running).
 
 ## 5. Post-proof doc errata (write-up stage, not measurement stage)
 
-- `agreed-protocol-gemma4.md` L70-73 ("LiteRT-LM reports no prompt-token count on the app
+- `agreed-protocol-gemma4.md` L43-46 ("LiteRT-LM reports no prompt-token count on the app
   path … no configuration in which one instrument gives a prefill row for all five arms") is
   false once the fix is proven. Rewrite it; it currently contradicts the campaign doc.
 - "a protocol that specifies n ≥ 7" — n≥7 is **our** convention (protocol doc's operational
-  rule + docx correction note), not part of Marissa's agreed spec. Phrase it as ours.
+  rule + correction note), not part of the spec. Phrase it as ours.
 - "nine days apart" is 8 days (depth cells) to 10 (OptiQ chat cells are 07-17).
 - llama.cpp's two failed energy attempts recorded `null` J/tok with 0% delta, not "0.000".
 - v0.15.0 re-checked 2026-07-28: still does not exist; newest is v0.14.0. Thinking row stands.

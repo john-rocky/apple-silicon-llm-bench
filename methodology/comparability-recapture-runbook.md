@@ -99,11 +99,11 @@ Apply these literally; they are what the audit was missing.
    `results/raw/2026-07-26-definitive/`. **The importer has no `--since`** — the pull contains
    every capture the device has ever taken, so filter by the run-start timestamp (echoed at the
    end of the run) before importing, or the directory will mix app builds and protocols.
-3. Apply the Doc corrections that were held for this measurement — the sheet is
+3. Apply the corrections that were held for this measurement — the sheet is
    `~/Downloads/meeting/doc-corrections-2026-07-26.md` (items 1, 2, 3-first-half, 10, 11, 12).
 4. Regenerate `x_deepcontext_e2b_iphone.png` on the chosen basis, and the hero chart if the
    decode column moves.
-5. Post the correction comment (`~/Downloads/meeting/doc-corrections-2026-07-26.md`) with the
+5. Publish the corrections (`~/Downloads/meeting/doc-corrections-2026-07-26.md`) with the
    final numbers rather than the provisional ones.
 
 

@@ -63,7 +63,7 @@ MODEL_LABEL = {"gemma-4-e2b": "Gemma 4 E2B", "gemma-4-e4b": "Gemma 4 E4B", "gemm
                "qwen3-14b": "Qwen3-14B", "lfm2.5-350m": "LFM2.5-350M", "minicpm5-1b": "MiniCPM5-1B"}
 
 # Device peak memory bandwidth (GB/s) = LPDDR5X data-rate × 64-bit bus / 8. Public-teardown
-# ESTIMATES, not Apple figures — flagged in the report; an obvious thing for Lu's team to pin.
+# ESTIMATES, not Apple figures — flagged in the report.
 DEVICE_PEAK_BW = {
     "iPhone18,1": 76.8,   # A19 Pro, LPDDR5X 9600 MT/s (iPhone 17 Pro)
     "iPhone18,3": 68.2,   # A19,     LPDDR5X 8533 MT/s (iPhone 17)
@@ -309,8 +309,8 @@ SUSTAINED_FAILURES = {
         "run does not complete on v0.13.1 — generation hangs with `DEADLINE_EXCEEDED` raised in the "
         "callback thread pool (the Metal top-k sampler `libLiteRtTopKMetalSampler.dylib` is not on the "
         "sustained path). The 128-token short-chat run above is unaffected — only long continuous "
-        "generation hangs. Kept here with its cause (fairness rule 4): a reproducible finding for the "
-        "LiteRT team, not a harness issue — the same adapter drives the short-chat run that passes.",
+        "generation hangs. Kept here with its cause (fairness rule 4): a reproducible finding, "
+        "not a harness issue — the same adapter drives the short-chat run that passes.",
 }
 
 
@@ -430,7 +430,7 @@ HEADER = """# LiteRT-LM on Apple silicon — per-device package
 ## The short version
 
 A neutral, reproducible on-device benchmark built to be trustworthy to the people who ship the runtime:
-**(1) the model the LiteRT team actually optimises** — **Qwen3-0.6B** (dense), measured on
+**(1) a model with a published LiteRT-LM bundle** — **Qwen3-0.6B** (dense), measured on
 LiteRT-LM v0.13.1 (which fixed the mixed-INT4 Metal-GPU segfault that 0.12.0 hit); **(2) genuinely
 same-conditions** — same 128-token budget, greedy, cold-from-`nominal`, Release build, n=3 median,
 `phys_footprint` memory; LiteRT-LM's output is capped at 128 so it generates the *same* token count

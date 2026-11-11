@@ -8,10 +8,10 @@
 > (1) forcing ctx to 2048 does **not** fix a footprint at that context — LiteRT-LM grows into
 > its KV rather than pre-allocating it; (2) `long-context-1024-gen256` **had** to be ported,
 > since it is the only cross-arm instrument for the deep-context column; (3) the model card's
-> 1,450 MB is a stale figure and no gap should be read from it.
+> 1,450 MB is not a target and no gap should be read from it.
 > It also missed four harness defects, listed in the protocol doc's deviation table.
 
-# Handoff — Gemma-4-E2B re-capture under the agreed protocol (written 2026-07-27)
+# Handoff — Gemma-4-E2B re-capture under the protocol (written 2026-07-27)
 
 ## Read this before touching anything
 
@@ -20,7 +20,7 @@ one of them came from the same root: **acting on a premise that was never checke
 "discoveries" were retracted (Mac energy untraceable → a bug in our own checker; LiteRT Mac
 energy improved 36% → a contaminated cache; decode-at-depth not flat → a 15-token measuring
 window; prefill ranking reverses → first-ever regime at n=1). A fifth nearly shipped: a
-correction that would have replaced an agreed-with-Google protocol with an invented one.
+correction that would have replaced the pinned protocol with an invented one.
 
 So: **do not start from this document's conclusions. Start by re-verifying its premises.**
 
@@ -30,12 +30,12 @@ So: **do not start from this document's conclusions. Start by re-verifying its p
    `git -C ~/Downloads/ios-llm-benchmark log --oneline -1` and the same for
    `~/code/apple-silicon-llm-bench`. They diverged 2026-07-20 and neither contains the other.
    Measurement work belongs in **~/Downloads/ios-llm-benchmark** (it has
-   `--litert-native-benchmark`, the agreed prefill path). The published table's raw data lives
+   `--litert-native-benchmark`, the protocol prefill path). The published table's raw data lives
    only in **code/**`results/raw/2026-07-18-gemma4-bestquant/`. Searching one and concluding
    "not stored" is how the last session got the Mac question wrong twice.
 
-2. **What is the agreed protocol?**
-   `methodology/agreed-protocol-gemma4.md` — quotes Marissa's spec verbatim so you never have
+2. **What is the protocol?**
+   `methodology/agreed-protocol-gemma4.md` — states the spec so you never have
    to re-derive it. If a measurement you are about to take deviates from it, say so out loud
    before taking it.
 
@@ -55,17 +55,9 @@ So: **do not start from this document's conclusions. Start by re-verifying its p
 
 ## State of play
 
-### Already sent to Lu (2026-07-27)
-
-A short status note: the deep-context memory line is wrong, the LiteRT-LM cell in that column
-came from a different instrument, the "three orders of magnitude" does not hold (it is a
-single-digit multiple, and it ran in Google's favour), and the whole iPhone table is being
-re-captured under the pinned protocol. **Check the doc/chat for the exact wording before
-following up — do not re-send it.** No numbers were promised beyond "later this week".
-
 ### Settled, independent of any re-measurement
 
-These six can go into the doc now (orange), from
+These six can go into the report now, from
 `~/Downloads/meeting/doc-corrections-2026-07-26.md`:
 
 | # | correction |
@@ -84,7 +76,7 @@ absent from v0.14.0, present in v0.15.0-alpha0's source but that tag ships no bi
 ### Pending the re-capture
 
 Items 1, 2, 3, 10, 11, 12, 15 of the correction sheet. Every number in them was measured with
-the **wrong build** (code/ checkout, no agreed prefill path) at a **context of ≈1,849 instead of
+the **wrong build** (code/ checkout, no protocol prefill path) at a **context of ≈1,849 instead of
 2048**, so none of it is publishable. What is confirmed regardless:
 
 - The published **92 MB** deep-context cell is a post-teardown single footprint sample from the
@@ -93,7 +85,7 @@ the **wrong build** (code/ checkout, no agreed prefill path) at a **context of �
   96–107 MB. It is not comparable with the in-run peaks in the rest of that column.
 - The Mac energy row (0.090 / 0.106 / 0.154 / 0.170) **is correct and reproducible** — five arms
   re-measured 2026-07-27, main two within 2%. Only the *attribution* needs fixing: LiteRT's Mac
-  cells run on **WebGPU**, which is the path Marissa named as macOS's standard, so word it as
+  cells run on **WebGPU**, the GPU path LiteRT-LM's macOS release ships, so word it as
   "as shipped", not as an unfair comparison. This applies to the Mac **speed** row too
   (7,305 / 153.2), where the current note mentions only the checkpoint difference.
 
@@ -107,10 +99,10 @@ the **wrong build** (code/ checkout, no agreed prefill path) at a **context of �
      arm that can report engine-derived timing (EOS finishes only), so keep both columns.
    - `harnessStamp` on every result — the 92 MB cell rode five revisions because nothing on it
      said which harness produced it.
-   Do **not** port `long-context-1024-gen256` (the agreed decode length is covered by the native
+   Do **not** port `long-context-1024-gen256` (the protocol decode length is covered by the native
    benchmark) or `CactusRuntime` (needs a 3.9 GB sideload; out-of-thread arm).
 
-2. **Implement `--context-tokens`** — the one piece of the agreed spec no checkout has ever had.
+2. **Implement `--context-tokens`** — the one piece of the spec no checkout has ever had.
    `BenchmarkRunner.swift` currently sizes the context to `prompt + maxTokens + 512`; the spec
    says force 2048 for Gemma-4. This is the whole explanation for our memory figures sitting far
    under the card's 1,450 MB, so it must land before any memory claim.
@@ -121,7 +113,7 @@ the **wrong build** (code/ checkout, no agreed prefill path) at a **context of �
      (warm — the card-comparable regime), plus a cold set kept separately as first-use
    - n≥7 per cell; `scripts/analyze_comparability.py --since=<start>` decides what may be ranked
 
-4. **Then** finish the correction sheet, regenerate `x_deepcontext_e2b_iphone.png`, and send Lu
+4. **Then** finish the correction sheet, regenerate `x_deepcontext_e2b_iphone.png`, and publish
    the corrected numbers together with the X thread and the v0.15.0 thinking cell.
 
 ## Standing traps

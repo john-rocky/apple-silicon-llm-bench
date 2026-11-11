@@ -1,6 +1,6 @@
 # ROUND — Gemma 4 E2B exported with `--use_rope_composite=True` (litert-torch main) on the LiteRT-LM #3913 cases, Mac (lane [C], launched 2026-10-17 21:2x JST)
 
-Launch: the `~/code` inventory session ("Google レーン別の進行状況・ToDo 一覧", cmux workspace:326) wrote the prompt; this tab = `apple-silicon-llm-bench` (Fable 5.1, effort max). Goal: make §7 of the litert-torch issue draft
+Launch: the `~/code` inventory session (cmux workspace:326) wrote the prompt; this tab = `apple-silicon-llm-bench` (Fable 5.1, effort max). Goal: make §7 of the litert-torch issue draft
 (`~/code/standup/drafts/2026-10-17-litert-torch-rope-composite-issue.md`) "measured", then the fidelity-check skill + a cold blind run.
 K (the 10-15 lane) = `~/code/standup/drafts/2026-10-15-rope-fp16-3913/`. Work dir W = `~/models/litertlm/ropecomposite3913/` (exports, runner, raw, logs, the blind run; see 残した file).
 Public outputs of this lane: `results/fidelity/claims-gemma4-v0.18.0-mac-ropecomposite.md` + `claims-gemma4-v0.18.0-mac-ropecomposite/` (raw 10, logs 13, count.py + count.txt, composite_count.py, rope_cast_probe.py, suite_report.md, SHA256SUMS.txt), the own-suite records `claims-gemma-4-E2B-{ropecomposite,ltdefault}-v0.18.0-mac-*.jsonl`, `skills/fidelity-check/` (SKILL.md + scripts), one line in `methodology/fidelity.md` row 1a, this file.

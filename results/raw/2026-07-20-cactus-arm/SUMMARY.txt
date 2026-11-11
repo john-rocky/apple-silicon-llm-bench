@@ -1,6 +1,6 @@
 Cactus arm — the 7th row of the Gemma-4-E2B best-available table (2026-07-20)
 =============================================================================
-Why: Lu's engine list for the continuous-benchmarking tool is LiteRT-LM / llama.cpp /
+Why: the engine list for the continuous-benchmarking tool is LiteRT-LM / llama.cpp /
 Core AI / MLX / Cactus; Cactus was the only listed engine with no arm in this app.
 Integration is Path A (in-app runtime adapter): CactusRuntime.swift over cactus's C FFI
 (cactus_init/cactus_complete + token callback), vendored as cactus-ios.xcframework built

@@ -1,4 +1,4 @@
-# Cactus arm status (for Lu — one paragraph, EN)
+# Cactus arm status (one paragraph, EN)
 
 Cactus is now the 7th arm of the Gemma-4-E2B table, integrated the same way as the other
 engines: an in-app adapter over their C FFI (`cactus_init`/`cactus_complete`), their

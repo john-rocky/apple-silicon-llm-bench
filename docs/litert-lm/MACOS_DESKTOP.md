@@ -57,8 +57,8 @@ same thread-pool timeout that makes sustained 600 s generation hang on-device.
 - LiteRT-CPU decode is extremely stable run-to-run (e.g. 8B: 65.2 ± <1 tok/s).
 
 ## Why this matters for LiteRT
-The desktop story today is **CPU-only on Apple Silicon**. For a team optimising "performance and
-memory across desktop, mobile, and web," the actionable items are (1) a Metal GPU backend on
+The desktop story today is **CPU-only on Apple Silicon**. For performance and
+memory across desktop, mobile, and web, the actionable items are (1) a Metal GPU backend on
 macOS (the OpenCL path is a dead end on Apple Silicon), and (2) the `callback_thread_pool`
 teardown/sustained-generation timeout (shared with the iPhone hang).
 

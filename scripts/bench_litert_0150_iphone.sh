@@ -3,7 +3,7 @@
 # bench_litert_0150_iphone.sh — LiteRT-LM arm re-capture on the v0.15.0 release
 # (CLiteRTLM.xcframework via the vendored package) + the thinking cell.
 #
-# Protocol: the 2026-07-28/29 agreed conditions — ctx 2048, warm n=8 per cell
+# Protocol: the 2026-07-28/29 conditions — ctx 2048, warm n=8 per cell
 # (8 separate launches; run 1 of a launch is the launch's own warmup inside the
 # app), thermal-nominal starts (in-app gate), UNPLUGGED, quiet device, serial.
 # Thinking cells: --litert-thinking, thinking-length budget (max-tokens 1400),

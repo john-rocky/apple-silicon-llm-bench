@@ -26,7 +26,7 @@ again before cells + 300 s settle):
    `device-jsonl/`, validate init-thermal=nominal + unplugged per run, compute pair
    ratios (adjacent cells; DeepSeek pair = 18:22 q8 vs the final int4 — same session).
 4. Import per `scripts/int4_int8_pair_runbook.md` ((a) session-local vs (b) supersede),
-   then the Doc post.
+   then the write-up.
 
 **Tunnel lessons (2026-07-23):** the WiFi devicectl tunnel dies when the phone's
 screen sleeps unplugged (Auto-Lock must be set to Never BEFORE unplugging);

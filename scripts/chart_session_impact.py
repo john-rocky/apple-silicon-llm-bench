@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Impact charts for the LiteRT collab from this session's findings.
+"""Impact charts from this session's findings.
 
   1) Engine efficiency = % of the memory-bandwidth ceiling (DeepSeek, iPhone) — the delegate
      gap as a number; LiteRT int4 path < int8 path.

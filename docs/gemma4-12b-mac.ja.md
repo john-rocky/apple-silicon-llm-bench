@@ -40,7 +40,7 @@ q4_0-snapped (int4):  'thought\nThe capital of France is Paris.'   ← 完全一
 
 ## LiteRT degenerate は Mac-GPU ランタイムバグ（裏どり済み）
 
-同じ Mac GPU(ML Drift)で **gemma4-E2B と Qwen3-4B は coherent、gemma4-12B だけ degenerate**（`0000…`）。→ プラットフォーム全般でも gemma4 全般でもなく **12B ビルド固有**。詳細＋repro＋triage 方向は [`litert-lm/GEMMA4_12B_MAC_GPU_DEGENERATE.md`](litert-lm/GEMMA4_12B_MAC_GPU_DEGENERATE.md)（LiteRT チームにそのまま出せる）。**QAT では直らない**（量子化でなくランタイムの問題）。
+同じ Mac GPU(ML Drift)で **gemma4-E2B と Qwen3-4B は coherent、gemma4-12B だけ degenerate**（`0000…`）。→ プラットフォーム全般でも gemma4 全般でもなく **12B ビルド固有**。詳細＋repro＋triage 方向は [`litert-lm/GEMMA4_12B_MAC_GPU_DEGENERATE.md`](litert-lm/GEMMA4_12B_MAC_GPU_DEGENERATE.md)。**QAT では直らない**（量子化でなくランタイムの問題）。
 
 ## 参考: QAT MLX
 

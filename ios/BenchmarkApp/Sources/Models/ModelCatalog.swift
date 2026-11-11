@@ -105,7 +105,7 @@ public enum ModelCatalog {
             onDiskSizeMB: 7000,
             hfRepoId: "mlx-community/gemma-4-12b-it-4bit"
         ),
-        // Comparators for Lu's models. LFM2-350M is v2.0, kept for its published
+        // Comparators for the LFM2 and MiniCPM models. LFM2-350M is v2.0, kept for its published
         // rows; mlx-community has since published LFM2.5-1.2B (entry below,
         // 2026-08-27) — the size-matched mlx arm for the LFM2.5 litert cell.
         ModelInfo(
@@ -476,7 +476,7 @@ public enum ModelCatalog {
             hfFilePatterns: ["gemma-4-E2B-it.litertlm"],
             primaryFile: "gemma-4-E2B-it.litertlm"
         ),
-        // Qwen3-0.6B — the model Lu's team is optimising; the 4-bit `.litertlm`
+        // Qwen3-0.6B — the 4-bit `.litertlm`
         // lines up with the existing Qwen3-0.6B rows on MLX / CoreML / Core AI.
         // Fallback if it won't load on GPU: the standard dynamic-INT8
         // `Qwen3-0.6B.litertlm` (614 MB) in the same repo.
@@ -490,7 +490,7 @@ public enum ModelCatalog {
             hfFilePatterns: ["qwen3_0_6b_mixed_int4.litertlm"],
             primaryFile: "qwen3_0_6b_mixed_int4.litertlm"
         ),
-        // Lu's focus models (Liquid/LFM2 + MiniCPM) — NOT on litert-community, so these are
+        // Liquid/LFM2 and MiniCPM — NOT on litert-community, so these are
         // OUR own .litertlm conversions, side-loaded (no HF download; hfRepoId is a local marker).
         // See MODEL_AVAILABILITY.md / MODEL_MATRIX.md.
         ModelInfo(
@@ -1112,7 +1112,7 @@ public enum ModelCatalog {
             primaryFile: "model.litertlm"
         ),
         // int4 companions for the two remaining int8-shipped litert-community models
-        // (Shuangfeng's all-int4 apple-to-apple ask, 2026-07-14). Same BOCTAV4 recipe as DeepSeek.
+        // (all-int4 apple-to-apple comparison, 2026-07-14). Same BOCTAV4 recipe as DeepSeek.
         ModelInfo(
             id: "own/TinySwallow-1.5B-int4-BOCTAV4",
             displayName: "TinySwallow-1.5B (.litertlm, own int4 BOCTAV4)",

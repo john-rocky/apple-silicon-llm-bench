@@ -62,7 +62,7 @@ TABLES = {
                  "is TOTAL context for this arm (budget-mode-rule; slug table in fairness-rules.md).",
     },
     ("mac", "e2b-protocol"): {
-        "desc": "Gemma-4-E2B Mac speed/energy table under the agreed protocol",
+        "desc": "Gemma-4-E2B Mac speed/energy table under the protocol",
         "published": "RESULTS.md Mac cells; spec: methodology/agreed-protocol-gemma4.md",
         "rows": "short-chat / deep-context / native benchmark() / energy / Core AI (llm-benchmark)",
         "prereqs": [("protocol script", "scripts/bench_gemma4_e2b_protocol_mac.sh")],
@@ -71,7 +71,7 @@ TABLES = {
         "script": "scripts/bench_gemma4_e2b_protocol_mac.sh",
     },
     ("iphone", "e2b-protocol"): {
-        "desc": "Gemma-4-E2B iPhone table under the agreed protocol (staged; USB + unplug discipline)",
+        "desc": "Gemma-4-E2B iPhone table under the protocol (staged; USB + unplug discipline)",
         "published": "RESULTS.md iPhone cells; spec: methodology/agreed-protocol-gemma4.md",
         "rows": "prefill-1024 / decode-256 / short-chat / deep-context / energy, per block",
         "prereqs": [("protocol script", "scripts/bench_gemma4_e2b_protocol_iphone.sh")],

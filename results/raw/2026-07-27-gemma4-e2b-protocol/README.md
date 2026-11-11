@@ -1,4 +1,4 @@
-# Gemma-4-E2B iPhone re-capture — 2026-07-27, agreed protocol
+# Gemma-4-E2B iPhone re-capture — 2026-07-27, protocol run
 
 Device iPhone 17 Pro (iPhone18,1), iOS 27.0 **24A5380h**, unplugged, harness stamp
 **`2026-07-27-agreed-protocol-r2`**, context forced to **2048** on every cell.
@@ -198,16 +198,16 @@ budget. **LiteRT-LM grows into its KV rather than pre-allocating `maxNumTokens`.
 So a memory cell must state the prompt length it was measured at. "At a 2048 context" does not
 pin a footprint; two cells with that label can differ by a third.
 
-`--context-tokens` is still required — it is in the agreed protocol, it is what makes LiteRT-LM
+`--context-tokens` is still required — it is in the protocol, it is what makes LiteRT-LM
 and llama.cpp comparable *to each other*, and without it llama.cpp silently ran at 4096. It just
 does not do the job of fixing memory at a context.
 
-**The model card's 1,450 MB is not a target.** It is a stale figure (confirmed 2026-07-27), so
+**The model card's 1,450 MB is not a target**, so
 the distance from it is not evidence about our measurement. `analyze_comparability.py` still
 prints a CARD RECONCILIATION block against it; that block should be updated or removed rather
 than read.
 
-## Core AI cannot meet the agreed context on iOS — and the reason is upstream
+## Core AI cannot meet the protocol context on iOS — and the reason is upstream
 
 The deep-context cell does not fail on memory here. All four runs fail before generation:
 
@@ -224,7 +224,7 @@ let iosDynamicKVCapacityCap = 1024   // "corrupt from the first token" above thi
 ```
 
 So the 1024 is neither our harness nor the exported graph — it is a deliberate cap inside
-Apple's runtime package, guarding a device-compiler bug. **Core AI cannot run at the agreed
+Apple's runtime package, guarding a device-compiler bug. **Core AI cannot run at the protocol
 2048 context on iOS at all**, and the deep-context task's ~1,098-token prompt is already over
 the cap, so the arm is rejected before it decodes a token.
 

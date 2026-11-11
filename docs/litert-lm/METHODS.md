@@ -1,6 +1,6 @@
 # Methods & reproduction — LiteRT-LM cross-runtime bench (Apple silicon)
 
-> Everything Lu's team needs to **re-run and cite** the [LiteRT-LM package](README.md). Pinned
+> Everything needed to **re-run and cite** the [LiteRT-LM package](README.md). Pinned
 > versions, exact model files, fixed device state, and the fairness rules in one place. Companion to
 > the auto-generated [`README.md`](README.md) (numbers) and
 > [`LITERT_SUSTAINED_HANG.md`](LITERT_SUSTAINED_HANG.md) (the one known failure). Part of the neutral
@@ -105,7 +105,7 @@ estimate, not an Apple figure** (`iPhone18,1` → 76.8 GB/s from LPDDR5X 9600 MT
 per-token byte count is likewise a model-structure estimate (Qwen3-0.6B ≈ 0.35 GB, Gemma-4-E2B ≈
 0.79 GB at INT4). So **absolute GB/s carries that estimate; the same-device ordering is robust.**
 Pinning the true peak bandwidth + a measured on-device STREAM/memcpy roofline is an obvious next step
-for the LiteRT team and is on the to-do list.
+and is on the to-do list.
 
 ## Fairness rules (summary)
 
@@ -134,5 +134,5 @@ print(list_repo_files("litert-community/Qwen3-0.6B"))   # confirm the .litertlm 
 PY
 ```
 
-See [`MODEL_AVAILABILITY.md`](MODEL_AVAILABILITY.md) for the current inventory and which of Lu's
-target families are benchmarkable today.
+See [`MODEL_AVAILABILITY.md`](MODEL_AVAILABILITY.md) for the current inventory and which
+model families are benchmarkable today.

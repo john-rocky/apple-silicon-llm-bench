@@ -1,4 +1,4 @@
-# Continuous competitive benchmarking — a strawman to iterate on together
+# Continuous competitive benchmarking — a strawman
 
 Status: PROPOSAL (2026-07-20). Nothing here is built; it exists so the design conversation
 starts from something concrete. The measurement layer it schedules is real and shipped
@@ -78,7 +78,7 @@ conversation — flagging it now so the gap is a decision, not a surprise.
 
 ## Open questions (the actual agenda)
 
-1. Where does the runner live — our hardware, Google's lab, or both (cross-lab anchors
+1. Where does the runner live — our hardware, a device lab, or both (cross-lab anchors
    would also measure lab-to-lab variance)?
 2. Cadence/cost envelope per device per week (battery cycles are the scarce resource).
 3. Alert routing: who gets the weekly digest; what threshold pages a human.

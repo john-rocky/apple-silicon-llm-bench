@@ -81,7 +81,7 @@ the app.)
 
 ## Why the arm exists at all
 
-Google evaluates this repo as a neutral cross-runtime benchmark. Dropping the Core AI arm
+This repo is a neutral cross-runtime benchmark. Dropping the Core AI arm
 for Gemma-4 would hide a real capability (the model runs, at competitive quality/memory);
 shipping the number unlabelled would overstate what Apple's stock engine does. The labelled
 reference row + this provenance doc is the honest middle.

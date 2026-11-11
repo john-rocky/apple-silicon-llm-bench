@@ -17,7 +17,7 @@ tree is that version and otherwise unmodified.
 
 ## 0001 — `benchmark(maxNumTokens:)`
 
-`LiteRTLM.benchmark()` is the entry point the agreed Gemma-4 protocol specifies for prefill
+`LiteRTLM.benchmark()` is the entry point the Gemma-4 protocol specifies for prefill
 (`methodology/agreed-protocol-gemma4.md`). The protocol pins two things the stock signature
 cannot express together:
 
@@ -34,7 +34,7 @@ The patch adds an optional `maxNumTokens:` parameter and defaults it to the stoc
 so unpatched call sites keep upstream behaviour exactly.
 
 **This is worth raising upstream** — the Swift `benchmark()` helper cannot reproduce the
-configuration the LiteRT team benchmarks Gemma-4 at.
+configuration of the Gemma-4 protocol.
 
 ### If you re-vendor and forget
 

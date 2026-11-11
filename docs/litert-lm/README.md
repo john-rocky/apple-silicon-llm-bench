@@ -8,7 +8,7 @@
 ## The short version
 
 A neutral, reproducible on-device benchmark built to be trustworthy to the people who ship the runtime:
-**(1) the model the LiteRT team actually optimises** — **Qwen3-0.6B** (dense), measured on
+**(1) a model with a published LiteRT-LM bundle** — **Qwen3-0.6B** (dense), measured on
 LiteRT-LM v0.13.1 (which fixed the mixed-INT4 Metal-GPU segfault that 0.12.0 hit); **(2) genuinely
 same-conditions** — same 128-token budget, greedy, cold-from-`nominal`, Release build, n=3 median,
 `phys_footprint` memory; LiteRT-LM's output is capped at 128 so it generates the *same* token count
@@ -125,7 +125,7 @@ Conditions: **fair** (0.13.1 · Release · 128-token cap · phys_footprint). Lit
 | MLX-Swift / GPU | 0.066 | 8,960 | 6.18 | 5% | nominal→fair |
 | CoreML / ANE | 0.252 | 2,355 | 6.18 | 5% | fair→serious |
 
-> ⚠️ **LiteRT-LM / GPU** is absent from the two tables above: its 600 s *continuous* Qwen3-0.6B run does not complete on v0.13.1 — generation hangs with `DEADLINE_EXCEEDED` raised in the callback thread pool (the Metal top-k sampler `libLiteRtTopKMetalSampler.dylib` is not on the sustained path). The 128-token short-chat run above is unaffected — only long continuous generation hangs. Kept here with its cause (fairness rule 4): a reproducible finding for the LiteRT team, not a harness issue — the same adapter drives the short-chat run that passes.
+> ⚠️ **LiteRT-LM / GPU** is absent from the two tables above: its 600 s *continuous* Qwen3-0.6B run does not complete on v0.13.1 — generation hangs with `DEADLINE_EXCEEDED` raised in the callback thread pool (the Metal top-k sampler `libLiteRtTopKMetalSampler.dylib` is not on the sustained path). The 128-token short-chat run above is unaffected — only long continuous generation hangs. Kept here with its cause (fairness rule 4): a reproducible finding, not a harness issue — the same adapter drives the short-chat run that passes.
 
 
 ---

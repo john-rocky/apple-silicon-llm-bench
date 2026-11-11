@@ -160,7 +160,7 @@ public actor MediaPipeRuntime: LLMRuntime {
     ///   without relying on a default** on purpose: `maxNumTokens` is a local patch to the
     ///   vendored (and gitignored) LiteRT-LM Swift package, so re-vendoring the stock package
     ///   must break the build here rather than silently reverting the context to the stock
-    ///   `max(prefill, decode) + 32` — 1056 at 1024x256, where the agreed protocol says 2048.
+    ///   `max(prefill, decode) + 32` — 1056 at 1024x256, where the protocol says 2048.
     ///   See `ios/BenchmarkApp/Vendored-patches/README.md`.
     public func nativeBenchmark(
         _ model: ModelInfo,

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Gemma-4-E2B iPhone re-capture under the protocol agreed with the LiteRT team.
+# Gemma-4-E2B iPhone re-capture under the protocol.
 # Spec: methodology/agreed-protocol-gemma4.md (prefill 1024 via benchmark(), decode 256,
 # context forced to 2048, default sampler, card memory definitions, cool start, iOS Metal).
 #
@@ -52,8 +52,8 @@ CAMPAIGN="${CAMPAIGN:-$(date +%F)-gemma4-e2b-protocol}"
 OUT="$REPO/results/raw/$CAMPAIGN"
 STAMP_FILE="$OUT/.session-start"
 
-# Agreed protocol constants — change these only with the doc, not to make a run fit.
-CTX=2048            # forced context (Marissa, 7/14: "For the Gemma 4 models, we have been using 2048")
+# Protocol constants — change these only with the doc, not to make a run fit.
+CTX=2048            # forced context
 PREFILL=1024        # forced prefill via LiteRT-LM benchmark()
 DECODE=256          # decode length
 # RUNS=3, not 4. The positional rule keeps runs 2-3 and drops run 1 (cold) and run 4+ (the
@@ -136,7 +136,7 @@ launch() {
     | grep -E "YARDSTICK_(BEGIN|RUN_OK|NATIVE_OK|RUN_FAIL|FATAL|WARN|ALL_DONE|ENERGY|THERMAL_DEFER)" || true
 }
 
-# Energy cells must start `nominal` (agreed protocol; the 07-19 headline cells started `fair`
+# Energy cells must start `nominal` (protocol; the 07-19 headline cells started `fair`
 # and read ~25% low). The gate lives in the app — it checks its own thermal state at launch
 # and defers (sentinel + exit 7) BEFORE loading a model, because battery-temperature telemetry
 # here lags by ~30 min (the 07-20 lesson). This wrapper retries a deferred cell after a full

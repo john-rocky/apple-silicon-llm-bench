@@ -5,15 +5,15 @@ should be re-captured because its columns span several dates. That is the wrong 
 produced the wrong scope. The right reason is narrower and more serious:
 
 > **The report currently publishes comparisons that are not like-for-like, and the bias runs
-> toward LiteRT-LM — the arm belonging to the team we are sending it to.**
+> toward LiteRT-LM.**
 
 Everything below is organised by that. A defect qualifies only if it makes a *comparison* unfair.
 A cell that is merely old, and is not compared against a newer one, is not a defect — it is a
 dated measurement, which is normal and disclosable.
 
-The deliverable is a public X thread that Lu asked for, plus this collaboration doc. Both need the
+The deliverable is a public X thread, plus a written report. Both need the
 same accuracy; the thread needs more than that, because **a tweet cannot carry a footnote.** Any
-caveat that only exists in the doc's footnotes does not exist for a reader of the thread.
+caveat that only exists in the report's footnotes does not exist for a reader of the thread.
 
 ---
 
@@ -39,12 +39,12 @@ median / 734 MB peak. A caption built on it ("MLX pays 37–54× LiteRT's memory
 4. Step 3 was challenged, and it did not survive: a dated cell that nothing is compared against
    is not a defect. The scope was cut to the gaps.
 5. That cut was also wrong — it was made while mistaking the deliverable. The X thread is
-   something **Lu asked for**; it is public, and a tweet cannot carry a footnote.
+   public, and a tweet cannot carry a footnote.
 6. Re-framing on **fairness** rather than on dates produced the five defects in this document.
    Some of what step 3 wanted is in it; some of what step 4 cut is back. The organising question
    is now "is this comparison like-for-like", which neither of the earlier framings asked.
 
-**What is already fixed in the doc, and is not this campaign's work.** `~/Downloads/docs.docx`
+**What is already fixed in the report, and is not this campaign's work.** `~/Downloads/docs.docx`
 carries 27 corrections in red, machine-diffed against `docs-original-backup.docx` and listed in
 document order in `~/Downloads/meeting/docx-changes-inorder-2026-07-28.html`. Those include the
 ④ column, the prefill column, the memory-inversion finding, footnotes ⓘ/ⓙ/ⓚ, Note 6's retired-value
@@ -92,7 +92,7 @@ than by the session checking itself.
 | Energy: two headline cells started `fair`; battery window 5% vs 10% | **measured** from stored JSON | re-aggregate `task == "energy"`, iOS, E2B, and print `initialThermalState` + `batteryDeltaPercent` |
 | Prefill is discarded because `capped == true`, not because LiteRT-LM cannot report it | **read in code**, `MediaPipeRuntime.swift:232` + `BenchmarkRunner.swift:315` | read both lines; then prove it by running the fix and seeing a non-zero `promptTokenCount` on a capped run |
 | Prefill counters are complete before decode is capped | **inferred** from where prefill sits in the turn | **not verified.** This is the load-bearing assumption of the fix. Test it: same prompt, capped vs EOS run, compare `lastPrefillTokenCount` and `lastPrefillTokensPerSecond`. If they differ, the fix is wrong |
-| Mac Core AI ran through Apple's `llm-benchmark` | **read in notes** + binary exists and runs | `GEMMA4_LU_BENCH_HANDOFF.md` §2/§5; the bundle question below is open |
+| Mac Core AI ran through Apple's `llm-benchmark` | **read in notes** + binary exists and runs | the 2026-07-17 Gemma-4-E2B bench handoff in `~/code/coreai/`, §2/§5; the bundle question below is open |
 | n = 4 for MLX and Core AI; 10–12 for LiteRT-LM and llama.cpp | **measured** (README of the 07-27 capture) | `analyze_comparability.py` over that campaign |
 | MLX-OptiQ and Cactus were absent from this checkout | **measured** — they were, and were ported 07-28 | `git log` on `ModelCatalog.swift`, `RuntimeKind.swift` |
 | v0.15.0 does not exist | **checked 2026-07-28** on the releases page | re-check; it may have shipped since |
@@ -140,8 +140,8 @@ one instrument.
 for prefill only; continue falling back to chunk-count + wall-clock for decode. Then every arm's
 prefill comes from the same task and the column is rankable for the first time.
 
-**Also note the reading of Marissa's spec.** Her `benchmark()` line is how Google measures
-*LiteRT-LM* — it is the method behind the model card, and no other runtime has that entry point.
+**Also note the reading of the spec.** `benchmark()` is an entry point of
+*LiteRT-LM*, and no other runtime has that entry point.
 It is a card-reconciliation instrument, not a cross-runtime one. Two rows, never merged:
 
 | row | instrument | compares against |
@@ -151,7 +151,7 @@ It is a card-reconciliation instrument, not a cross-runtime one. Two rows, never
 
 ### 2. X post 4/6 ranks Mac arms in a way our own notes forbid
 
-`~/code/coreai/GEMMA4_LU_BENCH_HANDOFF.md` §2, written when those numbers were taken:
+The 2026-07-17 Gemma-4-E2B bench handoff in `~/code/coreai/`, §2, written when those numbers were taken:
 
 > MLX vs Core AI is the only true runtime comparison (same ckpt/recipe/block size) … **LiteRT is
 > a different product — do not rank it here.**
@@ -169,7 +169,7 @@ not only in a footnote. Re-measure it under the protocol — the Mac CLI can now
 ### 3. n is unequal, and the smaller n belongs to the arms that are not ours
 
 LiteRT-LM n=10–12 and llama.cpp n=10, against **MLX n=4 and Core AI n=4** — in a table that
-presents all four as equally established, and while citing an n ≥ 7 floor — our own operational convention (the protocol doc's rule, not part of Marissa's agreed spec). The
+presents all four as equally established, and while citing an n ≥ 7 floor — our own operational convention (the protocol doc's rule, not part of the spec). The
 two under-sampled arms became runnable late in the 2026-07-27 session and ran out of thermal
 budget. Fix by measuring, not by annotating.
 
@@ -197,8 +197,8 @@ originally guessed at:
 
 Two things are wrong, and both are in the published comparison:
 
-**The agreed protocol requires not starting throttled** — Marissa, 7/14: *"not started throttled —
-fans or a few minutes between runs."* The two cells the thread leads with both start `fair`. That
+**The protocol requires not starting throttled**: fans or a few minutes between
+runs. The two cells the thread leads with both start `fair`. That
 field alone is the defect; do not lean on their decode rates as corroboration — 40.3/52.7 = 0.765
 is literally the published 76% retention ratio (sustained vs burst measure different regimes by
 design), and two of the three runs behind the 52.7 burst median started `fair` themselves.
@@ -251,7 +251,7 @@ Verified by build, not by intention:
 | Escalating cooldown | `cool()`: +60 s per 30 min of block age, capped |
 | `RUNS` default 3, not 4 | the positional rule discards run 4; measuring it only spent heat |
 | Mac driver | `bench_gemma4_e2b_protocol_mac.sh` |
-| **Mac CLI protocol flags** | `--context-tokens`, `--litert-native-benchmark`, `--model-id` — **built and smoke-tested**. Before this, the Mac CLI could not express the agreed protocol at all, so no Mac cell had a forced context and none was card-comparable |
+| **Mac CLI protocol flags** | `--context-tokens`, `--litert-native-benchmark`, `--model-id` — **built and smoke-tested**. Before this, the Mac CLI could not express the protocol at all, so no Mac cell had a forced context and none was card-comparable |
 | Harness stamp | `2026-07-28-agreed-protocol-r3` |
 
 ---

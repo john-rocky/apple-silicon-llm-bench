@@ -22,7 +22,7 @@ the iPhone), **(B) Core AI export** to close every blank (no device needed until
 
 ## What this project is
 Cross-framework LLM benchmark — **Core AI vs MLX vs LiteRT-LM**, on **Mac M4 Max + iPhone 17 Pro**, decode tok/s
-+ memory + (next) energy. Report for the Google LiteRT team. Public repo: github.com/john-rocky/apple-silicon-llm-bench.
++ memory + (next) energy. Public repo: github.com/john-rocky/apple-silicon-llm-bench.
 Headline finding (holds Mac + on-device): **Core AI ≈ MLX ≫ LiteRT-LM; on iPhone the ANE beats MLX** (DeepSeek-R1
 ANE 83 vs MLX 73). Report: `docs/litert-community-vs-mlx-coreai.md`.
 
@@ -80,5 +80,5 @@ OLMo-2 no repo). Export playbook for any future arch: `methodology/coreai-export
 - `results/raw/2026-06-24-coreai-iphone/extemb-isolation/SUMMARY.txt` — the full debugging trail (extemb refute →
   entitlement root cause → Phi quant).
 - `methodology/comprehensive-bench-runbook.md` · `coreai-export-todo.md` — the two detailed playbooks.
-- `~/Downloads/meeting/` — Doc paste blocks, the correction comment for Shuangfeng, the retracted-bug note.
+- `~/Downloads/meeting/` — report text, the correction note, the retracted-bug note.
 - Memory: `litert-community-crossframework-bench.md` (status + the corrected findings).

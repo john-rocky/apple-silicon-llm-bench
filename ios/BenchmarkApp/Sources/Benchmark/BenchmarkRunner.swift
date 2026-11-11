@@ -54,8 +54,8 @@ public actor BenchmarkRunner {
     /// Measurement-contract stamp written into every result. Bump on any change to what a
     /// recorded field means, so an inherited number can be told apart from a fresh one.
     /// `2026-07-27-agreed-protocol-r2`: harness wall-clock rates, median/resident memory, and
-    /// a recorded + overridable context budget (`--context-tokens`) — the Gemma-4 spec agreed
-    /// with the LiteRT team. Cells before and after this stamp are not the same measurement.
+    /// a recorded + overridable context budget (`--context-tokens`) — the Gemma-4 spec.
+    /// Cells before and after this stamp are not the same measurement.
     /// `-r2` closes the decode window at the last observed chunk rather than at end-of-stream;
     /// under `-r1` a draining runtime (LiteRT-LM past its token cap) read 15.8 tok/s on the
     /// wall-clock column against 55.2 on the engine column. Only throwaway warm-up cells were
@@ -91,7 +91,7 @@ public actor BenchmarkRunner {
         public var task: any BenchmarkTask
         public var coldRun: Bool
         /// Force the runtime's context (KV) budget to exactly this many tokens instead of
-        /// deriving it from prompt + output. The LiteRT team's Gemma-4 protocol pins it at
+        /// deriving it from prompt + output. The Gemma-4 protocol pins it at
         /// 2048; memory cells are meaningless without it, since KV pre-allocation scales
         /// with the budget. `nil` keeps the derived sizing.
         public var contextTokens: Int?
@@ -141,7 +141,7 @@ public actor BenchmarkRunner {
         // runtimes). LiteRT-LM pre-allocates a fixed KV and rejects longer prompts, so
         // long-context tasks must size it to the prompt. ~3 chars/token is a safe
         // over-estimate (lorem-ish English); over-provisioning KV is harmless, under is fatal.
-        // `--context-tokens` overrides the estimate outright — the agreed protocol pins a
+        // `--context-tokens` overrides the estimate outright — the protocol pins a
         // fixed budget so memory is comparable with the model card, and silently widening it
         // to fit a prompt would put us back off-protocol without saying so.
         let promptTokenEstimate = configuration.task.prompt.count / 3 + 16

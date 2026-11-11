@@ -196,8 +196,8 @@ enum HeadlessAutoRun {
         /// their long-context regime — a fairer comparison vs SWA runtimes (CoreML).
         var maxTokens: Int?
         /// `--context-tokens <n>` forces the runtime's context (KV) budget to exactly `n`
-        /// instead of letting the runner derive it from prompt + output. The protocol agreed
-        /// with the LiteRT team pins Gemma-4 at 2048; without it our memory cells sat at
+        /// instead of letting the runner derive it from prompt + output. The protocol
+        /// pins Gemma-4 at 2048; without it our memory cells sat at
         /// ~660-1,849 and were not comparable with the model card's 1,450 MB at 2048.
         var contextTokens: Int?
         /// `--litert-native-benchmark <prefillTokens>x<decodeTokens>` bypasses the
@@ -342,7 +342,7 @@ struct HeadlessRunnerView: View {
                 sustainSeconds: spec.sustainSeconds ?? 1800,
                 maxTokens: spec.maxTokens ?? 2048
             )
-            // Energy cells must not start throttled (agreed protocol: "not started
+            // Energy cells must not start throttled (protocol: "not started
             // throttled"). The 07-19 headline cells both began `fair` and read ~25%
             // below their own nominal decode rate. Battery-temperature telemetry is a
             // lagging long-window average, so the gate is the app's own thermal state
@@ -444,13 +444,13 @@ struct HeadlessRunnerView: View {
             await finish(5)
             return
         }
-        // The context length is an independent axis of the agreed protocol (2048 for Gemma-4),
+        // The context length is an independent axis of the protocol (2048 for Gemma-4),
         // but LiteRT-LM's own `benchmark()` ties it to prefill: without --context-tokens this
         // runs at max(prefill, decode) + 32 — 1056 at 1024x256. Both paths are allowed; only
         // one is on-protocol, so the log says which was taken instead of leaving it implicit.
         let contextTokens = contextTokensValue ?? (max(spec.prefill, spec.decode) + 32)
         if contextTokensValue == nil {
-            await log("YARDSTICK_WARN native_benchmark context_tokens=\(contextTokens) (litert stock default; agreed protocol is 2048 for gemma-4 — pass --context-tokens)")
+            await log("YARDSTICK_WARN native_benchmark context_tokens=\(contextTokens) (litert stock default; the protocol is 2048 for gemma-4 — pass --context-tokens)")
         }
         await log("YARDSTICK_BEGIN native_benchmark model=\(model.id) prefill=\(spec.prefill) decode=\(spec.decode) context_tokens=\(contextTokens)")
 

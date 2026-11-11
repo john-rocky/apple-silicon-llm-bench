@@ -64,7 +64,7 @@ MAC_BIG=(
   "litert-lm|litert-community/gemma-4-12B-it-litert-lm|litert-community/gemma-4-12B-it-litert-lm|gemma-4-12B-it.litertlm"
   "mlx-swift|mlx-community/gemma-4-12b-it-4bit|mlx-community/gemma-4-12b-it-4bit|*"
 )
-# Lu's focus models (Liquid/LFM2 + MiniCPM) — OUR own .litertlm conversions (not on HF),
+# Liquid/LFM2 + MiniCPM — OUR own .litertlm conversions (not on HF),
 # side-loaded; comparators on HF. Small → iPhone + Mac. (Mac preview: MiniCPM litert runs
 # 239 tok/s; LFM2.5 litert loads-but-fails-to-invoke on 0.13.1 — iPhone GPU will retest.)
 LU_MODELS=(
