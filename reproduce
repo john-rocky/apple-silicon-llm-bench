@@ -37,7 +37,7 @@ E2B_MODEL_HINT = ("MODEL=<path to gemma-4-E2B-it.litertlm> "
 TABLES = {
     ("mac", "gsm8k-e2b-yardstick"): {
         "desc": "GSM8K quality yardstick, Gemma-4-E2B, LiteRT arm (Swift xcframework surface)",
-        "published": "README/RESULTS quality column; raw: results/raw/2026-08-04-litert-0150-yardstick-thinking/",
+        "published": "docs/results-iphone.md and RESULTS quality column; raw: results/raw/2026-08-04-litert-0150-yardstick-thinking/",
         "rows": "v0.15.0: 88.0 (ctx2048 OFF) / 89.0 (ctx4096 OFF) / 92.0 (ctx4096 thinking). "
                 "The published 86.0 row is the v0.13.1 instrument (tools/litert-mac-verify/README.md).",
         "prereqs": [

@@ -177,7 +177,7 @@ Full text in [methodology/fairness-rules.md](methodology/fairness-rules.md).
 
 ## 9. Repository structure
 
-See README.
+See [docs/project.md](docs/project.md#project-shape).
 
 ## 10. First release scope (v0.1)
 

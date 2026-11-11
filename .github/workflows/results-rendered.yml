@@ -10,6 +10,7 @@ on:
       - "RESULTS.md"
       - "LEADERBOARD.md"
       - "README.md"
+      - "docs/headline-tables.md"
       - "evaldata/**"
       - ".github/workflows/results-rendered.yml"
   push:

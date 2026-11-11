@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the README headline decode table from stored records.
 
-  python3 scripts/render_headline.py          # rewrite the generated block in README.md
+  python3 scripts/render_headline.py          # rewrite the generated blocks in README.md and docs/headline-tables.md
   python3 scripts/render_headline.py --check  # CI: fail if stale
 
 Why: the headline table used to be typed by hand and drifted from the body and
@@ -62,6 +62,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HYBRID = os.path.join(ROOT, "results", "hybrid")
 RAW = os.path.join(ROOT, "results", "raw")
 TARGET = os.path.join(ROOT, "README.md")
+TABLES = os.path.join(ROOT, "docs", "headline-tables.md")  # every table, with its recipes
 BEGIN = "<!-- BEGIN GENERATED: scripts/render_headline.py -->"
 END = "<!-- END GENERATED: scripts/render_headline.py -->"
 HEADLINE_TASK = "short-chat"
@@ -166,31 +167,38 @@ def recipe_line(dev, model, rt, a, mid, sess, skipped):
 
 def session_note(model, dev_name, by_rt, n_sessions, marker):
     by = "; ".join(f"{label} {' and '.join(dates)}" for label, dates in by_rt.items())
-    return (f"{marker} {model} · {dev_name}: the cells come from {n_sessions} capture "
-            f"sessions ({by}). Same device, different sittings — device state moves between "
-            "sessions (measured on the phone: `results/raw/2026-07-13-mlx-variance/`), so a "
-            "ratio between two cells of this row is not a measurement; compare within one "
-            "session (the dated tables below are per-session).")
+    return (f"{marker} {model} · {dev_name}: the numbers come from {n_sessions} capture "
+            f"sessions ({by}). Device state moves between sessions, so a ratio between two "
+            "numbers in this row is not a measurement. Compare within one session. "
+            "Evidence: `results/raw/2026-07-13-mlx-variance/`.")
 
 
-def render_harness(lines):
+def render_harness(lines, prefix="", detail=False):
     tree, hot_only = harness_rows()
     runtimes = [rt for rt in RUNTIME_ORDER
                 if any(rt in arms for arms in tree.values())]
     runtimes += sorted({rt for arms in tree.values() for rt in arms} - set(runtimes))
     order = {p: i for i, p in enumerate(PLATFORMS)}
     keys = sorted(tree, key=lambda k: (order[k[0]], k[1], HEADLINE_MODELS.index(k[2])))
+    if not detail:  # the README keeps only rows whose numbers share one session
+        keys = [k for k in keys
+                if len({arm[2] for arms in tree[k].values() for arm in arms}) == 1]
+        runtimes = [rt for rt in runtimes if any(rt in tree[k] for k in keys)]
+        if not keys:
+            lines.append("No row has all its numbers from one session right now.")
+            lines.append("")
+            return ""
 
-    lines.append(
-        f"**Harness cells** — task `{HEADLINE_TASK}` (same prompt and 128-token budget "
-        "for every arm, in-tree harness, per-run JSONL under `results/raw/`). "
-        "**Bold** = warm, the median of one session's in-process runs (run 1 of every "
-        "launch dropped as cold); \"cold\" = fresh-process first generation, shown where "
-        "a session has no warm runs. Only runs that started thermal-nominal count "
-        "([fairness-rules §2](methodology/fairness-rules.md)), and each cell is its newest "
-        "qualifying session — the date in parentheses. Several artifacts of one runtime "
-        "are listed fastest-first, never pooled.")
-    lines.append("")
+    if detail:
+        lines.append(
+            f"Task `{HEADLINE_TASK}`, with the same prompt and 128-token budget for every runtime. "
+            "**Bold** is warm: the median of one session's in-process runs, with run 1 of every "
+            "launch dropped. \"cold\" is a fresh-process first generation, shown where a session "
+            "has no warm runs. Only runs that started thermal-nominal count "
+            f"([fairness-rules §2]({prefix}methodology/fairness-rules.md)). Each number is from its "
+            "newest qualifying session, the date in parentheses. Several artifacts of one runtime "
+            "are listed fastest first and never pooled.")
+        lines.append("")
     lines.append("| Model | Device | " + " | ".join(RUNTIME_LABEL.get(rt, rt) for rt in runtimes) + " |")
     lines.append("|---|---|" + "|".join("---:" for _ in runtimes) + "|")
     notes, recipes = [], []
@@ -219,15 +227,15 @@ def render_harness(lines):
     for n in notes:
         lines.append(n)
         lines.append("")
-    if hot_only:
-        lines.append("Arms with no thermal-nominal capture (failed-runs-stay; the hot captures "
+    if hot_only and detail:
+        lines.append("Runtimes with no thermal-nominal capture (the hot captures "
                      "are in `results/raw/` and LEADERBOARD.md):")
         lines.append("")
         for plat, dev, model, rt, mid, date in sorted(hot_only):
             lines.append(f"- {device_name(dev)} · {model} · {RUNTIME_LABEL.get(rt, rt)}: "
                          f"`{mid}` — newest capture {date} started hot")
         lines.append("")
-    lines.append("<details><summary>Recipes behind the harness cells (quant-per-arm-rule)</summary>")
+    lines.append("<details><summary>Recipes behind these numbers</summary>")
     lines.append("")
     lines.extend(recipes)
     lines.append("")
@@ -307,9 +315,9 @@ def render_llm_benchmark(lines):
     lines.append(
         "**Apple `llm-benchmark` protocol, Mac** — 512-token prompt, 1024 generated, 5 trials, "
         "greedy; Apple Core AI = Apple's `llm-benchmark` release build, MLX = `mlx_lm benchmark` "
-        "with the same arguments. A different budget from the harness rows above "
-        "(budget-mode-rule): never compare a number here with one there. Each cell is its newest "
-        "campaign — the date in parentheses.")
+        "with the same arguments. A different budget from the harness rows above, "
+        "so never compare a number here with one there. Each number is from its newest "
+        "session, the date in parentheses.")
     lines.append("")
     lines.append("| Model | Device | " + " | ".join(RUNTIME_LABEL.get(rt, rt) for rt in runtimes) + " |")
     lines.append("|---|---|" + "|".join("---:" for _ in runtimes) + "|")
@@ -337,7 +345,7 @@ def render_llm_benchmark(lines):
     for n in notes:
         lines.append(n)
         lines.append("")
-    lines.append("<details><summary>Recipes behind the llm-benchmark cells</summary>")
+    lines.append("<details><summary>Recipes behind the llm-benchmark numbers</summary>")
     lines.append("")
     lines.extend(recipes)
     lines.append("")
@@ -436,7 +444,7 @@ def render_hybrid(lines):
                            + (f" — ‡ {caveat}" if caveat else ""))
         lines.append(f"| {model} | {device} | " + " | ".join(cells) + f" | {date} |")
     lines.append("")
-    lines.append("<details><summary>Recipes behind the hybrid cells</summary>")
+    lines.append("<details><summary>Recipes behind the hybrid numbers</summary>")
     lines.append("")
     lines.extend(recipes)
     lines.append("")
@@ -448,45 +456,72 @@ def render_hybrid(lines):
 # ----------------------------------------------------------------------------
 
 def generate():
-    body = []
-    latest = max(render_harness(body), render_llm_benchmark(body), render_hybrid(body))
-    head = [
+    """Return (the block for README.md, the block for docs/headline-tables.md)."""
+    short = []
+    render_harness(short)
+    full = []
+    latest = max(render_harness(full, "../", True), render_llm_benchmark(full), render_hybrid(full))
+    readme_head = [
+        BEGIN,
+        "",
+        f"Decode tok/s, batch 1, greedy, on the `{HEADLINE_TASK}` task with a 128-token budget. "
+        "Numbers from different capture sessions can't be compared, so this table keeps only "
+        "rows measured in one session. The rest are in [all headline tables](docs/headline-tables.md), "
+        f"whose newest record is from {latest or 'n/a'}. "
+        "**Bold** is a warm median and \"cold\" is the first generation in a fresh process.",
+        "",
+    ]
+    tables_head = [
         BEGIN,
         "",
         "**Decode tok/s, batch 1, greedy.** Generated from stored records by "
-        f"`scripts/render_headline.py` (newest record {latest or 'n/a'}) — do not edit "
+        f"`scripts/render_headline.py` (newest record {latest or 'n/a'}), so do not edit "
         "inside the markers. Full standings with prefill, TTFT, memory and GSM8K: "
-        "[LEADERBOARD.md](LEADERBOARD.md); every capture: [RESULTS.md](RESULTS.md) and "
-        "`results/`. No cross-cell ratios are printed here on purpose: cells are "
-        "compared only within one session, and the session is part of every cell.",
+        "[LEADERBOARD.md](../LEADERBOARD.md); every capture: [RESULTS.md](../RESULTS.md) and "
+        "`results/`. Numbers are compared only within one session, so no ratios are printed.",
         "",
     ]
-    return "\n".join(head + body + [END]) + "\n"
+    return ("\n".join(readme_head + short + [END]) + "\n",
+            "\n".join(tables_head + full + [END]) + "\n")
+
+
+def splice(path, block):
+    """Return (the file now, the file with its generated block replaced), or None without markers."""
+    current = open(path).read()
+    if BEGIN not in current or END not in current:
+        return None
+    head, _, rest = current.partition(BEGIN)
+    _, _, tail = rest.partition(END)
+    return current, head + block.rstrip("\n") + tail  # text after END is kept verbatim
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
-    block = generate()
-    current = open(TARGET).read()
-    if BEGIN not in current or END not in current:
-        print(f"README.md has no {BEGIN} / {END} markers — add them where the "
-              "headline table goes", file=sys.stderr)
-        return 2
-    head, _, rest = current.partition(BEGIN)
-    _, _, tail = rest.partition(END)
-    new = head + block.rstrip("\n") + tail  # text after END is kept verbatim
-    if args.check:
-        if current != new:
-            print("README.md headline block is stale — run scripts/render_headline.py",
-                  file=sys.stderr)
-            return 1
-        print("README.md headline block is up to date.")
-        return 0
-    open(TARGET, "w").write(new)
-    print(f"wrote {os.path.relpath(TARGET, ROOT)}")
-    return 0
+    stale = 0
+    for path, block in zip((TARGET, TABLES), generate()):
+        name = os.path.relpath(path, ROOT)
+        if not os.path.exists(path):
+            print(f"{name} is missing", file=sys.stderr)
+            return 2
+        spliced = splice(path, block)
+        if spliced is None:
+            print(f"{name} has no {BEGIN} / {END} markers — add them where the "
+                  "headline table goes", file=sys.stderr)
+            return 2
+        current, new = spliced
+        if args.check:
+            if current != new:
+                print(f"{name} headline block is stale — run scripts/render_headline.py",
+                      file=sys.stderr)
+                stale = 1
+            else:
+                print(f"{name} headline block is up to date.")
+        else:
+            open(path, "w").write(new)
+            print(f"wrote {name}")
+    return stale
 
 
 if __name__ == "__main__":

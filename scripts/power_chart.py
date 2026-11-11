@@ -14,7 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# (label, avg package watts at full decode, color) — from the README energy table
+# (label, avg package watts at full decode, color) — from the energy table in docs/results-mac.md
 BARS = [
     ("CoreML / ANE",   12.7, "#2ca02c"),
     ("MLX / GPU",      24.7, "#d62728"),

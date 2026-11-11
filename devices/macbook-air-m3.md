@@ -28,7 +28,7 @@ assumptions break.
 
 For now, run via the iOS BenchmarkApp on a connected iPhone, or wait
 for the Phase-2 macOS app target (tracked in
-[`../README.md`](../README.md#roadmap)).
+[`../docs/project.md`](../docs/project.md#roadmap)).
 
 ## Results
 

@@ -1,4 +1,4 @@
-"""Canonical GSM8K quality harness — the generator of the README table's GSM8K column.
+"""Canonical GSM8K quality harness — the generator of the GSM8K column in docs/results-iphone.md.
 
 One protocol for every arm (fairness): chat template applied, thinking OFF unless
 --thinking (then ON for EVERY arm compared), greedy, max_tokens 1024, same extractor,

@@ -88,6 +88,6 @@ Edit `Models/ModelCatalog.swift` and append a `ModelInfo`. The MLX runtime only 
 
 ## Known gotchas
 
-- **First run downloads ~400 MB** for the default `Qwen3-0.6B-4bit` model. Use Wi-Fi.
+- **First run downloads ~300 MB** for the default `Qwen2.5-0.5B-Instruct-4bit` model. Use Wi-Fi.
 - **First generation is slower than later ones** because Metal compiles shaders on demand. The `coldRun` flag in the result captures this.
 - **Backgrounding the app during a run** may pause generation depending on iOS version. We have not yet wired up a `BackgroundTaskAssertion` — generation may be cut off after ~30 s in background.

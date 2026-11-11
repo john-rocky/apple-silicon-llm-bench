@@ -2,7 +2,7 @@
 
 The repo's main asset is the benchmark table in [`RESULTS.md`](RESULTS.md). **Every contribution is a new row, a new column, or a new pivot of that table.** This file is the step-by-step for getting a row in.
 
-If you want the 30-second version, read the [Contributing a row](README.md#-contributing-a-row) block in the README and come back here for the gotchas.
+If you want the 30-second version, read the [Contributing a row](README.md#contributing-a-row) block in the README and come back here for the gotchas.
 
 ## The three ways to add a row
 
@@ -21,6 +21,7 @@ Mac CLI:
 ```sh
 git clone https://github.com/john-rocky/apple-silicon-llm-bench.git
 cd apple-silicon-llm-bench/ios/BenchmarkApp
+./scripts/bootstrap.sh
 xcodegen generate                              # regenerate Xcode project from project.yml
 xcodebuild -project BenchmarkApp.xcodeproj \
            -scheme yardstick \
@@ -37,7 +38,7 @@ iPhone app:
 
 ```sh
 cd ios/BenchmarkApp
-./scripts/bootstrap.sh           # downloads llama.xcframework + Anemll source
+./scripts/bootstrap.sh           # fetches the runtimes the app builds against
 open BenchmarkApp.xcodeproj
 # - Set your Team in Signing & Capabilities
 # - Pick your iPhone as the run destination
@@ -60,14 +61,14 @@ The CLI version is identical on Mac:
 Three things matter:
 
 - **Run 3 times** for the same `(runtime, model, task, device)` tuple. The renderer uses median for `n ≥ 1` but the "trustworthy" sections of `RESULTS.md` cite `n ≥ 3`.
-- **Filename convention** is `<device>-<rest>.jsonl`. The renderer treats the *first* dash-separated segment as the device label and looks it up in `scripts/render_results.py::DEVICE_DISPLAY`. The rest of the filename is for humans; the renderer reads the runtime / model / task fields from the JSONL itself.
+- **Filename convention** is `<device>-<rest>.jsonl`. The renderer treats the *first* dash-separated segment as the device label and looks it up in `scripts/bench_common.py::DEVICE_DISPLAY`. The rest of the filename is for humans; the renderer reads the runtime / model / task fields from the JSONL itself.
 - **Use the same prompt + settings** for cross-runtime apples-to-apples. The CLI bakes the Task-A prompt in; just match the task name.
 
-For the iPhone app, run the tasks via the app's UI, export the result JSONLs (top-right "Export" sheet), and AirDrop them back to the Mac into `results/raw/`.
+For the iPhone app, run the tasks via the app's UI, choose **Export all (JSONL)** in the **History** tab, AirDrop the file to the Mac, and run `python3 scripts/import_ios_export.py <file> --device <label>`. It writes one file per run into `results/raw/`.
 
 ## 2. Add your device to `DEVICE_DISPLAY`
 
-If your device label isn't already mapped in `scripts/render_results.py::DEVICE_DISPLAY`, add it:
+If your device label isn't already mapped in `scripts/bench_common.py::DEVICE_DISPLAY`, add it:
 
 ```python
 DEVICE_DISPLAY = {
@@ -130,4 +131,4 @@ If a run produces an error rather than a result, add a row to `RESULTS.md`'s "Fa
 
 ## Questions
 
-Open a GitHub issue, or reach out via the contact listed in [`README.md`](README.md). Genuine "I want to run this on my <device>" requests are the entire point of the project — please don't sit on them.
+Open a GitHub issue. Genuine "I want to run this on my <device>" requests are the entire point of the project — please don't sit on them.

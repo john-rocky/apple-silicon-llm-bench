@@ -12,7 +12,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-REPO_RAW = "results/raw"
+REPO_RAW = "results/raw/superseded/2026-05-gemma-e2b-energy-tg128"
 SERIES = [
     ("CoreML / ANE",     f"{REPO_RAW}/iphone17pro-coreml-llm-gemma-4-e2b-energy-tg128.jsonl", "#2ca02c"),
     ("MLX / GPU",        f"{REPO_RAW}/iphone17pro-mlx-swift-gemma-4-e2b-energy-tg128.jsonl",  "#d62728"),

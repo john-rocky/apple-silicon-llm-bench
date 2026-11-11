@@ -92,7 +92,18 @@ fi
 # a future tag ships the parameter upstream, the grep sees it and skips.
 if ! grep -q "maxNumTokens: Int? = nil" "${LITERTLM_DIR}/swift/Benchmark.swift"; then
     echo "Applying litert-lm-swift-benchmark-maxnumtokens.patch …"
-    git -C "${LITERTLM_DIR}" apply "$(pwd)/patches/litert-lm-swift-benchmark-maxnumtokens.patch"
+    git -C "${LITERTLM_DIR}" apply "$(pwd)/patches/litert-lm-swift-benchmark-maxnumtokens.patch" \
+        && grep -q "maxNumTokens: Int? = nil" "${LITERTLM_DIR}/swift/Benchmark.swift" \
+        || { echo "ERROR: the maxNumTokens patch did not apply. The patches target LiteRT-LM ${LITERTLM_TAG}." >&2; exit 1; }
+fi
+# Second local patch: MediaPipeRuntime's --litert-fp32-act reads
+# ExperimentalFlags.forceFloat32Activations, which upstream does not have, so a clean
+# clone cannot compile the yardstick without it. Guarded = idempotent, as above.
+if ! grep -q "forceFloat32Activations" "${LITERTLM_DIR}/swift/ExperimentalFlags.swift"; then
+    echo "Applying 0002-experimental-flags-force-fp32-activations.patch …"
+    git -C "${LITERTLM_DIR}" apply "$(pwd)/Vendored-patches/0002-experimental-flags-force-fp32-activations.patch" \
+        && grep -q "forceFloat32Activations" "${LITERTLM_DIR}/swift/ExperimentalFlags.swift" \
+        || { echo "ERROR: patch 0002 did not apply. The patches target LiteRT-LM ${LITERTLM_TAG}." >&2; exit 1; }
 fi
 
 # 4. CoreML-LLM (john-rocky). Local SwiftPM package (CoreMLLLM product) for the CoreML/ANE
@@ -118,9 +129,7 @@ COREAI_TAG="${COREAI_TAG:-0.2.0}"
 # "cannot find type 'StaticInputBuffer' in scope".
 # Prefer a local patched checkout (what project.yml's comment assumes); fall back to the public
 # tag so the other arms still build, and say so loudly rather than failing 200 lines later.
-# Default = the dedicated 0.2.0+patch checkout, NOT ~/code/coreai/coreai-models — that one is a
-# shared working checkout other sessions move under us (observed 2026-08-05 at 0.2.1-zoo while
-# the lockfile pins 0.2.0; see CLAUDE.md "Arms").
+# Default = a dedicated checkout of 0.2.0 with the patch applied. COREAI_LOCAL overrides it.
 COREAI_LOCAL="${COREAI_LOCAL:-$HOME/code/coreai-models-020-bench}"
 if [ ! -e "${COREAI_DIR}" ]; then
     if [ -d "${COREAI_LOCAL}" ] && grep -qrs "public struct StaticInputBuffer" "${COREAI_LOCAL}/swift/Sources"; then
@@ -150,10 +159,17 @@ if [ ! -d "${CACTUS_FRAMEWORK}" ]; then
         if [ ! -d "${CACTUS_DIR}" ]; then
             echo "Cloning cactus @ ${CACTUS_COMMIT} …"
             git clone https://github.com/cactus-compute/cactus.git "${CACTUS_DIR}"
-            (cd "${CACTUS_DIR}" && git checkout --quiet "${CACTUS_COMMIT}")
+            if ! (cd "${CACTUS_DIR}" && git checkout --quiet "${CACTUS_COMMIT}"); then
+                # This commit is no longer on GitHub. Drop the clone so stamp_engine_pins.sh
+                # cannot record another commit as the Cactus version.
+                echo "WARNING: cactus ${CACTUS_COMMIT} is no longer on GitHub."
+                rm -rf "${CACTUS_DIR}"
+            fi
         fi
-        echo "Building cactus-ios.xcframework (this compiles the engine twice: device + simulator) …"
-        if (cd "${CACTUS_DIR}" && bash apple/build.sh); then
+        if [ -d "${CACTUS_DIR}" ]; then
+            echo "Building cactus-ios.xcframework (this compiles the engine twice: device + simulator) …"
+        fi
+        if [ -d "${CACTUS_DIR}" ] && (cd "${CACTUS_DIR}" && bash apple/build.sh); then
             cp -R "${CACTUS_DIR}/apple/cactus-ios.xcframework" "${CACTUS_FRAMEWORK}"
             # Upstream bundles only cactus_engine.h, whose first include is the C++
             # cactus_graph.h — absent from the framework, so `import cactus` cannot
@@ -164,7 +180,7 @@ if [ ! -d "${CACTUS_FRAMEWORK}" ]; then
             done
             echo "  -> ${CACTUS_FRAMEWORK}"
         else
-            echo "WARNING: cactus apple build failed; the Cactus arm will report unavailable."
+            echo "WARNING: cactus was not built; the app will report Cactus as unavailable."
         fi
     else
         echo "WARNING: cmake not found; skipping the Cactus arm (CactusRuntime stubs out)."
@@ -181,6 +197,13 @@ if command -v xcodegen >/dev/null 2>&1; then
     else
         echo "BenchmarkApp.xcodeproj already present (set REGEN_XCODEPROJ=1 to force regen)."
     fi
+fi
+
+# Without the Cactus framework the project cannot link, so take it out of the project.
+# CactusRuntime.swift is guarded with canImport(cactus), and the app reports Cactus as unavailable.
+if [ ! -d "${CACTUS_FRAMEWORK}" ] && grep -q "cactus-ios.xcframework" BenchmarkApp.xcodeproj/project.pbxproj; then
+    echo "Removing cactus-ios.xcframework from BenchmarkApp.xcodeproj (it was not built) …"
+    sed -i '' '/cactus-ios\.xcframework/d' BenchmarkApp.xcodeproj/project.pbxproj
 fi
 
 # 8. Record the observed engine pins (git state of the Vendored/ clones, the CLiteRTLM

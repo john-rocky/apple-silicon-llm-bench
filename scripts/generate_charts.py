@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Yardstick — generate the README hero charts from results/raw/*.jsonl.
+Yardstick — generate the charts from results/raw/*.jsonl.
 
 Outputs to docs/charts/:
 

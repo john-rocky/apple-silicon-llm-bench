@@ -15,12 +15,12 @@ Primary Mac reference. Fill in build / OS / RAM details before recording rows.
 ## Notes
 
 - Sets the upper bound for what Apple Silicon can do on a workstation today.
-- GPU-rich: MLX (GPU path) vs CoreML (ANE path) split here is the widest in the lineup — the README headline `5.3× MLX over CoreML` decode number for Gemma 4 E2B was taken on this class of machine.
+- GPU-rich: MLX (GPU path) vs CoreML (ANE path) split here is the widest in the lineup.
 - Thermal headroom is large; sustained-decode runs rarely throttle.
 
 ## Build
 
-For now, run via the iOS BenchmarkApp on a connected iPhone, or wait for the Phase-2 macOS app target (tracked in [`../README.md`](../README.md#roadmap)).
+For now, run via the iOS BenchmarkApp on a connected iPhone, or wait for the Phase-2 macOS app target (tracked in [`../docs/project.md`](../docs/project.md#roadmap)).
 
 ## Results
 

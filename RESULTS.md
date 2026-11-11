@@ -1803,7 +1803,7 @@ These are the non-trivial facts the harness has surfaced so far. They are **not*
 
 ## Failed runs (kept visible)
 
-Failure is signal. Each one is a discrete upstream gap. The detailed remediation plan for the upstream gaps lives in [`~/Downloads/Yardstick_UPSTREAM_PR_BACKLOG.md`](../Yardstick_UPSTREAM_PR_BACKLOG.md).
+Failure is signal. Each one is a discrete upstream gap.
 
 | Runtime | Model | Result | Upstream gap |
 |---|---|---|---|
@@ -1811,7 +1811,7 @@ Failure is signal. Each one is a discrete upstream gap. The detailed remediation
 | executorch | `executorch-community/Llama-3.2-1B-Instruct-SpinQuant_INT4_EO8-ET` | Tokenizer parse error | ET's `hf_tokenizer.cpp` parses tokenizer files as HF JSON; the ET-community repos ship `tokenizer.model` (SentencePiece). |
 | anemll | `anemll/anemll-google-gemma-3-270m-it-ctx4096_0.3.5` | Download failed (`HTTPClientError error 1`) | `swift-huggingface.HFDownloader` can't traverse `.mlmodelc/` directory-shaped HF repos. |
 
-> **litert-lm** is no longer blocked. `google-ai-edge/LiteRT-LM` v0.12.0 ships a `macos-arm64` slice and reads Gemma 4 `.litertlm`, so the adapter now builds on Mac + iOS via plain SPM. Its Gemma 4 E2B / E4B rows will appear in the Pivot tables above automatically once a run's JSONL lands in `results/raw/` (`render_results.py` already maps the `litert-lm` runtime). Run commands: [`Yardstick_USER_RUNS.md`](../Yardstick_USER_RUNS.md). One build caveat to watch: the package's `-all_load` can clash (duplicate symbols) with the vendored `llama`/`executorch` static libs — fall back to a scoped `-force_load` if so.
+> **litert-lm** is no longer blocked. `google-ai-edge/LiteRT-LM` v0.12.0 ships a `macos-arm64` slice and reads Gemma 4 `.litertlm`, so the adapter now builds on Mac + iOS via plain SPM. Its Gemma 4 E2B / E4B rows will appear in the Pivot tables above automatically once a run's JSONL lands in `results/raw/` (`render_results.py` already maps the `litert-lm` runtime). One build caveat to watch: the package's `-all_load` can clash (duplicate symbols) with the vendored `llama`/`executorch` static libs — fall back to a scoped `-force_load` if so.
 
 ## Tasks B / C / D
 

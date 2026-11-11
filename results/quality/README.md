@@ -1,4 +1,4 @@
-# results/quality — GSM8K reports behind the README table's quality column
+# results/quality — GSM8K reports behind the quality column of docs/results-iphone.md
 
 Written by `scripts/parity_gsm8k.py` (one identical protocol per arm — see the script
 docstring and `methodology/fairness-rules.md`). File = one arm × build × mode:
