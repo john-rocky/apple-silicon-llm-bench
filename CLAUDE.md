@@ -6,8 +6,8 @@ missing `methodology/next-session-brief.md` — both happened on 2026-07-17 and 
 
 ## What this repo is
 
-A **neutral, reproducible** benchmark for local LLMs on Apple Silicon. Google's LiteRT team is
-evaluating extending it into continuous, automated competitive benchmarking:
+A **neutral, reproducible** benchmark for local LLMs on Apple Silicon, being extended into
+continuous, automated competitive benchmarking:
 - engines: **LiteRT-LM, llama.cpp, Core AI, MLX, Cactus**
 - platforms: Android, iOS, macOS
 
@@ -17,7 +17,7 @@ evaluating extending it into continuous, automated competitive benchmarking:
 
 - `methodology/next-session-brief.md` — carries hard-won gotchas. **Read before building.**
 - `methodology/fairness-rules.md` — what makes a cell publishable.
-- `~/code/coreai/GEMMA4_LU_BENCH_HANDOFF.md` — current Gemma-4 / Lu campaign state (2026-07-17).
+- The `GEMMA4_*_BENCH_HANDOFF.md` file under `~/code/coreai/` — current Gemma-4 campaign state (2026-07-17).
 
 ## Rules that produce wrong numbers when broken
 
