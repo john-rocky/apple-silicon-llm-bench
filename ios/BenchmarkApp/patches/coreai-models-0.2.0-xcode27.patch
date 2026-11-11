@@ -1,0 +1,31 @@
+Local patch for apple/coreai-models 0.2.0 (938d0b8), applied by scripts/bootstrap.sh to a fresh clone.
+1. Xcode 27.0 (27A266a): LanguageModelCapabilities(capabilities:) became LanguageModelCapabilities(_:).
+   Same change as upstream 5ed9981 (#123), which no 0.2.x tag carries (apple/coreai-models#293).
+2. xgrammar: branch main -> exact 0.2.9 (main on 2026-11-07), so every clone resolves the same version.
+
+diff --git a/Package.swift b/Package.swift
+index 5748c1d..aa20fbd 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -43,7 +43,7 @@ let package = Package(
+     dependencies: [
+         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
+         .package(url: "https://github.com/huggingface/swift-transformers", from: "1.1.0"),
+-        .package(url: "https://github.com/mlc-ai/xgrammar", branch: "main"),
++        .package(url: "https://github.com/mlc-ai/xgrammar", exact: "0.2.9"),
+     ],
+     targets: [
+         .target(
+diff --git a/swift/Sources/CoreAILanguageModels/LanguageModel/CoreAILanguageModel.swift b/swift/Sources/CoreAILanguageModels/LanguageModel/CoreAILanguageModel.swift
+index 3fd4ef2..c46b59a 100644
+--- a/swift/Sources/CoreAILanguageModels/LanguageModel/CoreAILanguageModel.swift
++++ b/swift/Sources/CoreAILanguageModels/LanguageModel/CoreAILanguageModel.swift
+@@ -48,7 +48,7 @@ public struct CoreAILanguageModel: LanguageModel {
+         if supportsToolCalling { caps.append(.toolCalling) }
+         if supportsReasoning { caps.append(.reasoning) }
+         if engine.supportsLogits { caps.append(.guidedGeneration) }
+-        return LanguageModelCapabilities(capabilities: caps)
++        return LanguageModelCapabilities(caps)
+     }
+ 
+     public var executorConfiguration: CoreAIExecutor.Configuration {

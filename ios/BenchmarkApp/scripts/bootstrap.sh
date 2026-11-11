@@ -116,33 +116,49 @@ else
     echo "${COREMLLLM_DIR} already present."
 fi
 
-# 5. coreai-models (Apple Core AI, CoreAILM product). Ships CXGrammar.xcframework in-repo.
+# 5. coreai-models (Apple Core AI, CoreAILM product). Builds its grammar bridge from xgrammar source.
 #    Required for the project to *compile* (project.yml links it) even though Core AI *runs*
 #    additionally need a side-loaded .aimodel in Documents/CoreAIModels/<id>/.
 COREAI_DIR="${VENDORED_DIR}/coreai-models"
 COREAI_TAG="${COREAI_TAG:-0.2.0}"
-# The Core AI arm needs StaticInputBuffer (EngineOptions.staticInputBuffers) to feed Gemma-4's
-# per-layer-embedding table to the `_tbl` decode graph. That API does NOT exist in Apple's public
+# Gemma-4's per-layer-embedding (PLE) models need StaticInputBuffer (EngineOptions.staticInputBuffers)
+# to feed their table to the `_tbl` decode graph. That API does NOT exist in Apple's public
 # coreai-models (checked: absent from both 0.1.0 and 0.2.0) — it comes from our engine patch,
-# coreai-models-community/apps/coreai-pipelined-static-inputs.patch. So a plain clone of the
-# public repo compiles everything EXCEPT CoreAIRuntime.swift, with a bare
-# "cannot find type 'StaticInputBuffer' in scope".
-# Prefer a local patched checkout (what project.yml's comment assumes); fall back to the public
-# tag so the other arms still build, and say so loudly rather than failing 200 lines later.
-# Default = a dedicated checkout of 0.2.0 with the patch applied. COREAI_LOCAL overrides it.
+# patches/coreai-models-938d0b8-gemma4-ple.diff at the repo root. CoreAIRuntime.swift uses it
+# only under COREAI_STATIC_INPUTS (off by default), so the public tag builds the app; PLE models
+# then report unsupported (methodology/core-ai-arm-provenance.md).
+# Prefer a local checkout that carries the PLE patch (what project.yml's comment assumes);
+# otherwise clone the public tag.
+# Default = a dedicated checkout of 0.2.0 with the PLE patch applied. COREAI_LOCAL overrides it.
 COREAI_LOCAL="${COREAI_LOCAL:-$HOME/code/coreai-models-020-bench}"
 if [ ! -e "${COREAI_DIR}" ]; then
     if [ -d "${COREAI_LOCAL}" ] && grep -qrs "public struct StaticInputBuffer" "${COREAI_LOCAL}/swift/Sources"; then
         echo "Linking coreai-models -> ${COREAI_LOCAL} (patched: has StaticInputBuffer)"
         ln -s "${COREAI_LOCAL}" "${COREAI_DIR}"
     else
-        echo "WARNING: no patched coreai-models at ${COREAI_LOCAL}."
-        echo "         Cloning public ${COREAI_TAG}; the Core AI arm will NOT compile"
-        echo "         (needs coreai-pipelined-static-inputs.patch). Other arms are fine."
+        echo "No patched coreai-models at ${COREAI_LOCAL}: cloning public ${COREAI_TAG}."
+        echo "  Core AI builds; Gemma-4 E2B/E4B (PLE) report unsupported without the patched engine."
         git clone --depth 1 --branch "${COREAI_TAG}" https://github.com/apple/coreai-models.git "${COREAI_DIR}"
     fi
 else
     echo "${COREAI_DIR} already present."
+fi
+# Local patch for the public 0.2.0 clone (ios/BenchmarkApp/patches/coreai-models-0.2.0-xcode27.patch):
+#   - Xcode 27.0 (27A266a) renamed FoundationModels' LanguageModelCapabilities(capabilities:)
+#     to LanguageModelCapabilities(_:), so 0.2.0 no longer compiles. Upstream fixed the call in
+#     5ed9981 (#123), which no 0.2.x tag carries (apple/coreai-models#293).
+#   - 0.2.0 takes xgrammar from branch main; the patch pins 0.2.9 (main on 2026-11-07), so
+#     every fresh clone builds the same grammar library.
+# Only a clean checkout of the 0.2.0 tag is patched; a link or a locally edited checkout is
+# left alone.
+COREAI_LM_SWIFT="${COREAI_DIR}/swift/Sources/CoreAILanguageModels/LanguageModel/CoreAILanguageModel.swift"
+if [ ! -L "${COREAI_DIR}" ] && [ "${COREAI_TAG}" = "0.2.0" ] \
+    && grep -qs "LanguageModelCapabilities(capabilities:" "${COREAI_LM_SWIFT}" \
+    && git -C "${COREAI_DIR}" diff --quiet HEAD; then
+    echo "Applying coreai-models-0.2.0-xcode27.patch …"
+    git -C "${COREAI_DIR}" apply "$(pwd)/patches/coreai-models-0.2.0-xcode27.patch" \
+        && ! grep -q "LanguageModelCapabilities(capabilities:" "${COREAI_LM_SWIFT}" \
+        || { echo "ERROR: coreai-models-0.2.0-xcode27.patch did not apply to ${COREAI_DIR}." >&2; exit 1; }
 fi
 
 # 6. Cactus engine (cactus-compute/cactus) — build cactus-ios.xcframework from source.
