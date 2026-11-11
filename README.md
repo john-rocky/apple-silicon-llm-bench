@@ -38,7 +38,7 @@ Each `run` writes one JSONL file with the speed, memory and thermal numbers. Thi
 
 ## Running on iPhone (app)
 
-`bootstrap.sh` can't build Cactus any more, because the commit this repo used is no longer on GitHub. It removes Cactus from the Xcode project. The app still does not build from a fresh clone with Xcode 27 (27A266a): the Core AI package that `bootstrap.sh` clones, apple/coreai-models 0.2.0, does not compile against that SDK ([apple/coreai-models#293](https://github.com/apple/coreai-models/issues/293)).
+`bootstrap.sh` can't build Cactus any more, because the commit this repo used is no longer on GitHub. It removes Cactus from the Xcode project. It also patches the Core AI package it clones, apple/coreai-models 0.2.0, because that tag does not compile with Xcode 27 (27A266a) ([apple/coreai-models#293](https://github.com/apple/coreai-models/issues/293)). On 2026-11-12 the app, built from a fresh clone with `xcodebuild`, completed a `short-chat` run with the default model on an iPhone 18 Pro (iOS 27.2).
 
 From the repo root:
 
