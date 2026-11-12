@@ -42,7 +42,7 @@ and the file's sha256. It does not say why; root cause belongs to the thread, no
   `litert-lm-builder` and `flatbuffers`. Do not hunt for one: make it inside the work dir,
   `/opt/homebrew/bin/python3.12 -m venv "$W/venv" && "$W/venv/bin/pip" install ai-edge-litert==2.3.0 litert-lm-builder==0.18.0 flatbuffers`
   (about a minute; python3.13 / 3.14 work as well — the wheels exist), and run the probe with `"$W/venv/bin/python" -I`.
-- The Mac measurement window. If `~/code/standup/tools/quiet/quiet_hold.py` exists on this machine, the
+- The Mac measurement window. If the author's window tool (`quiet_hold.py`) is at its usual place on this machine, the
   scripts use it: `run_arms.sh` takes one window per call and `fetch_runner.sh` builds through
   `quiet_wait.py`. Keep one `run_arms.sh` call at ≤ 15 minutes of work (GPU arms take ~1 min per 25 cases
   for a 2B model, cpu arms a few minutes). Never run anything heavy of your own outside your window.
