@@ -356,8 +356,9 @@ INVOKE_CEILING = {
         "**Two LiteRT rows (int8 vs int4-mixed):** the int8 row is the safe baseline; the **int4-mixed** "
         "row (int4 body + int8 tied-embedding/lm_head) **roughly halves the gap** to the int4 peers vs MLX "
         "(from ~−54% at int8 to ~−25%), and is faster than Core AI's *cold* number. The earlier \"PTQ int4 collapses "
-        "sub-2B\" was specifically the **embedding at int4**; keep it int8 and the int4 body is coherent "
-        "(7/8 quality, no degeneracy). The residual gap to pure-int4 runtimes is that int8 "
+        "sub-2B\" was specifically the **embedding at int4**; keep it int8 and the int4 body is coherent: "
+        "in the 256-token quality run its reasoning gets the first seven questions right, "
+        "and the cap ends the reply before a final answer. The residual gap to pure-int4 runtimes is that int8 "
         "embedding/lm_head — the heaviest per-token read — which a 4-bit-QAT lm_head (not PTQ, which "
         "*does* collapse it) would close.",
 }

@@ -35,7 +35,7 @@ median n=3 where it runs):
 
 | Model | LiteRT (`.litertlm`, ours) | MLX 4-bit | GGUF |
 |---|---|---|---|
-| **MiniCPM5-1B** | ⚠️ **runs (239 tok/s) but output is garbage** — `<\|fim_prefix\|>` loop, **0/8** quality, degenerate | `mlx-community/MiniCPM5-1B-4bit` ✅ **526 tok/s, 7/8** | none on HF |
+| **MiniCPM5-1B** | ⚠️ **runs (239 tok/s) but output is garbage** — `<\|fim_prefix\|>` loop, **0/8** quality, degenerate | `mlx-community/MiniCPM5-1B-4bit` ✅ **526 tok/s**, coherent (its reasoning gets the first seven questions right, and the 256-token cap ends the reply before a final answer) | none on HF |
 | **LFM2.5-350M** | ⚠️ **loads but fails to invoke** (`INTERNAL: Failed to invoke the compiled model`, litert-lm 0.13.1 macOS) | `mlx-community/LFM2-350M-4bit` (v2.0 ✅ 1024 tok/s, 7/8) | `LiquidAI/LFM2.5-350M-GGUF` ✅ |
 
 - **Neither of our litert conversions produces usable output on litert-lm 0.13.1 (macOS)** — caught by the
@@ -44,8 +44,8 @@ median n=3 where it runs):
     tokenizer / special-token / chat-template bug in the conversion, not a speed result.
   - **LFM2.5-350M** doesn't even invoke (`Failed to invoke the compiled model`) — likely the runtime
     doesn't execute LFM2's hybrid conv/attention ops.
-  - Both **MLX** variants answer correctly (7/8), so it's the litert path, not the models. Actionable
-    feedback for the conversions; the iPhone Metal-GPU path is untested (may differ — that's what 実機 tells us).
+  - Both **MLX** variants stay coherent (LFM2-350M answers 7/8; for MiniCPM5-1B see its row above), so it's the litert path, not the models. Actionable
+    feedback for the conversions; the iPhone Metal-GPU path is untested (it may differ; only an on-device run can tell).
 - MLX LFM comparator is **LFM2-350M (v2.0)**, not 2.5 (no 2.5 on mlx-community) — a version skew, disclosed.
 
 > Quant is each runtime's native 4-bit (LiteRT mixed-INT4 / MLX Q4 / GGUF Q4_K_M) — disclosed per
