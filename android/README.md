@@ -1,8 +1,8 @@
-# Android lane — adb-driven CLI benchmarks (Pixel 8a first)
+# Android — adb-driven CLI benchmarks (Pixel 8a first)
 
 Engines with Android support: **LiteRT-LM** (cpu/gpu) and **llama.cpp** (cpu).
 MLX and Core AI are Apple-only (n/a rows); Cactus is a phase-2 slot.
-Measurement semantics and every disclosed difference from the Apple lane:
+Measurement semantics and every disclosed difference from the Apple runs:
 `methodology/android.md`. Device notes: `devices/pixel-8a.md`.
 
 ## Prerequisites (one-time, host Mac)

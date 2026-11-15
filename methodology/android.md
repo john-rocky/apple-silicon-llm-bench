@@ -1,4 +1,4 @@
-# Android measurement semantics — what transfers from the Apple lane and what does not
+# Android measurement semantics — what transfers from the Apple runs and what does not
 
 The Android column shares the schema (result.v1), the accumulation layer, the
 regression differ, and the fairness rules. The measurement *mechanics* differ;

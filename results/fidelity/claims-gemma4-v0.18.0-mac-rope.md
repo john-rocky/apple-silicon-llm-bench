@@ -187,7 +187,7 @@ the window form was adopted; everything else ran inside the windows listed.
 | own suite, E2B original cpu and E2B rope512 cpu (1 rep) | 11:17:16 | 11:23:47 | 2 |
 
 No timeouts, no errors in the recorded arms (one earlier `long` E4B original fp16 run was killed
-after 21 cases when another lane's window opened, and rerun in full inside the first window; its
+after 21 cases when another job's measurement window opened, and rerun in full inside the first window; its
 partial file is not included). Engine logs: `claims-gemma4-v0.18.0-mac-rope/logs/` (the complete
 stderr of each runner process, with the home directory in the wrapper's header lines shortened to
 `~`). Raw records: `claims-gemma4-v0.18.0-mac-rope/raw/<cases>__<model>-<file>__<backend>-<activations>.jsonl`,

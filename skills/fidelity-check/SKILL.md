@@ -140,7 +140,7 @@ Root cause, other devices, other runtimes, speed (the runner's tok/s are recorde
   FLOAT32. The record's `activation` field copies the argument string.
 - `maxNumTokens` is total context. A bundle exported with a 4096 cache cannot run `long` at 8192.
 - The hook that guards the measurement window reads command text: `python3` plus words like `probe`,
-  `export`, `bench` in the same command is denied while another lane's window is open. Run the Python
+  `export`, `bench` in the same command is denied while another job's measurement window is open. Run the Python
   scripts from a script file or outside a window; the paths in this repo's name contain `bench`.
 - Compare prompt token counts per case id before trusting a cross-file comparison (`count.txt` top lines).
   A different chat template shows up there first.

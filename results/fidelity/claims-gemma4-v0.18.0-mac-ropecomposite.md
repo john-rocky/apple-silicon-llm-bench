@@ -132,11 +132,11 @@ quantization and is not comparable.
 ## Run record
 
 JST, 2026-10-18. Exports ran outside measurement windows through `quiet_wait.py` (`nice -n 10`);
-measurement arms ran inside this lane's own windows (`quiet_hold.py`), one runner process per arm.
+measurement arms ran inside this run's own measurement windows (`quiet_hold.py`), one runner process per arm.
 
 | step | from | to | note |
 |---|---|---|---|
-| export `ropecomposite` | 00:34:23 | 00:38:44 | 261 s wall; two short windows of another lane (`aa-b1-c1-checks`, 00:35:59–00:36:47 and 00:38:11–00:38:53) overlapped it |
+| export `ropecomposite` | 00:34:23 | 00:38:44 | 261 s wall; two short measurement windows of another job (00:35:59–00:36:47 and 00:38:11–00:38:53) overlapped it |
 | export `ltdefault` | 00:39:58 | 00:43:45 | 221 s wall |
 | window A: `long` × {composite, control} × {gpu fp16, cpu} | 00:44:06 | 00:49:12 | 4 arms |
 | window B: `long` FLOAT32 × 2, `long` public fp16, `short` / `baseline` / `cross4096` composite fp16 | 00:49:21 | 00:53:05 | 6 arms |

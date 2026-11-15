@@ -4,7 +4,7 @@
   the Pixel 8a's mid-range Tensor G3. Never pool or average rows across the
   two devices (same-device-class rule); each carries its own anchors.
 - CPU topology (read on-device 2026-08-25): cpu0-5 @ 3.63 GHz (performance)
-  + cpu6-7 @ 4.74 GHz (prime). The lane's standard `taskset f0` mask lands on
+  + cpu6-7 @ 4.74 GHz (prime). The harness's standard `taskset f0` mask lands on
   cpu4-7 = 2 performance + 2 prime here (on Pixel 8a it means the 4 mid
   cores) — the mask is recorded per run in `conditions.cpuAffinity`, so rows
   stay comparable within the device either way.
@@ -22,7 +22,7 @@
   Program only, so LiteRT rows here are cpu/gpu and the NPU row stays n/a
   with that reason.
 - CPU affinity choice: **this device runs unmasked** (`BENCH_CPU_MASK=`,
-  recorded per run as `conditions.cpuAffinity: none`). The lane's default
+  recorded per run as `conditions.cpuAffinity: none`). The harness's default
   `taskset f0` was tuned on the Pixel 8a's four contiguous mid cores; here it
   spans the perf/prime cluster boundary and collapses ggml's thread sync —
   llama.cpp Qwen3-0.6B measured 15.0 tok/s under f0 vs 105.6 unmasked on the

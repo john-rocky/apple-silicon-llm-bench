@@ -2,7 +2,7 @@
 
 - SoC: Google Tensor G3 (1× Cortex-X3 + 4× A715 + 4× A510; Mali-G715 GPU)
 - RAM: 8 GB
-- First measured: 2026-08 (Android lane v1); Android version + security patch
+- First measured: 2026-08 (Android harness v1); Android version + security patch
   are recorded per run in the JSON (`device.systemVersion` /
   `device.securityPatch`) — the OS moves under a long campaign, the records
   carry the truth.
