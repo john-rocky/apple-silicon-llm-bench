@@ -1,7 +1,7 @@
 # 2026-07-28/29 iPhone protocol re-capture (Gemma-4-E2B, iPhone 17 Pro, iOS 27 24A5380h)
 
 The fairness re-capture of `methodology/CAMPAIGN-gemma4-e2b-full-recapture.md`, iPhone half.
-Harness `2026-07-28-agreed-protocol-r3`, ctx forced 2048, unplugged, one block per sitting,
+Harness `2026-07-28-protocol-r3`, ctx forced 2048, unplugged, one block per sitting,
 LiteRT-LM as the cross-block anchor, positional rule (runs 2–3 of each launch), RUNS=3 ×
 LAUNCHES=4. Spans two raw dirs (the date rolled mid-campaign):
 `2026-07-28-gemma4-e2b-protocol/` holds warmup + PROBE proof + blocks A1/A2 (console +

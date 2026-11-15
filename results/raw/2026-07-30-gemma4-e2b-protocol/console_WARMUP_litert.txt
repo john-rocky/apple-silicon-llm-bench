@@ -323,11 +323,11 @@ W0000 00:00:1785381167.396312 1724401 sampler_factory.cc:529] Metal sampler not 
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1785381167.396435 1724401 sampler_factory.cc:537] Statically linked LiteRtTopKMetalSampler C API.
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=54.89 decode_tok_s_wall=54.46 ttft_ms=746 prefill_tok_s=69.0 prefill_tok_s_wall=26.8 prompt_tokens=20 peak_mb=554 median_mb=507 median_resident_mb=668 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=54.89 decode_tok_s_wall=54.46 ttft_ms=746 prefill_tok_s=69.0 prefill_tok_s_wall=26.8 prompt_tokens=20 peak_mb=554 median_mb=507 median_resident_mb=668 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 I0000 00:00:1785381176.152484 1724156 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785381176.152540 1724156 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=59.70 decode_tok_s_wall=59.23 ttft_ms=66 prefill_tok_s=447.3 prefill_tok_s_wall=304.3 prompt_tokens=20 peak_mb=497 median_mb=496 median_resident_mb=681 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=59.70 decode_tok_s_wall=59.23 ttft_ms=66 prefill_tok_s=447.3 prefill_tok_s_wall=304.3 prompt_tokens=20 peak_mb=497 median_mb=496 median_resident_mb=681 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=2 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x702768b070, name=CpuAccelerator

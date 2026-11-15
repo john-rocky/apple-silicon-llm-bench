@@ -1087,7 +1087,7 @@ ggml_metal_library_compile_pipeline: compiling pipeline: base = 'kernel_flash_at
 ggml_metal_library_compile_pipeline: loaded kernel_flash_attn_ext_vec_f16_dk512_dv512_mask=1_sink=0_bias=0_scap=0_kvpad=0_ns10=512_ns20=512_nsg=1_nwg=32      0x1284e4700 | th_max = 1024 | th_width =   32
 ggml_metal_library_compile_pipeline: compiling pipeline: base = 'kernel_flash_attn_ext_vec_reduce', name = 'kernel_flash_attn_ext_vec_reduce_dv=512_nwg=32'
 ggml_metal_library_compile_pipeline: loaded kernel_flash_attn_ext_vec_reduce_dv=512_nwg=32      0x128520000 | th_max = 1024 | th_width =   32
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=22.18 decode_tok_s_wall=22.24 ttft_ms=354 prefill_tok_s=1929.0 prefill_tok_s_wall=275.9 prompt_tokens=536 peak_mb=224 median_mb=199 median_resident_mb=3125 ctx=2048 tokens=13936 thermal_initial=nominal thermal_final=serious harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=22.18 decode_tok_s_wall=22.24 ttft_ms=354 prefill_tok_s=1929.0 prefill_tok_s_wall=275.9 prompt_tokens=536 peak_mb=224 median_mb=199 median_resident_mb=3125 ctx=2048 tokens=13936 thermal_initial=nominal thermal_final=serious harness=2026-07-28-protocol-r3
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=5.0 joules=2970.0 avg_w=4.72 j_per_tok=0.2131 window_s=629 tokens=13936
 YARDSTICK_ALL_DONE
 /Users/runner/work/llama.cpp/llama.cpp/ggml/src/ggml-metal/ggml-metal-device.m:617: GGML_ASSERT([rsets->data count] == 0) failed

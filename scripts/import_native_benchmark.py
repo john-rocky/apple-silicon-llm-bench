@@ -41,7 +41,7 @@ from pathlib import Path
 # instead of silently defaulted.
 #
 # The value pattern is a plain `\S+` on purpose. An earlier `([-\d.]+|\?|[\w.-]+)` truncated
-# `harness=2026-07-27-agreed-protocol-r2` to `2026-07-27-`, because the numeric alternative
+# `harness=2026-07-27-protocol-r2` to `2026-07-27-`, because the numeric alternative
 # matched the leading date and won. A stamp that silently loses its suffix is worse than no
 # stamp at all — it reads as a valid, different contract. Numeric coercion happens in `num()`,
 # where a non-numeric value returns None rather than a wrong number.

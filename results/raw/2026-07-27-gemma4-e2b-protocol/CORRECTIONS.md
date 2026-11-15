@@ -1,9 +1,9 @@
 # Corrected numbers for the doc — Gemma-4-E2B iPhone, 2026-07-27
 
 Source: `results/raw/2026-07-27-gemma4-e2b-protocol/` (this directory). Every cell captured on
-one device, one session, unplugged, harness `2026-07-27-agreed-protocol-r2`, context forced to
+one device, one session, unplugged, harness `2026-07-27-protocol-r2`, context forced to
 2048. Method and caveats: `README.md` beside this file. Protocol:
-`methodology/agreed-protocol-gemma4.md`.
+`methodology/protocol-gemma4.md`.
 
 The doc itself is edited elsewhere; this file is the numbers and the
 sentences they support, not a diff against the doc.

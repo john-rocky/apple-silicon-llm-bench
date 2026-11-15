@@ -1078,13 +1078,13 @@ ggml_metal_library_compile_pipeline: compiling pipeline: base = 'kernel_unary_f3
 ggml_metal_library_compile_pipeline: loaded kernel_unary_f32_f32_4_op=100_cnt=0           0x12446ad80 | th_max = 1024 | th_width =   32
 ggml_metal_library_compile_pipeline: compiling pipeline: base = 'kernel_mul_mv_bf16_f32_4', name = 'kernel_mul_mv_bf16_f32_4_nsg=4'
 ggml_metal_library_compile_pipeline: loaded kernel_mul_mv_bf16_f32_4_nsg=4                0x12446b480 | th_max = 1024 | th_width =   32
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=38.74 decode_tok_s_wall=39.68 ttft_ms=107 prefill_tok_s=2076.1 prefill_tok_s_wall=112.6 prompt_tokens=12 peak_mb=218 median_mb=197 median_resident_mb=3121 ctx=2048 tokens=128 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=38.74 decode_tok_s_wall=39.68 ttft_ms=107 prefill_tok_s=2076.1 prefill_tok_s_wall=112.6 prompt_tokens=12 peak_mb=218 median_mb=197 median_resident_mb=3121 ctx=2048 tokens=128 harness=2026-07-27-protocol-r2
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=38.71 decode_tok_s_wall=39.64 ttft_ms=108 prefill_tok_s=1847.0 prefill_tok_s_wall=111.0 prompt_tokens=12 peak_mb=191 median_mb=191 median_resident_mb=3116 ctx=2048 tokens=128 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=38.71 decode_tok_s_wall=39.64 ttft_ms=108 prefill_tok_s=1847.0 prefill_tok_s_wall=111.0 prompt_tokens=12 peak_mb=191 median_mb=191 median_resident_mb=3116 ctx=2048 tokens=128 harness=2026-07-27-protocol-r2
 YARDSTICK_ENERGY run=2 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=38.53 decode_tok_s_wall=39.41 ttft_ms=109 prefill_tok_s=1758.5 prefill_tok_s_wall=110.4 prompt_tokens=12 peak_mb=191 median_mb=191 median_resident_mb=3116 ctx=2048 tokens=128 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=38.53 decode_tok_s_wall=39.41 ttft_ms=109 prefill_tok_s=1758.5 prefill_tok_s_wall=110.4 prompt_tokens=12 peak_mb=191 median_mb=191 median_resident_mb=3116 ctx=2048 tokens=128 harness=2026-07-27-protocol-r2
 YARDSTICK_ENERGY run=3 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=38.21 decode_tok_s_wall=39.07 ttft_ms=109 prefill_tok_s=1788.4 prefill_tok_s_wall=110.3 prompt_tokens=12 peak_mb=192 median_mb=192 median_resident_mb=3117 ctx=2048 tokens=128 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=38.21 decode_tok_s_wall=39.07 ttft_ms=109 prefill_tok_s=1788.4 prefill_tok_s_wall=110.3 prompt_tokens=12 peak_mb=192 median_mb=192 median_resident_mb=3117 ctx=2048 tokens=128 harness=2026-07-27-protocol-r2
 YARDSTICK_ENERGY run=4 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 /Users/runner/work/llama.cpp/llama.cpp/ggml/src/ggml-metal/ggml-metal-device.m:617: GGML_ASSERT([rsets->data count] == 0) failed

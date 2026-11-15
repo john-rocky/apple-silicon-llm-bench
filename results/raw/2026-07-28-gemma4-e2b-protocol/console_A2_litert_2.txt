@@ -323,15 +323,15 @@ W0000 00:00:1785232244.910147  252625 sampler_factory.cc:529] Metal sampler not 
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1785232244.910202  252625 sampler_factory.cc:537] Statically linked LiteRtTopKMetalSampler C API.
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=56.74 decode_tok_s_wall=56.30 ttft_ms=784 prefill_tok_s=67.9 prefill_tok_s_wall=25.5 prompt_tokens=20 peak_mb=554 median_mb=495 median_resident_mb=660 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=56.74 decode_tok_s_wall=56.30 ttft_ms=784 prefill_tok_s=67.9 prefill_tok_s_wall=25.5 prompt_tokens=20 peak_mb=554 median_mb=495 median_resident_mb=660 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-protocol-r3
 I0000 00:00:1785232253.507718  252332 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785232253.507753  252332 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=61.19 decode_tok_s_wall=60.71 ttft_ms=63 prefill_tok_s=455.4 prefill_tok_s_wall=315.7 prompt_tokens=20 peak_mb=496 median_mb=496 median_resident_mb=679 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=61.19 decode_tok_s_wall=60.71 ttft_ms=63 prefill_tok_s=455.4 prefill_tok_s_wall=315.7 prompt_tokens=20 peak_mb=496 median_mb=496 median_resident_mb=679 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-protocol-r3
 YARDSTICK_ENERGY run=2 state=unplugged battery_delta_pct=5.0 joules=2970.0 avg_w=390.10 j_per_tok=23.2031 window_s=8 tokens=128
 I0000 00:00:1785232261.345362  252341 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785232261.345403  252341 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=60.85 decode_tok_s_wall=60.38 ttft_ms=64 prefill_tok_s=458.6 prefill_tok_s_wall=313.7 prompt_tokens=20 peak_mb=497 median_mb=497 median_resident_mb=680 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=60.85 decode_tok_s_wall=60.38 ttft_ms=64 prefill_tok_s=458.6 prefill_tok_s_wall=313.7 prompt_tokens=20 peak_mb=497 median_mb=497 median_resident_mb=680 ctx=2048 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-28-protocol-r3
 YARDSTICK_ENERGY run=3 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x702607acb0, name=CpuAccelerator

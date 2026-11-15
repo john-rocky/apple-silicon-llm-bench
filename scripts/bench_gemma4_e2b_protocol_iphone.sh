@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Gemma-4-E2B iPhone re-capture under the protocol.
-# Spec: methodology/agreed-protocol-gemma4.md (prefill 1024 via benchmark(), decode 256,
+# Spec: methodology/protocol-gemma4.md (prefill 1024 via benchmark(), decode 256,
 # context forced to 2048, default sampler, card memory definitions, cool start, iOS Metal).
 #
 #   scripts/bench_gemma4_e2b_protocol_iphone.sh inventory     # what is on device (run FIRST)

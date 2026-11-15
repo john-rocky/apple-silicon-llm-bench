@@ -123,7 +123,7 @@ arm; the seam only opens on EOS-terminated runs.
 ```
 
 `--runs 4` with run 1 discarded and the median of runs 2–4 is the warm convention (fairness
-rule 2). Both flags exist as of harness stamp `2026-07-27-agreed-protocol-r2`, and the Mac CLI
+rule 2). Both flags exist as of harness stamp `2026-07-27-protocol-r2`, and the Mac CLI
 gained them in `-r3` (2026-07-28); a result whose
 `harnessStamp` is older, or whose `contextTokensConfigured` is null, was captured before the
 protocol was implementable and is not comparable with the card.

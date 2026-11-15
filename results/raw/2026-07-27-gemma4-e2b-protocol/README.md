@@ -1,9 +1,9 @@
 # Gemma-4-E2B iPhone re-capture — 2026-07-27, protocol run
 
 Device iPhone 17 Pro (iPhone18,1), iOS 27.0 **24A5380h**, unplugged, harness stamp
-**`2026-07-27-agreed-protocol-r2`**, context forced to **2048** on every cell.
+**`2026-07-27-protocol-r2`**, context forced to **2048** on every cell.
 Driver: `scripts/bench_gemma4_e2b_protocol_iphone.sh`.
-Protocol: `methodology/agreed-protocol-gemma4.md`.
+Protocol: `methodology/protocol-gemma4.md`.
 
 ## Two rows, two instruments — do not merge them
 

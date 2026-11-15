@@ -240,7 +240,7 @@ Verified by build, not by intention:
 | `RUNS` default 3, not 4 | the positional rule discards run 4; measuring it only spent heat |
 | Mac driver | `bench_gemma4_e2b_protocol_mac.sh` |
 | **Mac CLI protocol flags** | `--context-tokens`, `--litert-native-benchmark`, `--model-id` — **built and smoke-tested**. Before this, the Mac CLI could not express the protocol at all, so no Mac cell had a forced context and none was card-comparable |
-| Harness stamp | `2026-07-28-agreed-protocol-r3` |
+| Harness stamp | `2026-07-28-protocol-r3` |
 
 ---
 

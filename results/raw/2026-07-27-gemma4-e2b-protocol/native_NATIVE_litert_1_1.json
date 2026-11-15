@@ -9,7 +9,7 @@
     "energyJoules": null,
     "firstTokenLatencyMS": 377.1,
     "generatedTokenCount": 256,
-    "harnessStamp": "2026-07-27-agreed-protocol-r2",
+    "harnessStamp": "2026-07-27-protocol-r2",
     "initialThermalState": null,
     "loadTimeSeconds": 2.36,
     "memoryMedianMB": 661.0,

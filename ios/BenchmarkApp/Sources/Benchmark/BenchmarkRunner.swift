@@ -53,7 +53,7 @@ final class DownloadActivityScope {
 public actor BenchmarkRunner {
     /// Measurement-contract stamp written into every result. Bump on any change to what a
     /// recorded field means, so an inherited number can be told apart from a fresh one.
-    /// `2026-07-27-agreed-protocol-r2`: harness wall-clock rates, median/resident memory, and
+    /// `2026-07-27-protocol-r2`: harness wall-clock rates, median/resident memory, and
     /// a recorded + overridable context budget (`--context-tokens`) — the Gemma-4 spec.
     /// Cells before and after this stamp are not the same measurement.
     /// `-r2` closes the decode window at the last observed chunk rather than at end-of-stream;
@@ -69,7 +69,7 @@ public actor BenchmarkRunner {
     // `public` because the Mac CLI is a separate module and stamps its own rows with it. The
     // stamp exists so a result can say which harness produced it — a row that cannot carry it
     // across the module boundary defeats the purpose.
-    public static let harnessStamp = "2026-07-30-agreed-protocol-r4"
+    public static let harnessStamp = "2026-07-30-protocol-r4"
 
     public enum Phase: Sendable {
         case idle

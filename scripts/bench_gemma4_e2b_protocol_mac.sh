@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Gemma-4-E2B on Mac, under the same protocol as the iPhone capture.
-# Spec: methodology/agreed-protocol-gemma4.md. Same tasks, same forced context, same
+# Spec: methodology/protocol-gemma4.md. Same tasks, same forced context, same
 # positional rule — so an iPhone cell and a Mac cell differ by the device and nothing else.
 #
 #   scripts/bench_gemma4_e2b_protocol_mac.sh build      # build yardstick

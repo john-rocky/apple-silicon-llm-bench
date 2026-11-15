@@ -18,7 +18,7 @@ tree is that version and otherwise unmodified.
 ## 0001 — `benchmark(maxNumTokens:)`
 
 `LiteRTLM.benchmark()` is the entry point the Gemma-4 protocol specifies for prefill
-(`methodology/agreed-protocol-gemma4.md`). The protocol pins two things the stock signature
+(`methodology/protocol-gemma4.md`). The protocol pins two things the stock signature
 cannot express together:
 
 - prefill exactly 1024, decode 256 — `benchmark()` takes these;

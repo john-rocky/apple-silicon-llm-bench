@@ -329,7 +329,7 @@ I0000 00:00:1785265713.550419  549707 threadpool.cc:75] ThreadPool 'callback_thr
 I0000 00:00:1785265713.550422  549707 threadpool.cc:46] ThreadPool 'execution_thread_pool': Shutting down...
 I0000 00:00:1785265713.550426  549993 threadpool.cc:171] ThreadPool 'execution_thread_pool': Worker thread stopped.
 I0000 00:00:1785265713.550470  549707 threadpool.cc:75] ThreadPool 'execution_thread_pool': Shutdown complete.
-YARDSTICK_NATIVE_OK prefill_tokens=1024 prefill_tok_s=3896.80 decode_tokens=256 decode_tok_s=60.59 ttft_ms=279.3 init_s=1.73 context_tokens=2048 peak_mb=721 median_mb=664 median_resident_mb=696 samples=52 teardown_footprint_mb=103 harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_NATIVE_OK prefill_tokens=1024 prefill_tok_s=3896.80 decode_tokens=256 decode_tok_s=60.59 ttft_ms=279.3 init_s=1.73 context_tokens=2048 peak_mb=721 median_mb=664 median_resident_mb=696 samples=52 teardown_footprint_mb=103 harness=2026-07-28-protocol-r3
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7027cbe260, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7027cbe210, name=GPU Metal
 The app terminated with the exit code 0.

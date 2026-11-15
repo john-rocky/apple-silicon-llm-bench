@@ -85,7 +85,7 @@ W0000 00:00:1787105678.871748  682396 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.14 decode_tok_s_wall=54.71 ttft_ms=129 prefill_tok_s=226.2 prefill_tok_s_wall=155.2 prompt_tokens=20 peak_mb=510 median_mb=478 median_resident_mb=1428 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.14 decode_tok_s_wall=54.71 ttft_ms=129 prefill_tok_s=226.2 prefill_tok_s_wall=155.2 prompt_tokens=20 peak_mb=510 median_mb=478 median_resident_mb=1428 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=1 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105679.100769  678382 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105679.148988  682396 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -96,7 +96,7 @@ W0000 00:00:1787105688.105832  682396 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=56.98 decode_tok_s_wall=56.53 ttft_ms=72 prefill_tok_s=422.9 prefill_tok_s_wall=279.3 prompt_tokens=20 peak_mb=487 median_mb=479 median_resident_mb=1445 ctx=672 tokens=128 thermal_initial=nominal thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=56.98 decode_tok_s_wall=56.53 ttft_ms=72 prefill_tok_s=422.9 prefill_tok_s_wall=279.3 prompt_tokens=20 peak_mb=487 median_mb=479 median_resident_mb=1445 ctx=672 tokens=128 thermal_initial=nominal thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=2 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105688.327692  678381 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105688.377180  682396 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -107,7 +107,7 @@ W0000 00:00:1787105697.226980  682396 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=53.38 decode_tok_s_wall=52.96 ttft_ms=83 prefill_tok_s=414.3 prefill_tok_s_wall=240.8 prompt_tokens=20 peak_mb=490 median_mb=480 median_resident_mb=1413 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=53.38 decode_tok_s_wall=52.96 ttft_ms=83 prefill_tok_s=414.3 prefill_tok_s_wall=240.8 prompt_tokens=20 peak_mb=490 median_mb=480 median_resident_mb=1413 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=3 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105697.443316  678383 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105697.490767  682396 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -118,7 +118,7 @@ W0000 00:00:1787105706.721194  682396 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=51.77 decode_tok_s_wall=51.36 ttft_ms=71 prefill_tok_s=430.8 prefill_tok_s_wall=280.5 prompt_tokens=20 peak_mb=490 median_mb=481 median_resident_mb=1413 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=51.77 decode_tok_s_wall=51.36 ttft_ms=71 prefill_tok_s=430.8 prefill_tok_s_wall=280.5 prompt_tokens=20 peak_mb=490 median_mb=481 median_resident_mb=1413 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=4 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x701813f570, name=CpuAccelerator
@@ -211,7 +211,7 @@ W0000 00:00:1787105966.945172  688457 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=51.80 decode_tok_s_wall=51.40 ttft_ms=144 prefill_tok_s=186.4 prefill_tok_s_wall=138.7 prompt_tokens=20 peak_mb=518 median_mb=492 median_resident_mb=904 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=51.80 decode_tok_s_wall=51.40 ttft_ms=144 prefill_tok_s=186.4 prefill_tok_s_wall=138.7 prompt_tokens=20 peak_mb=518 median_mb=492 median_resident_mb=904 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=1 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105967.164849  688177 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105967.213088  688457 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -222,7 +222,7 @@ W0000 00:00:1787105976.532814  688457 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=50.95 decode_tok_s_wall=50.56 ttft_ms=75 prefill_tok_s=424.5 prefill_tok_s_wall=268.3 prompt_tokens=20 peak_mb=505 median_mb=495 median_resident_mb=868 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=50.95 decode_tok_s_wall=50.56 ttft_ms=75 prefill_tok_s=424.5 prefill_tok_s_wall=268.3 prompt_tokens=20 peak_mb=505 median_mb=495 median_resident_mb=868 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=2 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105976.747436  688180 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105976.797516  688457 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -233,7 +233,7 @@ W0000 00:00:1787105986.817349  688457 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=48.29 decode_tok_s_wall=47.92 ttft_ms=141 prefill_tok_s=408.1 prefill_tok_s_wall=141.7 prompt_tokens=20 peak_mb=507 median_mb=496 median_resident_mb=810 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=48.29 decode_tok_s_wall=47.92 ttft_ms=141 prefill_tok_s=408.1 prefill_tok_s_wall=141.7 prompt_tokens=20 peak_mb=507 median_mb=496 median_resident_mb=810 ctx=672 tokens=128 thermal_initial=fair thermal_final=fair harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=3 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105987.029879  688183 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787105987.079567  688457 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -244,7 +244,7 @@ W0000 00:00:1787105998.215157  688457 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=46.09 decode_tok_s_wall=45.73 ttft_ms=76 prefill_tok_s=411.1 prefill_tok_s_wall=263.8 prompt_tokens=20 peak_mb=506 median_mb=496 median_resident_mb=810 ctx=672 tokens=128 thermal_initial=fair thermal_final=serious harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=46.09 decode_tok_s_wall=45.73 ttft_ms=76 prefill_tok_s=411.1 prefill_tok_s_wall=263.8 prompt_tokens=20 peak_mb=506 median_mb=496 median_resident_mb=810 ctx=672 tokens=128 thermal_initial=fair thermal_final=serious harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=4 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x701d311040, name=CpuAccelerator
@@ -341,7 +341,7 @@ W0000 00:00:1787110753.024267  757497 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.37 decode_tok_s_wall=54.94 ttft_ms=149 prefill_tok_s=179.0 prefill_tok_s_wall=134.0 prompt_tokens=20 peak_mb=500 median_mb=477 median_resident_mb=920 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.37 decode_tok_s_wall=54.94 ttft_ms=149 prefill_tok_s=179.0 prefill_tok_s_wall=134.0 prompt_tokens=20 peak_mb=500 median_mb=477 median_resident_mb=920 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787110753.247894  757244 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787110753.301799  757497 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -352,7 +352,7 @@ W0000 00:00:1787110762.760337  757497 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=47.34 decode_tok_s_wall=46.97 ttft_ms=84 prefill_tok_s=378.7 prefill_tok_s_wall=237.1 prompt_tokens=20 peak_mb=487 median_mb=470 median_resident_mb=940 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=47.34 decode_tok_s_wall=46.97 ttft_ms=84 prefill_tok_s=378.7 prefill_tok_s_wall=237.1 prompt_tokens=20 peak_mb=487 median_mb=470 median_resident_mb=940 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=2 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787110762.989896  757244 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787110763.042819  757497 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -363,7 +363,7 @@ W0000 00:00:1787110771.876225  757497 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=51.90 decode_tok_s_wall=51.49 ttft_ms=78 prefill_tok_s=385.4 prefill_tok_s_wall=255.5 prompt_tokens=20 peak_mb=480 median_mb=477 median_resident_mb=946 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=51.90 decode_tok_s_wall=51.49 ttft_ms=78 prefill_tok_s=385.4 prefill_tok_s_wall=255.5 prompt_tokens=20 peak_mb=480 median_mb=477 median_resident_mb=946 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=3 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787110772.103729  757244 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1787110772.153675  757497 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
@@ -374,7 +374,7 @@ W0000 00:00:1787110782.253150  757497 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=49.50 decode_tok_s_wall=49.11 ttft_ms=72 prefill_tok_s=409.2 prefill_tok_s_wall=276.2 prompt_tokens=20 peak_mb=481 median_mb=472 median_resident_mb=941 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=49.50 decode_tok_s_wall=49.11 ttft_ms=72 prefill_tok_s=409.2 prefill_tok_s_wall=276.2 prompt_tokens=20 peak_mb=481 median_mb=472 median_resident_mb=941 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=4 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7018373930, name=CpuAccelerator

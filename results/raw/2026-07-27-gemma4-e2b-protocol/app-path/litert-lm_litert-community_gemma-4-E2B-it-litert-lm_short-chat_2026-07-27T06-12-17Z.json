@@ -29,7 +29,7 @@
     "finalThermalState" : "nominal",
     "firstTokenLatencyMS" : 63,
     "generatedTokenCount" : 128,
-    "harnessStamp" : "2026-07-27-agreed-protocol-r2",
+    "harnessStamp" : "2026-07-27-protocol-r2",
     "initialThermalState" : "nominal",
     "interTokenLatencyP50MS" : 16.392946243286133,
     "interTokenLatencyP95MS" : 16.991019248962402,

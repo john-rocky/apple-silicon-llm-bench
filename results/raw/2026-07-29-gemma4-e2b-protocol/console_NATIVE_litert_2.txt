@@ -328,7 +328,7 @@ I0000 00:00:1785265406.158456  547542 threadpool.cc:171] ThreadPool 'callback_th
 I0000 00:00:1785265406.158476  547252 threadpool.cc:75] ThreadPool 'callback_thread_pool': Shutdown complete.
 I0000 00:00:1785265406.158479  547252 threadpool.cc:46] ThreadPool 'execution_thread_pool': Shutting down...
 I0000 00:00:1785265406.158482  547534 threadpool.cc:171] ThreadPool 'execution_thread_pool': Worker thread stopped.
-YARDSTICK_NATIVE_OK prefill_tokens=1024 prefill_tok_s=3860.93 decode_tokens=256 decode_tok_s=60.55 ttft_ms=281.7 init_s=1.73 context_tokens=2048 peak_mb=720 median_mb=664 median_resident_mb=695 samples=52 teardown_footprint_mb=103 harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_NATIVE_OK prefill_tokens=1024 prefill_tok_s=3860.93 decode_tokens=256 decode_tok_s=60.55 ttft_ms=281.7 init_s=1.73 context_tokens=2048 peak_mb=720 median_mb=664 median_resident_mb=695 samples=52 teardown_footprint_mb=103 harness=2026-07-28-protocol-r3
 I0000 00:00:1785265406.158526  547252 threadpool.cc:75] ThreadPool 'execution_thread_pool': Shutdown complete.
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x70277a5fe0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x70277a5f90, name=GPU Metal

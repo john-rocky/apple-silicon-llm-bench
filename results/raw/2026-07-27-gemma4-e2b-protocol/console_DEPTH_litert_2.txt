@@ -324,22 +324,22 @@ W0000 00:00:1785121810.861908  720265 sampler_factory.cc:529] Metal sampler not 
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1785121810.862033  720265 sampler_factory.cc:537] Statically linked LiteRtTopKMetalSampler C API.
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.42 decode_tok_s_wall=55.21 ttft_ms=1079 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=778 median_mb=729 median_resident_mb=805 ctx=2048 tokens=256 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=55.42 decode_tok_s_wall=55.21 ttft_ms=1079 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=778 median_mb=729 median_resident_mb=805 ctx=2048 tokens=256 harness=2026-07-27-protocol-r2
 I0000 00:00:1785121828.706299  719954 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785121828.706337  719954 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_WARN context_tokens_forced=2048 below_estimate=2523
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=56.94 decode_tok_s_wall=56.72 ttft_ms=339 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=731 median_mb=730 median_resident_mb=847 ctx=2048 tokens=256 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=56.94 decode_tok_s_wall=56.72 ttft_ms=339 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=731 median_mb=730 median_resident_mb=847 ctx=2048 tokens=256 harness=2026-07-27-protocol-r2
 I0000 00:00:1785121846.197022  719944 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785121846.197063  719944 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 YARDSTICK_ENERGY run=2 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_WARN context_tokens_forced=2048 below_estimate=2523
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=54.62 decode_tok_s_wall=54.41 ttft_ms=353 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=732 median_mb=732 median_resident_mb=849 ctx=2048 tokens=256 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=54.62 decode_tok_s_wall=54.41 ttft_ms=353 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=732 median_mb=732 median_resident_mb=849 ctx=2048 tokens=256 harness=2026-07-27-protocol-r2
 I0000 00:00:1785121865.807438  719956 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785121865.807474  719956 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 YARDSTICK_ENERGY run=3 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_WARN context_tokens_forced=2048 below_estimate=2523
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=43.67 decode_tok_s_wall=43.50 ttft_ms=416 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=734 median_mb=733 median_resident_mb=850 ctx=2048 tokens=256 harness=2026-07-27-agreed-protocol-r2
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=43.67 decode_tok_s_wall=43.50 ttft_ms=416 prefill_tok_s=0.0 prefill_tok_s_wall=0.0 prompt_tokens=0 peak_mb=734 median_mb=733 median_resident_mb=850 ctx=2048 tokens=256 harness=2026-07-27-protocol-r2
 YARDSTICK_ENERGY run=4 state=unplugged battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x70239d72a0, name=CpuAccelerator

@@ -181,7 +181,7 @@ text(CX1 + 0.028, 0.204,
 
 # ---------------------------------------------------------------- footnotes
 text(0.035, 0.163,
-     "Method  ·  one session, one device, unplugged, harness 2026-07-27-agreed-protocol-r2. "
+     "Method  ·  one session, one device, unplugged, harness 2026-07-27-protocol-r2. "
      "Context forced to 2,048 tokens on every cell — but a forced context is a ceiling, not "
      "an occupancy:",
      size=11.5, color=DIM)

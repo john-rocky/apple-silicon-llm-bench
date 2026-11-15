@@ -1,6 +1,6 @@
 # 2026-07-28 Mac protocol capture (Gemma-4-E2B, M4 Max)
 
-First protocol-compliant Mac capture: ctx forced 2048, harness `2026-07-28-agreed-protocol-r3`,
+First protocol-compliant Mac capture: ctx forced 2048, harness `2026-07-28-protocol-r3`,
 xcodebuild yardstick (mlx-swift-lm pinned 60bd0d78 — same loader as the iPhone app), arms
 litert / mlx(PTQ) / optiq / llamacpp, n=8 warm per chat/depth cell (positional rule).
 

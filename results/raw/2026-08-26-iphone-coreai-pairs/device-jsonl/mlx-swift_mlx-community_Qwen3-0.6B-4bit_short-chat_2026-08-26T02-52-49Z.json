@@ -25,7 +25,7 @@
     "finalThermalState" : "fair",
     "firstTokenLatencyMS" : 43,
     "generatedTokenCount" : 128,
-    "harnessStamp" : "2026-07-30-agreed-protocol-r4",
+    "harnessStamp" : "2026-07-30-protocol-r4",
     "initialThermalState" : "fair",
     "interTokenLatencyP50MS" : 5.75411319732666,
     "interTokenLatencyP95MS" : 6.054043769836426,

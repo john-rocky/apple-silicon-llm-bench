@@ -80,7 +80,7 @@ struct YardstickApp {
         // The protocol has a context length as an independent axis (2048 for Gemma-4).
         // Until 2026-07-28 this CLI had no way to express it, so every Mac cell ran at whatever
         // `prepareContext` derived from the prompt — which is deviation #2 of
-        // methodology/agreed-protocol-gemma4.md, fixed on iOS months earlier and still open
+        // methodology/protocol-gemma4.md, fixed on iOS months earlier and still open
         // here. A Mac number captured without this flag is not comparable with an iPhone one.
         var contextTokens: Int? = nil
         var nativeBenchmark: (prefill: Int, decode: Int)? = nil

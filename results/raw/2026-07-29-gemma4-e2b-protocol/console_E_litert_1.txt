@@ -346,7 +346,7 @@ I0000 00:00:1785313679.776015 1018874 model_data_processor_factory.cc:427] Creat
 W0000 00:00:1785313679.776034 1018874 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 I0000 00:00:1785313735.705757 1018878 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1785313735.705825 1018878 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=38.14 decode_tok_s_wall=38.17 ttft_ms=901 prefill_tok_s=876.8 prefill_tok_s_wall=501.5 prompt_tokens=900 peak_mb=542 median_mb=507 median_resident_mb=712 ctx=2048 tokens=23676 thermal_initial=nominal thermal_final=serious harness=2026-07-28-agreed-protocol-r3
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=38.14 decode_tok_s_wall=38.17 ttft_ms=901 prefill_tok_s=876.8 prefill_tok_s_wall=501.5 prompt_tokens=900 peak_mb=542 median_mb=507 median_resident_mb=712 ctx=2048 tokens=23676 thermal_initial=nominal thermal_final=serious harness=2026-07-28-protocol-r3
 YARDSTICK_ENERGY run=1 state=unplugged battery_delta_pct=5.0 joules=2970.0 avg_w=4.78 j_per_tok=0.1254 window_s=622 tokens=23676
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x70263f8000, name=CpuAccelerator

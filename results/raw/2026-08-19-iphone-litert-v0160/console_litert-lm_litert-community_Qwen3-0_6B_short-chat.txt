@@ -64,7 +64,7 @@ W0000 00:00:1787105159.533495  674945 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=122.51 decode_tok_s_wall=121.55 ttft_ms=404 prefill_tok_s=186.0 prefill_tok_s_wall=49.6 prompt_tokens=20 peak_mb=687 median_mb=686 median_resident_mb=1079 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=1 cold=1 decode_tok_s=122.51 decode_tok_s_wall=121.55 ttft_ms=404 prefill_tok_s=186.0 prefill_tok_s_wall=49.6 prompt_tokens=20 peak_mb=687 median_mb=686 median_resident_mb=1079 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=1 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105159.872028  674945 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
@@ -74,7 +74,7 @@ W0000 00:00:1787105163.047583  674945 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=121.52 decode_tok_s_wall=120.57 ttft_ms=147 prefill_tok_s=185.3 prefill_tok_s_wall=136.2 prompt_tokens=20 peak_mb=483 median_mb=456 median_resident_mb=851 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=2 cold=0 decode_tok_s=121.52 decode_tok_s_wall=120.57 ttft_ms=147 prefill_tok_s=185.3 prefill_tok_s_wall=136.2 prompt_tokens=20 peak_mb=483 median_mb=456 median_resident_mb=851 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=2 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105163.377272  674945 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
@@ -84,7 +84,7 @@ W0000 00:00:1787105166.570406  674945 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=121.70 decode_tok_s_wall=120.74 ttft_ms=150 prefill_tok_s=185.7 prefill_tok_s_wall=133.6 prompt_tokens=20 peak_mb=477 median_mb=457 median_resident_mb=852 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=3 cold=0 decode_tok_s=121.70 decode_tok_s_wall=120.74 ttft_ms=150 prefill_tok_s=185.7 prefill_tok_s_wall=133.6 prompt_tokens=20 peak_mb=477 median_mb=457 median_resident_mb=852 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=3 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 W0000 00:00:1787105166.893851  674945 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1763]
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
@@ -94,7 +94,7 @@ W0000 00:00:1787105170.139231  674945 tasks.cc:672] Failed to get decode profile
 └ ERROR: [./third_party/odml/litert/litert/cc/litert_profiler.h:91]
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:547
-YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=120.35 decode_tok_s_wall=119.41 ttft_ms=153 prefill_tok_s=185.1 prefill_tok_s_wall=130.7 prompt_tokens=20 peak_mb=477 median_mb=461 median_resident_mb=856 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-agreed-protocol-r4
+YARDSTICK_RUN_OK run=4 cold=0 decode_tok_s=120.35 decode_tok_s_wall=119.41 ttft_ms=153 prefill_tok_s=185.1 prefill_tok_s_wall=130.7 prompt_tokens=20 peak_mb=477 median_mb=461 median_resident_mb=856 ctx=672 tokens=128 thermal_initial=nominal thermal_final=nominal harness=2026-07-30-protocol-r4
 YARDSTICK_ENERGY run=4 state=charging battery_delta_pct=0.0 joules=nil (run too short, or plugged in/charging)
 YARDSTICK_ALL_DONE
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x700fa143c0, name=CpuAccelerator
