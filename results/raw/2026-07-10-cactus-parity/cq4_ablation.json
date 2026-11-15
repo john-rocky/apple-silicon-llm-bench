@@ -1,5 +1,5 @@
 {
-  "bundle": "/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/gemma-4-e2b-it-cq4",
+  "bundle": "<work>/cactus/weights/gemma-4-e2b-it-cq4",
   "rendered_prompt": "<bos><|turn>user\nHi<turn|>\n<|turn>model\n",
   "harness_ablations": [
     {

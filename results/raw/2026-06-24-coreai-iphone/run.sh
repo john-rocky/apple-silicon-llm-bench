@@ -1,7 +1,7 @@
 #!/bin/bash
 DEV=A6F3E849-1947-5202-9AD1-9C881CA58EEF; APP=com.iosllmbenchmark.benchmarkapp
-EX=~/code/coreai/coreai-models/exports; APP_PATH=/Users/majimadaisuke/bench-dd/Build/Products/Release-iphoneos/BenchmarkApp.app
-RES=/Users/majimadaisuke/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/runs.txt
+EX=~/code/coreai/coreai-models/exports; APP_PATH=/Users/USER/bench-dd/Build/Products/Release-iphoneos/BenchmarkApp.app
+RES=/Users/USER/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/runs.txt
 : > $RES
 echo "=== install updated app ===" | tee -a $RES
 xcrun devicectl device install app --device $DEV "$APP_PATH" 2>&1 | tail -1 | tee -a $RES; sleep 3

@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -133,7 +133,7 @@ INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x794aa184b0, name=CpuAccelerator
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1788872367.315694 125923267 executor_settings_base.cc:376] Deleted 1 stale cache files.
-I0000 00:00:1788872367.315718 125923267 litert_compiled_model_executor_utils.cc:524] Setting serialization dir: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a
+I0000 00:00:1788872367.315718 125923267 litert_compiled_model_executor_utils.cc:524] Setting serialization dir: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a
 INFO: [compiled_model.cc:805] Flatbuffer model initialized directly from incoming litert model.
 I0000 00:00:1788872367.324847 125923267 delegate_webgpu.cc:214] Create WebGPU environment (use_low_power=false, enable_host_mapped_pointer=true)
 I0000 00:00:1788872367.335684 125923267 environment.cc:522] Selected adapter: Apple M4 Max, arch=metal-3, vendor=apple, backend=Metal, adapterType=Integrated GPU
@@ -203,6 +203,6 @@ I0000 00:00:1788872381.077502 125923267 threadpool.cc:75] ThreadPool 'callback_t
 I0000 00:00:1788872381.099626 125923267 delegate_webgpu.cc:273] Destroyed the WebGPU environment.
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x794aa184b0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x794aa18460, name=GPU WebGPU
-RESULT steady_tps=117.99 overall_tps=117.95 tokens=1500 engine_decode_tps=None out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_q8_v0140_r1.json
+RESULT steady_tps=117.99 overall_tps=117.95 tokens=1500 engine_decode_tps=None out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_q8_v0140_r1.json
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x79481cbed0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x79481cbe80, name=GPU WebGPU

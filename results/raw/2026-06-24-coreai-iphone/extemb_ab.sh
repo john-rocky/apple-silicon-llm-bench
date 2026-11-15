@@ -3,7 +3,7 @@ DEV=A6F3E849-1947-5202-9AD1-9C881CA58EEF; APP=com.iosllmbenchmark.benchmarkapp
 OUT=~/code/litertlm-convert/out
 DEST="Documents/models/litert-lm/litert-local__Qwen3-1.7B-int4"
 RES=~/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/extemb-isolation
-SCR="/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/8778f82f-8fdb-4a64-97ed-838c42f8a72c/scratchpad"
+SCR="<work>"
 mkdir -p "$RES" "$SCR/q17_off" "$SCR/q17_on"
 cp "$OUT/qwen3-1.7b-boctav4-c4k/model.litertlm"        "$SCR/q17_off/model.litertlm"
 cp "$OUT/qwen3-1.7b-boctav4-c4k-EXTEMB/model.litertlm" "$SCR/q17_on/model.litertlm"

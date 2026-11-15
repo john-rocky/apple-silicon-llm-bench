@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -125,10 +125,10 @@ INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x7678e14ff0, name=G
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x7678e14fa0, name=CpuAccelerator
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
-I0000 00:00:1788872222.873652 125907008 executor_settings_base.cc:397] File does not exist: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm_1788871848_1833451520_mldrift_program_cache.bin Cleaning stale caches.
+I0000 00:00:1788872222.873652 125907008 executor_settings_base.cc:397] File does not exist: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm_1788871848_1833451520_mldrift_program_cache.bin Cleaning stale caches.
 I0000 00:00:1788872222.873728 125907008 executor_settings_base.cc:408] Deleted 0 stale cache files.
 I0000 00:00:1788872222.873760 125907008 executor_settings_base.cc:351] Deleted 0 stale cache files.
-I0000 00:00:1788872222.873764 125907008 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a
+I0000 00:00:1788872222.873764 125907008 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a
 INFO: [compiled_model.cc:797] Flatbuffer model initialized directly from incoming litert model.
 I0000 00:00:1788872222.881987 125907008 delegate_webgpu.cc:219] Create WebGPU environment with device substr: 
 I0000 00:00:1788872222.892819 125907008 environment.cc:526] Found 1 adapters
@@ -192,6 +192,6 @@ I0000 00:00:1788872237.516548 125907008 threadpool.cc:75] ThreadPool 'callback_t
 I0000 00:00:1788872237.516583 125907008 threadpool.cc:46] ThreadPool 'execution_thread_pool': Shutting down...
 I0000 00:00:1788872237.516593 125907254 threadpool.cc:171] ThreadPool 'execution_thread_pool': Worker thread stopped.
 I0000 00:00:1788872237.516651 125907008 threadpool.cc:75] ThreadPool 'execution_thread_pool': Shutdown complete.
-RESULT steady_tps=113.51 overall_tps=113.54 tokens=1500 engine_decode_tps=None out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_q8_v0131_r1.json
+RESULT steady_tps=113.51 overall_tps=113.54 tokens=1500 engine_decode_tps=None out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_q8_v0131_r1.json
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7678e14190, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7678e15220, name=GPU WebGPU

@@ -388,4 +388,4 @@
   mlx q100 OK pred=58 gold=58 tok=845 (32s)
 == mlx: 95/100 = 95.0%  rescued 26  still-capped 2  (3586s)
 
-wrote /Users/majimadaisuke/code/coreai/_muse_gsm8k_results.json
+wrote /Users/USER/code/coreai/_muse_gsm8k_results.json

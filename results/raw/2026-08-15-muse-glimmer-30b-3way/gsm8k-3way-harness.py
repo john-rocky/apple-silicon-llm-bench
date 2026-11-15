@@ -164,7 +164,7 @@ def main():
     ap.add_argument("--rescue-budget", type=int, default=2048,
                     help="pass-2 budget, for questions that hit pass 1's")
     ap.add_argument("--show", action="store_true", help="print each generation (probe runs)")
-    ap.add_argument("--out", default="/Users/majimadaisuke/code/coreai/_muse_gsm8k_results.json")
+    ap.add_argument("--out", default="/Users/USER/code/coreai/_muse_gsm8k_results.json")
     args = ap.parse_args()
 
     for path, what in ((CA_RUNNER, "llm-runner"), (ET_SOLO, "solo_runner")):

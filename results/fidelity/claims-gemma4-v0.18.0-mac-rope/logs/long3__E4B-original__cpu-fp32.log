@@ -1,7 +1,7 @@
 == run_arm long3__E4B-original__cpu-fp32 start 2026-10-15 08:47:56 JST
 cmd: runner ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it.litertlm cpu fp32 cases/long3.json 
 model -> ~/.cache/huggingface/hub/models--litert-community--gemma-4-E4B-it-litert-lm/snapshots/2eee7ac325f20eb8c9ac1d0e972f7c84663062da/gemma-4-E4B-it.litertlm
--rw-------@ 1 majimadaisuke  staff  3659530240 Sep 21 03:11 ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it.litertlm
+-rw-------@ 1 USER  staff  3659530240 Sep 21 03:11 ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it.litertlm
 runner sha256 f411da9573f5d143155c8c86c3f7360a92b4f4b63086eb8b2d9216e1ca068a35
 W0000 00:00:1792021676.946050 82736599 litert_lm_loader.cc:391] Section not found: SP_Tokenizer
 INFO: [environment.cc:36] Creating LiteRT environment with options

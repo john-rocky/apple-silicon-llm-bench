@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 DEV=A6F3E849-1947-5202-9AD1-9C881CA58EEF; APP=com.iosllmbenchmark.benchmarkapp
-STG="/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/8778f82f-8fdb-4a64-97ed-838c42f8a72c/scratchpad/mlx_llama3b"
+STG="<work>/mlx_llama3b"
 DEST="Documents/models/mlx/mlx-community__Llama-3.2-3B-Instruct-4bit"
 RES=~/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/extemb-isolation
 echo "=== side-load MLX Llama-3.2-3B-4bit ($(du -sh $STG | awk '{print $1}')) ==="

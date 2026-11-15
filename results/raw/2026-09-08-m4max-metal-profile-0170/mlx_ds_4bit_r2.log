@@ -3,4 +3,4 @@ PID 89483
 DECODE_START
 
 DECODE_END
-RESULT steady_tps=309.65 overall_tps=310.09 tokens=1632 mlx_generation_tps=310.28131245801814 out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/mlx_ds_4bit_r2.json
+RESULT steady_tps=309.65 overall_tps=310.09 tokens=1632 mlx_generation_tps=310.28131245801814 out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/mlx_ds_4bit_r2.json

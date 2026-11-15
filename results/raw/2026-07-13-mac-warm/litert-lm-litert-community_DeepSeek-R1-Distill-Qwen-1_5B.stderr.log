@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: /var/folders/pn/y692nwgx6_s29gl7m57dhtkh0000gn/T/
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--DeepSeek-R1-Distill-Qwen-1.5B/snapshots/2f8b8ee90d8f93b15305b699e8772b277d074a9a/DeepSeek-R1-Distill-Qwen-1.5B_multi-prefill-seq_q8_ekv4096.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -185,27 +185,27 @@ I0000 00:00:1783949606.395373 15077605 model_data_processor_factory.cc:412] Crea
 I0000 00:00:1783949606.396465 15077605 threadpool.cc:96] ThreadPool 'execution_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 I0000 00:00:1783949606.577239 15077606 threadpool.cc:96] ThreadPool 'callback_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 W0000 00:00:1783949606.579573 15077606 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
-└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
+└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1783949606.579616 15077606 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
 yardstick: run=1 cold=1 TTFT=199ms decode=119.34tok/s peakMB=1208
 yardstick: run 2/5 task=short-chat runtime=litert-lm model=litert-community/DeepSeek-R1-Distill-Qwen-1.5B
 I0000 00:00:1783949612.329250 15077318 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
 yardstick: run=2 cold=0 TTFT=345ms decode=119.65tok/s peakMB=1638
 yardstick: run 3/5 task=short-chat runtime=litert-lm model=litert-community/DeepSeek-R1-Distill-Qwen-1.5B
 I0000 00:00:1783949618.444207 15077317 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
 yardstick: run=3 cold=0 TTFT=346ms decode=118.92tok/s peakMB=1865
 yardstick: run 4/5 task=short-chat runtime=litert-lm model=litert-community/DeepSeek-R1-Distill-Qwen-1.5B
 I0000 00:00:1783949624.549083 15077605 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
 yardstick: run=4 cold=0 TTFT=338ms decode=119.06tok/s peakMB=1684
 yardstick: run 5/5 task=short-chat runtime=litert-lm model=litert-community/DeepSeek-R1-Distill-Qwen-1.5B
 I0000 00:00:1783949630.624884 15080520 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_DeepSeek-R1-Distill-Qwen-1_5B.jsonl
 yardstick: run=5 cold=0 TTFT=337ms decode=118.86tok/s peakMB=1686
 I0000 00:00:1783949636.708406 15077605 threadpool.cc:46] ThreadPool 'callback_thread_pool': Shutting down...
 I0000 00:00:1783949636.708438 15077613 threadpool.cc:171] ThreadPool 'callback_thread_pool': Worker thread stopped.

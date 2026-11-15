@@ -8,7 +8,7 @@
   "max_tokens": 1024,
   "cot_style": "answer-is",
   "elapsed_seconds": 247.2,
-  "path": "/Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74//gemma-4-E2B-it.litertlm",
+  "path": "/Users/USER/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74//gemma-4-E2B-it.litertlm",
   "cactus_backend": null,
   "rows": [
     {

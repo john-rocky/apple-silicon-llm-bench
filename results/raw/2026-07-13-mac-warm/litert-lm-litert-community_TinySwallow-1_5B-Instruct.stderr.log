@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: /var/folders/pn/y692nwgx6_s29gl7m57dhtkh0000gn/T/
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--TinySwallow-1.5B-Instruct/snapshots/cf67d4d779c4602a7fdf43331c21897bc63ee67f/TinySwallow-1.5B-Instruct.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--TinySwallow-1.5B-Instruct/snapshots/cf67d4d779c4602a7fdf43331c21897bc63ee67f/TinySwallow-1.5B-Instruct.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -201,7 +201,7 @@ lora_rank: 0
 cache_dir: /var/folders/pn/y692nwgx6_s29gl7m57dhtkh0000gn/T/
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--TinySwallow-1.5B-Instruct/snapshots/cf67d4d779c4602a7fdf43331c21897bc63ee67f/TinySwallow-1.5B-Instruct.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--TinySwallow-1.5B-Instruct/snapshots/cf67d4d779c4602a7fdf43331c21897bc63ee67f/TinySwallow-1.5B-Instruct.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -280,27 +280,27 @@ I0000 00:00:1783949699.880331 15086292 model_data_processor_factory.cc:412] Crea
 I0000 00:00:1783949699.881325 15086292 threadpool.cc:96] ThreadPool 'execution_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 I0000 00:00:1783949700.023562 15086440 threadpool.cc:96] ThreadPool 'callback_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 W0000 00:00:1783949700.025707 15086440 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
-└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
+└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1783949700.025729 15086440 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
 yardstick: run=1 cold=1 TTFT=159ms decode=120.44tok/s peakMB=1145
 yardstick: run 2/5 task=short-chat runtime=litert-lm model=litert-community/TinySwallow-1.5B-Instruct
 I0000 00:00:1783949702.173963 15086293 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
 yardstick: run=2 cold=0 TTFT=423ms decode=120.61tok/s peakMB=1634
 yardstick: run 3/5 task=short-chat runtime=litert-lm model=litert-community/TinySwallow-1.5B-Instruct
 I0000 00:00:1783949704.725555 15086439 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
 yardstick: run=3 cold=0 TTFT=415ms decode=120.44tok/s peakMB=1652
 yardstick: run 4/5 task=short-chat runtime=litert-lm model=litert-community/TinySwallow-1.5B-Instruct
 I0000 00:00:1783949707.281492 15086294 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
 yardstick: run=4 cold=0 TTFT=403ms decode=120.62tok/s peakMB=1652
 yardstick: run 5/5 task=short-chat runtime=litert-lm model=litert-community/TinySwallow-1.5B-Instruct
 I0000 00:00:1783949709.823799 15086305 model_data_processor_factory.cc:412] Creating GenericDataProcessor
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_TinySwallow-1_5B-Instruct.jsonl
 yardstick: run=5 cold=0 TTFT=406ms decode=120.57tok/s peakMB=1656
 I0000 00:00:1783949712.363754 15086294 threadpool.cc:46] ThreadPool 'callback_thread_pool': Shutting down...
 I0000 00:00:1783949712.363783 15086445 threadpool.cc:171] ThreadPool 'callback_thread_pool': Worker thread stopped.

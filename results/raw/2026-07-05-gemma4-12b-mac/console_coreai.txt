@@ -30,4 +30,4 @@
 Prompt:     23.197 tokens/sec
 Generation: 24.767 tokens/sec
 ==================================================
-Wrote: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/coreai_gemma4_12b.json
+Wrote: <work>/coreai_gemma4_12b.json

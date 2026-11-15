@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -142,10 +142,10 @@ INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x7c5af77b60, name=G
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x7c5af77de0, name=CpuAccelerator
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
-I0000 00:00:1783938926.893815 14599637 executor_settings_base.cc:397] File does not exist: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm_1783938851_497664000_mldrift_program_cache.bin Cleaning stale caches.
+I0000 00:00:1783938926.893815 14599637 executor_settings_base.cc:397] File does not exist: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm_1783938851_497664000_mldrift_program_cache.bin Cleaning stale caches.
 I0000 00:00:1783938926.893880 14599637 executor_settings_base.cc:408] Deleted 0 stale cache files.
 I0000 00:00:1783938926.893912 14599637 executor_settings_base.cc:351] Deleted 0 stale cache files.
-I0000 00:00:1783938926.893917 14599637 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716
+I0000 00:00:1783938926.893917 14599637 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716
 INFO: [compiled_model.cc:797] Flatbuffer model initialized directly from incoming litert model.
 I0000 00:00:1783938926.895578 14599637 delegate_webgpu.cc:219] Create WebGPU environment with device substr: 
 I0000 00:00:1783938926.902672 14599637 environment.cc:526] Found 1 adapters
@@ -202,7 +202,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-0.6B/snapshots/3adacb36657dbe0119addf143782ed973c680716//qwen3_0_6b_mixed_int4.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -280,7 +280,7 @@ I0000 00:00:1783938927.542458 14599637 model_data_processor_factory.cc:408] Crea
 I0000 00:00:1783938927.543573 14599637 threadpool.cc:96] ThreadPool 'execution_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 I0000 00:00:1783938927.595197 14600359 threadpool.cc:96] ThreadPool 'callback_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 W0000 00:00:1783938927.699910 14600359 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
-└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/code/litert-mac-verify/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
+└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/code/litert-mac-verify/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
 === Source Location Trace: === 
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1783938927.699938 14600359 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.

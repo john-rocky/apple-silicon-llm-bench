@@ -151,7 +151,7 @@ lora_rank: 0
 cache_dir: /var/folders/pn/y692nwgx6_s29gl7m57dhtkh0000gn/T/
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74/gemma-4-E2B-it.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74/gemma-4-E2B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -340,7 +340,7 @@ lora_rank: 0
 cache_dir: /var/folders/pn/y692nwgx6_s29gl7m57dhtkh0000gn/T/
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74/gemma-4-E2B-it.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/6664aee5fc114b486e2fec56a9f73c0146e79e74/gemma-4-E2B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -434,31 +434,31 @@ W0000 00:00:1783949552.315580 15072176 mel_filterbank.cc:137] Missing 10 bands  
 I0000 00:00:1783949552.316174 15072176 threadpool.cc:96] ThreadPool 'execution_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 I0000 00:00:1783949552.473431 15072326 threadpool.cc:96] ThreadPool 'callback_thread_pool': Created a worker thread since all 0 worker threads are (supposed to be) busy.
 W0000 00:00:1783949552.475692 15072326 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
-└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/majimadaisuke/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
+└ Could not load shared library libLiteRtTopKWebGpuSampler.dylib: dlopen(libLiteRtTopKWebGpuSampler.dylib, 0x0005): tried: 'libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OSlibLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), '/System/Volumes/Preboot/Cryptexes/OS/usr/lib/swift/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/ios-llm-benchmark/.build/out/Products/Release/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v27.1.5194.15.dQuc6i/Metal.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/USER/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx/libLiteRtTopKWebGpuSampler.dylib' (no such file), '/usr/lib/libLiteRtTopKWebGpuSampler.dylib' (no such file, not in dyld cache), 'libLiteRtTopKWebGpuSampler.dylib' (no such file).
 === Source Location Trace: ===
 ./third_party/odml/litert/litert/cc/litert_macros.h:573
 I0000 00:00:1783949552.475722 15072326 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
 yardstick: run=1 cold=1 TTFT=337ms decode=133.00tok/s peakMB=673
 yardstick: run 2/5 task=short-chat runtime=litert-lm model=litert-community/gemma-4-E2B-it-litert-lm
 I0000 00:00:1783949556.871161 15072175 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1783949556.871181 15072175 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
 yardstick: run=2 cold=0 TTFT=32ms decode=156.30tok/s peakMB=663
 yardstick: run 3/5 task=short-chat runtime=litert-lm model=litert-community/gemma-4-E2B-it-litert-lm
 I0000 00:00:1783949560.732754 15072273 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1783949560.732817 15072273 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
 yardstick: run=3 cold=0 TTFT=38ms decode=155.50tok/s peakMB=663
 yardstick: run 4/5 task=short-chat runtime=litert-lm model=litert-community/gemma-4-E2B-it-litert-lm
 I0000 00:00:1783949564.608991 15072176 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1783949564.609022 15072176 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
 yardstick: run=4 cold=0 TTFT=37ms decode=155.56tok/s peakMB=664
 yardstick: run 5/5 task=short-chat runtime=litert-lm model=litert-community/gemma-4-E2B-it-litert-lm
 I0000 00:00:1783949568.527224 15072176 model_data_processor_factory.cc:427] Creating Gemma4DataProcessor
 W0000 00:00:1783949568.527271 15072176 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
-yardstick: appended to /Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
+yardstick: appended to /Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-13-mac-warm/litert-lm-litert-community_gemma-4-E2B-it-litert-lm.jsonl
 yardstick: run=5 cold=0 TTFT=37ms decode=156.34tok/s peakMB=664
 I0000 00:00:1783949572.398098 15072273 threadpool.cc:46] ThreadPool 'callback_thread_pool': Shutting down...
 I0000 00:00:1783949572.398147 15072329 threadpool.cc:171] ThreadPool 'callback_thread_pool': Worker thread stopped.

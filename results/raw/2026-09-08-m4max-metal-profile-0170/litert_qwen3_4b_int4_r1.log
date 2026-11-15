@@ -64,6 +64,6 @@ E0000 00:00:1788871070.881790 125805920 engine.cc:1104] Failed to get benchmark 
 third_party/odml/litert_lm/runtime/core/session_advanced.cc:413
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7c45931320, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7c45931380, name=GPU WebGPU
-RESULT steady_tps=113.52 overall_tps=113.58 tokens=1200 engine_decode_tps=None out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_qwen3_4b_int4_r1.json
+RESULT steady_tps=113.52 overall_tps=113.58 tokens=1200 engine_decode_tps=None out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_qwen3_4b_int4_r1.json
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7c4dbd0ea0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x7c4dbd0e40, name=GPU WebGPU

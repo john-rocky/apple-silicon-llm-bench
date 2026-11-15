@@ -1,4 +1,4 @@
-tee: /Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/drive.log: No such file or directory
+tee: /Users/USER/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/drive.log: No such file or directory
 
 === short-chat OFF x8 [15:38:55]
 
@@ -48,9 +48,9 @@ tee: /Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-08-04-li
 
 === pull results [16:29:03]
 File received from Device
-/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/pulled
+/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/pulled
 
-=== done — raw in /Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/pulled [16:29:05]
+=== done — raw in /Users/USER/code/apple-silicon-llm-bench/results/raw/2026-08-04-litert-0150-iphone/pulled [16:29:05]
 litert-lm_litert-community_gemma-4-E2B-it-litert-lm_long-context-1024_2026-08-04T06-55-04Z.json
 litert-lm_litert-community_gemma-4-E2B-it-litert-lm_long-context-1024_2026-08-04T06-58-03Z.json
 litert-lm_litert-community_gemma-4-E2B-it-litert-lm_long-context-1024_2026-08-04T07-01-03Z.json

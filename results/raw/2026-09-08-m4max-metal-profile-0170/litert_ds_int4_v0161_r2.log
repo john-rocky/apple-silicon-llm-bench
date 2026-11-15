@@ -65,6 +65,6 @@ third_party/odml/litert_lm/runtime/core/session_advanced.cc:409
 I0000 00:00:1788872900.442136 125977974 delegate_webgpu.cc:320] Destroyed the WebGPU environment.
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x766286caa0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x766286c820, name=GPU WebGPU
-RESULT steady_tps=132.4 overall_tps=132.14 tokens=1131 engine_decode_tps=None out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_int4_v0161_r2.json
+RESULT steady_tps=132.4 overall_tps=132.14 tokens=1131 engine_decode_tps=None out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_ds_int4_v0161_r2.json
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x766286fcf0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x766286fa70, name=GPU WebGPU

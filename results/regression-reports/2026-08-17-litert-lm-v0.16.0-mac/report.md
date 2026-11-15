@@ -1,7 +1,7 @@
 # Regression report — litert-lm v0.16.0-mac (2026-08-17)
 
 ```
-/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/majimadaisuke/Downloads/ios-llm-benchmark/scripts/regression_diff.py device --baseline campaign:flat --candidate campaign:2026-08-17-mac-litert-v0160 --anchors matrices/anchors.cells --no-rebuild --engine-under-test litert-lm --json-out /Users/majimadaisuke/Downloads/ios-llm-benchmark/results/regression-reports/2026-08-17-litert-lm-v0.16.0-mac/verdicts.json
+/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/USER/Downloads/ios-llm-benchmark/scripts/regression_diff.py device --baseline campaign:flat --candidate campaign:2026-08-17-mac-litert-v0160 --anchors matrices/anchors.cells --no-rebuild --engine-under-test litert-lm --json-out /Users/USER/Downloads/ios-llm-benchmark/results/regression-reports/2026-08-17-litert-lm-v0.16.0-mac/verdicts.json
 ```
 
 ```
@@ -26,6 +26,6 @@ INFO-ONLY        Mac16,9 litert-lm litert-community/gemma-4-E2B-it-litert-lm sho
 UNRELIABLE       Mac16,9 mlx-swift mlx-community/Qwen3-0.6B-4bit short-chat warm  11.5 (n=4, spread 61%) -> 10.0 (n=2, spread 0%)  -13.0%  [spread > 5% — throw out]
 INFO-ONLY        Mac16,9 mlx-swift mlx-community/Qwen3-0.6B-4bit short-chat cold  613.0 (n=1, spread 0%) -> 35.0 (n=1, spread 0%)  -94.3%  [cross-session — do not pool; anchor unavailable (arm not under test (litert-lm) — raw cross-session is the drift signal); use a same-session A/B for a verdict]
 
-wrote /Users/majimadaisuke/Downloads/ios-llm-benchmark/results/regression-reports/2026-08-17-litert-lm-v0.16.0-mac/verdicts.json (14 verdicts)
+wrote /Users/USER/Downloads/ios-llm-benchmark/results/regression-reports/2026-08-17-litert-lm-v0.16.0-mac/verdicts.json (14 verdicts)
 
 ```

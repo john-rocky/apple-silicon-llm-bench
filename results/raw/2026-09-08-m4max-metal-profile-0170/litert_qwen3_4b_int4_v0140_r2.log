@@ -56,7 +56,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e/qwen3_4b_mixed_int4.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e/qwen3_4b_mixed_int4.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -145,7 +145,7 @@ INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x795d00cb90, name=CpuAccelerator
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1788872668.129776 125955680 executor_settings_base.cc:376] Deleted 1 stale cache files.
-I0000 00:00:1788872668.129813 125955680 litert_compiled_model_executor_utils.cc:524] Setting serialization dir: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e
+I0000 00:00:1788872668.129813 125955680 litert_compiled_model_executor_utils.cc:524] Setting serialization dir: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e
 INFO: [compiled_model.cc:805] Flatbuffer model initialized directly from incoming litert model.
 I0000 00:00:1788872668.131886 125955680 delegate_webgpu.cc:214] Create WebGPU environment (use_low_power=false, enable_host_mapped_pointer=true)
 I0000 00:00:1788872668.142541 125955680 environment.cc:522] Selected adapter: Apple M4 Max, arch=metal-3, vendor=apple, backend=Metal, adapterType=Integrated GPU
@@ -202,7 +202,7 @@ lora_rank: 0
 cache_dir: 
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /Users/majimadaisuke/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e/qwen3_4b_mixed_int4.litertlm
+model_assets: model_path: /Users/USER/.cache/huggingface/hub/models--litert-community--Qwen3-4B/snapshots/84cc5a35c9c65cd18fcd65bb1f3a7d77a4acfe6e/qwen3_4b_mixed_int4.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -297,6 +297,6 @@ I0000 00:00:1788872681.469342 125955680 threadpool.cc:75] ThreadPool 'callback_t
 I0000 00:00:1788872681.484424 125955680 delegate_webgpu.cc:273] Destroyed the WebGPU environment.
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x795d00cb90, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x795d00caa0, name=GPU WebGPU
-RESULT steady_tps=109.39 overall_tps=109.44 tokens=1200 engine_decode_tps=None out=/Users/majimadaisuke/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_qwen3_4b_int4_v0140_r2.json
+RESULT steady_tps=109.39 overall_tps=109.44 tokens=1200 engine_decode_tps=None out=/Users/USER/code/apple-silicon-llm-bench/results/raw/2026-09-08-m4max-metal-profile-0170/litert_qwen3_4b_int4_v0140_r2.json
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x79650d57c0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x79650d5770, name=GPU WebGPU

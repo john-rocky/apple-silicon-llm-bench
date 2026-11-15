@@ -1,7 +1,7 @@
 == run_arm cross4096__E2B-rope2048__gpu-fp16 start 2026-10-15 07:55:35 JST
 cmd: runner ~/models/litertlm/rope3913/fp16/gemma-4-E2B-it-rope2048.litertlm gpu fp16 cases/cross4096.json 
 model -> ~/models/litertlm/rope3913/gemma-4-E2B-it-rope2048.litertlm
--rw-r--r--@ 1 majimadaisuke  staff  2588557312 Oct 15 07:08 ~/models/litertlm/rope3913/fp16/gemma-4-E2B-it-rope2048.litertlm
+-rw-r--r--@ 1 USER  staff  2588557312 Oct 15 07:08 ~/models/litertlm/rope3913/fp16/gemma-4-E2B-it-rope2048.litertlm
 runner sha256 f411da9573f5d143155c8c86c3f7360a92b4f4b63086eb8b2d9216e1ca068a35
 W0000 00:00:1792018535.403175 81991980 litert_lm_loader.cc:391] Section not found: SP_Tokenizer
 INFO: [environment.cc:36] Creating LiteRT environment with options

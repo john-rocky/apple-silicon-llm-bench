@@ -1,7 +1,7 @@
 == run_arm baseline__E2B-original__gpu-fp32 start 2026-10-15 08:16:50 JST
 cmd: runner ~/models/litertlm/rope3913/fp32/gemma-4-E2B-it.litertlm gpu fp32 cases/baseline.json 
 model -> ~/.cache/huggingface/hub/models--litert-community--gemma-4-E2B-it-litert-lm/snapshots/b3ca0d2f076785a8f4b2219ddbd2bdb99954eae1/gemma-4-E2B-it.litertlm
--rw-r--r--@ 1 majimadaisuke  staff  2588147712 Sep  3 21:51 ~/models/litertlm/rope3913/fp32/gemma-4-E2B-it.litertlm
+-rw-r--r--@ 1 USER  staff  2588147712 Sep  3 21:51 ~/models/litertlm/rope3913/fp32/gemma-4-E2B-it.litertlm
 runner sha256 f411da9573f5d143155c8c86c3f7360a92b4f4b63086eb8b2d9216e1ca068a35
 W0000 00:00:1792019810.254427 82352241 litert_lm_loader.cc:391] Section not found: SP_Tokenizer
 INFO: [environment.cc:36] Creating LiteRT environment with options

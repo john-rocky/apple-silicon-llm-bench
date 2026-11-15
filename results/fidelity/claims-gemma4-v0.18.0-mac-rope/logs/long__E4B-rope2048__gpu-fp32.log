@@ -1,7 +1,7 @@
 == run_arm long__E4B-rope2048__gpu-fp32 start 2026-10-15 08:30:15 JST
 cmd: runner ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it-rope2048.litertlm gpu fp32 cases/long.json 
 model -> ~/models/litertlm/rope3913/gemma-4-E4B-it-rope2048.litertlm
--rw-r--r--@ 1 majimadaisuke  staff  3659988992 Oct 15 07:08 ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it-rope2048.litertlm
+-rw-r--r--@ 1 USER  staff  3659988992 Oct 15 07:08 ~/models/litertlm/rope3913/fp32/gemma-4-E4B-it-rope2048.litertlm
 runner sha256 f411da9573f5d143155c8c86c3f7360a92b4f4b63086eb8b2d9216e1ca068a35
 W0000 00:00:1792020615.850624 82502253 litert_lm_loader.cc:391] Section not found: SP_Tokenizer
 INFO: [environment.cc:36] Creating LiteRT environment with options

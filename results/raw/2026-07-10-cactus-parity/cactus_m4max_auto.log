@@ -1,7 +1,7 @@
-Model:                /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/gemma-4-e2b-it-cq4
-Bundle:               /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/gemma-4-e2b-it-cq4
-Transcription model:  /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/parakeet-tdt-0.6b-v3-cq4
-Transcription bundle: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/parakeet-tdt-0.6b-v3-cq4
+Model:                <work>/cactus/weights/gemma-4-e2b-it-cq4
+Bundle:               <work>/cactus/weights/gemma-4-e2b-it-cq4
+Transcription model:  <work>/cactus/weights/parakeet-tdt-0.6b-v3-cq4
+Transcription bundle: <work>/cactus/weights/parakeet-tdt-0.6b-v3-cq4
 Backend:              
 [ 18%] Built target cactus_kernels
 [ 37%] Built target cactus_graph
@@ -80,7 +80,7 @@ Backend:
 
 
 Fetching Cactus-Compute/gemma-4-E2B-it [cq4] @ v2.0.1
-Ready at /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/gemma-4-e2b-it-cq4
+Ready at <work>/cactus/weights/gemma-4-e2b-it-cq4
 
 Fetching Cactus-Compute/parakeet-tdt-0.6b-v3 [cq4] @ v2.0
-Ready at /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/parakeet-tdt-0.6b-v3-cq4
+Ready at <work>/cactus/weights/parakeet-tdt-0.6b-v3-cq4

@@ -83,10 +83,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -168,7 +168,7 @@ WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1783261433.296952 12025912 executor_settings_base.cc:351] Deleted 1 stale cache files.
-I0000 00:00:1783261433.296964 12025912 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/Library/Caches
+I0000 00:00:1783261433.296964 12025912 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/Library/Caches
 INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=957, num_signatures=2
 INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=0, num_tensors=4808, num_inputs=100, num_outputs=96, num_ops=4026
 INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=1, num_tensors=4714, num_inputs=100, num_outputs=97, num_ops=3924
@@ -234,10 +234,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -397,10 +397,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -482,7 +482,7 @@ WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1783261452.027182 12027601 executor_settings_base.cc:351] Deleted 1 stale cache files.
-I0000 00:00:1783261452.027194 12027601 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/Library/Caches
+I0000 00:00:1783261452.027194 12027601 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/Library/Caches
 INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=957, num_signatures=2
 INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=0, num_tensors=4808, num_inputs=100, num_outputs=96, num_ops=4026
 INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=1, num_tensors=4714, num_inputs=100, num_outputs=97, num_ops=3924
@@ -548,10 +548,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -711,10 +711,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -796,7 +796,7 @@ WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1783261467.470313 12028936 executor_settings_base.cc:351] Deleted 1 stale cache files.
-I0000 00:00:1783261467.470325 12028936 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/Library/Caches
+I0000 00:00:1783261467.470325 12028936 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/Library/Caches
 INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=957, num_signatures=2
 INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=0, num_tensors=4808, num_inputs=100, num_outputs=96, num_ops=4026
 INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=1, num_tensors=4714, num_inputs=100, num_outputs=97, num_ops=3924
@@ -862,10 +862,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -1025,10 +1025,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -1110,7 +1110,7 @@ WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1783261482.934969 12030218 executor_settings_base.cc:351] Deleted 1 stale cache files.
-I0000 00:00:1783261482.934981 12030218 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/Library/Caches
+I0000 00:00:1783261482.934981 12030218 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/Library/Caches
 INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=957, num_signatures=2
 INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=0, num_tensors=4808, num_inputs=100, num_outputs=96, num_ops=4026
 INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=1, num_tensors=4714, num_inputs=100, num_outputs=97, num_ops=3924
@@ -1176,10 +1176,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -1339,10 +1339,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []
@@ -1424,7 +1424,7 @@ WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered
 INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
 INFO: [cpu_registry.cc:42] CPU accelerator registered.
 I0000 00:00:1783261498.357663 12031546 executor_settings_base.cc:351] Deleted 1 stale cache files.
-I0000 00:00:1783261498.357673 12031546 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/majimadaisuke/Library/Caches
+I0000 00:00:1783261498.357673 12031546 litert_compiled_model_executor_utils.cc:518] Setting serialization dir: /Users/USER/Library/Caches
 INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=957, num_signatures=2
 INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=0, num_tensors=4808, num_inputs=100, num_outputs=96, num_ops=4026
 INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=1, num_tensors=4714, num_inputs=100, num_outputs=97, num_ops=3924
@@ -1490,10 +1490,10 @@ max_tokens: 640
 activation_data_type: FLOAT32
 max_num_images: 0
 lora_rank: 0
-cache_dir: /Users/majimadaisuke/Library/Caches
+cache_dir: /Users/USER/Library/Caches
 cache_file: Not set
 litert_dispatch_lib_dir: Not set
-model_assets: model_path: /private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/46e8f40d-08fa-44e4-ab69-84aa18a534f3/scratchpad/gemma-4-12B-it.litertlm
+model_assets: model_path: <work>/gemma-4-12B-it.litertlm
 fake_weights_mode: FAKE_WEIGHTS_NONE
 
 advanced_settings: prefill_batch_sizes: []

@@ -3,7 +3,7 @@ DEV=A6F3E849-1947-5202-9AD1-9C881CA58EEF; APP=com.iosllmbenchmark.benchmarkapp
 PHI=~/code/litertlm-convert/out/_litertcomm/phi-4-mini/Phi-4-mini-instruct_multi-prefill-seq_q8_ekv4096.litertlm
 DEST="Documents/models/litert-lm/litert-local__Qwen3-1.7B-int4"   # reuse an existing litert id's dir
 RES=~/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/extemb-isolation
-SCR="/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/8778f82f-8fdb-4a64-97ed-838c42f8a72c/scratchpad/phi"
+SCR="<work>/phi"
 SUM="$RES/PHI_REBENCH.txt"; : > "$SUM"
 echo "Phi model size: $(ls -lh $PHI | awk '{print $5}')" | tee -a "$SUM"
 mkdir -p "$SCR"; cp "$PHI" "$SCR/model.litertlm"

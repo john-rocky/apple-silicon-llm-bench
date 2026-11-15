@@ -2,7 +2,7 @@
 DEV=A6F3E849-1947-5202-9AD1-9C881CA58EEF; APP=com.iosllmbenchmark.benchmarkapp
 RES=~/Downloads/ios-llm-benchmark/results/raw/2026-06-24-coreai-iphone/extemb-isolation
 OUT=~/code/litertlm-convert/out
-SCR="/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/8778f82f-8fdb-4a64-97ed-838c42f8a72c/scratchpad/llama3b"
+SCR="<work>/llama3b"
 SUM="$RES/ENTITLEMENT_RETEST.txt"; : > "$SUM"
 # side-load Llama-3B extemb (Ministral already on device)
 mkdir -p "$SCR"; cp "$OUT/llama32-3b-official-extemb/model.litertlm" "$SCR/model.litertlm"

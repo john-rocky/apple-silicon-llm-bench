@@ -1083,7 +1083,7 @@ W0000 00:00:1785804943.406027 58267496 tasks.cc:672] Failed to get decode profil
   q 100/100 OK pred=58 gold=58 gen=465 (3s)
   gen-tokens: median 362 mean 434 max 1279  decode median 155.5 tok/s
 == litert-gemma4-e2b-pip015gpu-off: 89/100 = 89.0%   (285s)
-   wrote /Users/majimadaisuke/Downloads/ios-llm-benchmark/results/quality/gsm8k_litert-gemma4-e2b-pip015gpu-off.json
+   wrote /Users/USER/Downloads/ios-llm-benchmark/results/quality/gsm8k_litert-gemma4-e2b-pip015gpu-off.json
 === arm: litert-gemma4-e2b-pip015gpu-thinking ===
 W0000 00:00:1785804943.407460 58267451 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
 W0000 00:00:1785804943.430269 58267496 tasks.cc:490] Failed to get prefill profile summary: INVALID_ARGUMENT: ERROR: [third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1704]
@@ -2087,7 +2087,7 @@ W0000 00:00:1785805666.443605 58267496 tasks.cc:672] Failed to get decode profil
   q 100/100 OK pred=58 gold=58 gen=876 (8s)
   gen-tokens: median 812 mean 887 max 2048  decode median 123.2 tok/s
 == litert-gemma4-e2b-pip015gpu-thinking: 92/100 = 92.0%   (723s)
-   wrote /Users/majimadaisuke/Downloads/ios-llm-benchmark/results/quality/gsm8k_litert-gemma4-e2b-pip015gpu-thinking.json
+   wrote /Users/USER/Downloads/ios-llm-benchmark/results/quality/gsm8k_litert-gemma4-e2b-pip015gpu-thinking.json
 I0000 00:00:1785805666.463218 58267451 delegate_webgpu.cc:320] Destroyed the WebGPU environment.
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x103bc6dc0, name=CpuAccelerator
 INFO: [accelerator_registry.cc:43] DestroyAccelerator: ptr=0x103bc3820, name=GPU WebGPU

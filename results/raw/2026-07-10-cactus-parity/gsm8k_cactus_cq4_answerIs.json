@@ -8,7 +8,7 @@
   "max_tokens": 1024,
   "cot_style": "answer-is",
   "elapsed_seconds": 405.8,
-  "path": "/private/tmp/claude-501/-Users-majimadaisuke-Downloads-ios-llm-benchmark/3bc1c707-b155-4c17-a5c3-ae27ebc228ee/scratchpad/cactus/weights/gemma-4-e2b-it-cq4",
+  "path": "<work>/cactus/weights/gemma-4-e2b-it-cq4",
   "cactus_backend": "metal",
   "rows": [
     {
