@@ -28,8 +28,8 @@ needs the column named in the same breath.
 Three of its assumptions did not survive measurement. They are listed first because they
 change what can be *claimed*, not just what the digits are.
 
-**1. Forcing the context does not fix a footprint at that context.** The sheet (via the
-handoff) treated `--context-tokens 2048` as the thing that would make our memory figure
+**1. Forcing the context does not fix a footprint at that context.** An earlier plan
+treated `--context-tokens 2048` as the thing that would make our memory figure
 comparable to a "2048-context" number. It does not, and our own data shows why: at the *same*
 forced 2048, short-chat reads **497 MB** and deep-context **732 MB** — 235 MB apart, tracking
 the tokens actually used (128 vs ~1,354), not the budget.

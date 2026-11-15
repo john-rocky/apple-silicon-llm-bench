@@ -16,7 +16,7 @@ line: holder: ew1-qwen3-p8a-r2a (pid 19887, since 2026-10-15 07:34:46)
 line: 1. as6-r3-pixel8a  litert-samples-ae  ~45 min  queued 2026-10-15 07:14:08 (keeper waiting)
 line: 2. dash-0180-pixel8a-p8  edge-llm-bench-55  ~45 min  queued 2026-10-15 06:23:11 (keeper waiting)
 line: 3. C1-pixel8a-ortgenai-B  edge-llm-bench-46  ~45 min  queued 2026-10-15 07:36:35 (keeper waiting)
-line: 4. g3913-p8a-r2a  (the supervising session)  ~45 min  queued 2026-10-15 07:40:26 (no keeper waiting)
+line: 4. g3913-p8a-r2a  ~45 min  queued 2026-10-15 07:40:26 (no keeper waiting)
 keeper pid 48425 waiting in line for ~/code/litertlm-convert/community_accel_work/s2_npu_sweep/.device_hold.pixel8a as g3913-p8a-r2a 2026-10-15 07:41:50
 HOLD_SEEN 2026-10-15 09:20:35: acquired 09:20:34, skip_after 10:00:34, run_end 10:04:34, released by 10:05:34
 gpu at 2026-10-15 09:20:35: mali (the ready gate's GPU level: gpu_cooling)

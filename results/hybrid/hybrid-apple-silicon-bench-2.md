@@ -4,7 +4,7 @@ Measured 2026-09-05 on the same machine and binaries as `nemotron3-nano-apple-si
 
 ## Hardware and software
 
-- Apple M4 Max, 128 GiB unified memory, macOS 27.0 (26A5416b). Mains power. No other GPU workload during measurements (sibling sessions confirmed idle; downloads only).
+- Apple M4 Max, 128 GiB unified memory, macOS 27.0 (26A5416b). Mains power. No other GPU workload during measurements (downloads only).
 - llama.cpp: Homebrew build **8680**, commit **15f786e65**, backends `BLAS,MTL`, 12 threads (unchanged from 09-04).
 - MLX: `mlx` **0.32.2**, `mlx-lm` **0.31.3** (PyPI latest on 2026-09-05), Python 3.12.13 in a fresh venv.
 - Protocol: identical to 09-04. llama.cpp = `llama-bench -m <gguf> -p 512 -n 256 -ngl 99 -fa 1 -r 3` (mean ± std), a second identical run under `/usr/bin/time -l` for max RSS, and `llama-completion --temp 0 -n 160` for a coherence sample. MLX = `python -m mlx_lm generate --model <m> --prompt "$(cat prompt.txt)" --max-tokens 256 --temp 0`, three separate processes, median of the `Generation:` tok/s; the prompt is the same 101-word chat prompt as 09-04 (132-145 tokens after each model's chat template).
@@ -29,7 +29,7 @@ Measured 2026-09-05 on the same machine and binaries as `nemotron3-nano-apple-si
 | Falcon-H1 7B-Instruct | llama.cpp Metal (b8680) | Q4_K_M, tiiuae rev 058c8c8f, 4.28 GiB | pp512 **686.96 ± 1.16** | tg256 **52.91 ± 0.40** | 4.89 GB max RSS | RSS run 683.65 ± 2.10 / 53.03 ± 0.93; llama-completion eval 54.53; coherent |
 | Falcon-H1 7B-Instruct | MLX mlx-lm 0.31.3 | mlx-community 4-bit rev 3a0e8b0b | NOT MEASURED (download throttled) | | | |
 
-Rows from 09-04 that belong in the same table: Nemotron-3 Nano 30B-A3B (86.19 / 159.7), Nemotron-3 Nano 4B (88.38 / 176.8), Granite-4.0-H Tiny 7B-A1B (117.31 / 202.2). Apple Core AI rows from the HF cards (measured earlier by the user, not today): Nemotron-3 Nano 4B int8-head M4 Max 85.2, iPhone 17 Pro 16.0; Granite-4.0-H 1B int8lin M4 Max 136.5, iPhone 17 Pro 30.2-31.3 (int8hu 35.4-37.1); Granite-4.0-H 350M fp16 M4 Max 191.1.
+Rows from 09-04 that belong in the same table: Nemotron-3 Nano 30B-A3B (86.19 / 159.7), Nemotron-3 Nano 4B (88.38 / 176.8), Granite-4.0-H Tiny 7B-A1B (117.31 / 202.2). Apple Core AI rows from the HF cards (measured earlier, not today): Nemotron-3 Nano 4B int8-head M4 Max 85.2, iPhone 17 Pro 16.0; Granite-4.0-H 1B int8lin M4 Max 136.5, iPhone 17 Pro 30.2-31.3 (int8hu 35.4-37.1); Granite-4.0-H 350M fp16 M4 Max 191.1.
 
 ## How to read the columns
 

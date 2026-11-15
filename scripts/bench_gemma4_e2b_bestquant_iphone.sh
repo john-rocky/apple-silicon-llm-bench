@@ -34,7 +34,7 @@ set -euo pipefail
 UDID="${1:-A6F3E849-1947-5202-9AD1-9C881CA58EEF}"   # DaisukeのiPhone (iPhone 17 Pro)
 # com.iosllmbenchmark.benchmarkapp (the project's canonical id) is NOT registerable — "not
 # available", taken by another team; automatic signing cannot mint a profile for it, CLI and
-# Xcode GUI alike (methodology/next-session-brief.md). Build AND drive with an override id
+# Xcode GUI alike. Build AND drive with an override id
 # that MFN25KNUGJ can register.
 BUNDLE_ID="${YARDSTICK_BUNDLE_ID:-com.daisukemajima.llmbench}"; TEAM="${YARDSTICK_TEAM:-MFN25KNUGJ}"; DEVICE="iphone17pro"   # override both for your own Apple ID / App ID (see methodology/comprehensive-bench-runbook.md)
 REPO="$(cd "$(dirname "$0")/.." && pwd)"

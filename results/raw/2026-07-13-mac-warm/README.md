@@ -34,7 +34,7 @@ diff, no measurement code change) and locally staged litert-local dirs.
 | Ministral-3-3B | (June: mlx can't load) | 91.7 / 92.0 | — / 92.8 | ✓ |
 | Phi-4-mini | 169.0 / 169.1 | 42.0 / 64.9 (q8) | 167.4 / 67.7 | warm ≈ June −4%; cold 42 = first-run cache build |
 
-## Headline observations (LOCAL — not published; user review pending)
+## Headline observations (LOCAL — not published)
 
 1. **The June Mac table reproduces within ±5% on today's OS/harness** for every cell with the
    same artifact — Mac numbers were already steady-state; no cold-bias correction needed there.

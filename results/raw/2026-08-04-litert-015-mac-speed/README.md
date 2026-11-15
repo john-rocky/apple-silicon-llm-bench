@@ -33,7 +33,7 @@ Notes:
   instruments agree at the protocol band, which supports quoting the delta.
 - The 8/4 quick A/B's "0.14 p256 unstable (475→2290)" did **not** reproduce under n=8
   (0.14 p256 spread 3.7%); treat that as a cold/contended first-run artifact.
-- Energy re-verification trigger (handoff item 3: "only if speed moved a lot") **not met**:
+- Energy re-verification trigger ("only if speed moved a lot") **not met**:
   decode +3% and no change at the energy protocol's sustained-decode operating point.
 - Cross-check with the same-day released-artifact quality pair (thinking axis):
   OFF 89.0 / ON 92.0 GSM8K n=100 on litert-lm-api 0.15.0 GPU (Python API instrument),

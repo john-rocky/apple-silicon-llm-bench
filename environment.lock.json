@@ -176,6 +176,6 @@
   "external_instruments_not_yet_in_repo": {
     "coreai-llm-runner": "parity_gsm8k.py --which coreai shells to COREAI_RUNNER (default ~/code/coreai/coreai-models/.build/release/llm-runner); gemma-4 PLE bundles additionally need the unpublished COREAI_STATIC_INPUTS engine patch — best-effort until Apple publishes it",
     "coreai-thinking-tokenizer": "--which coreai --thinking renders prompts with the HF tokenizer at ~/code/litertlm-convert/src_models/gemma-4-E2B-it-qat-mobile-transformers",
-    "cactus-checkout": "--which cactus needs a cactus checkout with a built engine dylib (methodology/cactus-arm-session.md)"
+    "cactus-checkout": "--which cactus needs a cactus checkout with a built engine dylib"
   }
 }

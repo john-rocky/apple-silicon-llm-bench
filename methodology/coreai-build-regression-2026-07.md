@@ -69,7 +69,7 @@ produced today. Only the AOT **compile** stage is broken.
 `odiec` is the on-device-inference compiler layer that ships with the OS, not with the
 toolchain — consistent with both toolchain versions failing identically after an OS beta update.
 
-## Unblock paths (for a later session)
+## Unblock paths
 
 1. Next macOS 27 beta / MetalToolchain drop → retry
    `scripts/export_coreai_qwen3.sh 0_6b Qwen/Qwen3-0.6B 4096 h18p` (exports are pinned on disk;

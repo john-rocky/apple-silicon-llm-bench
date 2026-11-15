@@ -1,4 +1,4 @@
-# DEBUG SESSION BRIEF — llama.cpp adapter empty-output bug (written 2026-07-19)
+# Debug notes — llama.cpp adapter empty-output bug (written 2026-07-19)
 
 > **RESOLVED 2026-07-19 (same day).** Root cause: the adapter's applyChatTemplate fell
 > back to the BARE prompt on every task — llama_chat_apply_template pattern-matches
@@ -11,9 +11,8 @@
 > full chain + validation in `results/raw/2026-07-18-gemma4-bestquant/SUMMARY.txt`
 > ("llama.cpp adapter empty-output bug — ROOT-CAUSED + FIXED"). Kept for methodology.
 
-Self-contained. Launch the session in `~/code/apple-silicon-llm-bench`. The bug blocks two
-cells of the published Gemma-4-E2B table (README + the written report), both annotated ⓕ —
-fixing it and filling those cells is the deliverable.
+The bug blocked two cells of the published Gemma-4-E2B table (README + the written report),
+both annotated ⓕ.
 
 ## The symptom — exactly what is known
 
@@ -106,9 +105,8 @@ A cheap discriminator: `LLAMA_TAG=<older> ./scripts/bootstrap.sh` (delete
 2. `long-context-1024` decodes ~256 tokens (prefill throughput stays ~1,000 tok/s).
 3. `energy --sustain-seconds 600` completes and writes a record (unplugged, ≤90% battery,
    Auto-Lock Never — see `scripts/bench_energy_iphone_gemma_part2.sh` header).
-4. Fill the two ⓕ cells and update the annotations in: README Gemma table,
-   `results/raw/2026-07-18-gemma4-bestquant/SUMMARY.txt`, and the send-out reports
-   `~/Downloads/meeting/gemma4-e2b-post-v2-{ja,en}.md`. Import new captures via the
+4. Fill the two ⓕ cells and update the annotations in: README Gemma table and
+   `results/raw/2026-07-18-gemma4-bestquant/SUMMARY.txt`. Import new captures via the
    flat-convention pattern in `results/raw/2026-07-18-gemma4-bestquant/import_to_flat.py`.
 5. Commit with the root cause in the message (this repo's convention: the finding IS the
    commit message).
@@ -123,5 +121,5 @@ A cheap discriminator: `LLAMA_TAG=<older> ./scripts/bootstrap.sh` (delete
   CoreMLLLM.swiftmodule that flips `canImport` back on) — build with a fresh DD.
 - The canonical bundle id is unregisterable; use `YARDSTICK_BUNDLE_ID`/`YARDSTICK_TEAM`
   overrides (scripts already support them).
-- Background driver scripts can be killed by the session harness — `nohup` + a DONE
+- Background driver scripts can be killed — `nohup` + a DONE
   marker file survived where plain background tasks were killed 3×.

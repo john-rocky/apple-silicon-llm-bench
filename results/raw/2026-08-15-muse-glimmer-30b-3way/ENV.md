@@ -7,13 +7,13 @@ in this directory. Pins are mirrored in `environment.lock.json` (capture
 ## Hardware / OS / toolchain
 
 - Mac Studio (Mac16,9), Apple M4 Max (40-core GPU), 128 GB RAM — chassis verified via
-  `system_profiler` (the session notes said "MacBook Pro"; that was wrong). All three arms
+  `system_profiler` (an earlier note said "MacBook Pro"; that was wrong). All three arms
   ran on this one machine, so the chassis does not differentiate the table; it matters only
   against figures measured elsewhere (e.g. Meta's published numbers are from a MacBook —
   same chip bin, different sustained cooling — and are deliberately not carried here).
 - macOS 27.0 (26A5406e) — verified via `sw_vers` on the capture day
 - Toolchain as observed on the capture day: Xcode 26.1.1 (17B100), Apple Swift 6.2.1
-  (swift-driver 1.127.14.1), the only Xcode installed. The session notes that forced the
+  (swift-driver 1.127.14.1), the only Xcode installed. The notes that forced the
   Core AI rebuild call the toolchain "Xcode 27 beta 5"; that label does not match
   `xcodebuild -version` on this machine and is recorded as unverified.
 

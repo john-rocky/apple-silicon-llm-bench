@@ -7,8 +7,7 @@
 #
 # Mac M4 Max warm sweep — REPO harness (`yardstick run --runs N`), fairness §2.
 # One JSONL per (runtime, model) with N runs (run 1 cold, 2..N warm, coldRun-flagged).
-# GPU must be idle (no other GPU work / browser automation). Results stay local;
-# nothing is published without explicit user GO.
+# GPU must be idle (no other GPU work / browser automation). Results stay local.
 #
 #   scripts/bench_warm_mac.sh [litert|mlx|all]   (default: all)
 set -uo pipefail

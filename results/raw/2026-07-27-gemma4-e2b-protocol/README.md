@@ -183,7 +183,7 @@ cell's 92 MB was labelled as an increment; it is not one, and it is not the tota
 
 ## A forced context is a ceiling, not an occupancy
 
-The handoff treated `--context-tokens 2048` as the thing that would make our memory figure
+An earlier plan treated `--context-tokens 2048` as the thing that would make our memory figure
 comparable with a "2048-context" number. It is not. Three cells, all at a forced ctx 2048:
 
 | | footprint | prompt tokens |

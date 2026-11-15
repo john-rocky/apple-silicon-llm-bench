@@ -1,7 +1,7 @@
 # Comprehensive on-device benchmark — runbook (prep'd 2026-06-24)
 
 Goal: one pass that captures **speed + memory + energy** across **every comparable model × runtime** on
-iPhone 17 Pro. Everything Mac-side is staged; this is the plug-in-and-go guide for the next session.
+iPhone 17 Pro. Everything Mac-side is staged; this is the plug-in-and-go guide.
 
 Driver: `scripts/comprehensive_bench.sh` · Matrix: `results/raw/2026-06-25-comprehensive/manifest.tsv`
 (set `DEV=<devicectl id>` env if the identifier changed.)

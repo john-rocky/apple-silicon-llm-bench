@@ -28,7 +28,7 @@
 # The macOS `yardstick` target does not compile CoreAIRuntime, which is easy to mistake for
 # "Core AI cannot be measured on Mac". It can: the published Mac row (82.4 prefill / 75.9 decode
 # / GSM8K 88.0, medians of 3, 2026-07-17) came from Apple's own `llm-benchmark` CLI, not from
-# this repo's harness. Method of record: the 2026-07-17 Gemma-4-E2B bench handoff in `~/code/coreai/`, §2 and §5.
+# this repo's harness.
 #
 # That means the Mac Core AI cell is NOT protocol-identical with the other Mac cells and cannot
 # be made so: `llm-benchmark` has no `--context-tokens`, sizes its own KV, and reports its own

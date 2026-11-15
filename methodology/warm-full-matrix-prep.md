@@ -1,12 +1,10 @@
 # Full warm-matrix prep runbook (Mac now / iPhone on device return) — 2026-07-13
 
-**Hard rules for this campaign (user directive, absolute):**
+**Rules for this campaign:**
 1. Only verified numbers leave this repo: raw jsonl cross-checked, protocol-conformant
    (initialThermalState==nominal every run, warm n=3, one session window). Any deviation →
-   the number is withheld or the deviation is disclosed AND the user decides.
+   the number is withheld or the deviation is disclosed.
 2. Harness verdicts are law: THERMAL_FAIL / EXCLUDED are never overridden.
-3. Nothing is posted anywhere (doc/comment/HF/mail/push) without the user's explicit GO on
-   the final text.
 
 ## Environment repairs applied (2026-07-13 evening — record for reproducibility)
 
@@ -55,22 +53,22 @@ automation during capture). Qwen3 0.6B/1.7B-int4mixed/4B + E2B already done
 | DeepSeek (ours) | HF `mlboydaisuke/DeepSeek-R1-Distill-Qwen-1.5B-LiteRT` (in addition to the litert-community q8 — June table used q8; keep both, label clearly) | HF | downloading |
 | Qwen3-1.7B (June row artifact) | June Mac row provenance TBC (int8 vs BOCTAV4) — resolve BEFORE re-running so we re-verify the SAME artifact class | convert | provenance TBC |
 
-**Inventory lesson (user):** before re-converting/re-exporting ANYTHING, check (1) HF
+**Inventory lesson:** before re-converting/re-exporting ANYTHING, check (1) HF
 `mlboydaisuke/*` + `litert-community/*`, (2) the iPhone app containers on device return, (3)
 `~/Library/Application Support/CoreAIKit/Models/` (ModelStore: gemma-4-E2B-CoreAI,
 qwen3-0.6b-CoreAI-official, qwen3.5-0.8B-CoreAI present locally). Only Core AI *IRs* must be
 re-made regardless (0.4.0-era IRs don't compile on 26A5378j).
 
-**Source-weight retention (user):** the downloaded fp16 originals in the HF cache are KEPT
+**Source-weight retention:** the downloaded fp16 originals in the HF cache are KEPT
 (not deleted after exports) — needed if a conversion turns out broken or an iPhone/Mac
 variant has to be regenerated.
 
-**Measured-artifact retention (user, 2026-07-13):** any artifact that produced a measurement
+**Measured-artifact retention (2026-07-13):** any artifact that produced a measurement
 is NEVER deleted — it is the provenance of the number, and where a version break made the old
 generation unusable (Core AI 0.4.0 → 0.4.1), the NEW-generation artifacts (ct041 IRs +
 assembled bundles in `~/code/coreai/coreai-models/exports/*_ct041*`) are upload candidates
-for HF (replacing the now-uncompilable June IRs on the `-CoreAI-official` repos). Any HF
-upload is an external action → user GO required first. Deletions are limited to: never-measured
+for HF (replacing the now-uncompilable June IRs on the `-CoreAI-official` repos).
+Deletions are limited to: never-measured
 intermediates that are provably regenerable AND unusable (e.g., the 0.4.0 re-exports removed
 earlier today — the June-measured originals remain in `_artifact_archive/` and on HF).
 
@@ -122,4 +120,4 @@ results dir README instead.
    (`devicectl device info details | grep Build`), Mac clock synced.
 8. **Post-session audit (before ANY table edit)**: for every cell — all-nominal? n(warm)=3?
    single session? THERMAL_FAIL.txt empty or cells excluded? EXCLUDED.txt reconciled?
-   Only then import → render → show the user → wait for GO.
+   Only then import → render.

@@ -15,7 +15,7 @@ Arms and their external prerequisites (env-overridable):
   --which int4     : tools/litert-mac-verify (in-repo; build once with
                      `swift build --package-path tools/litert-mac-verify -c release`,
                      or point LITERT_MAC_VERIFY at another build)
-  --which cactus   : a cactus checkout (see methodology/cactus-arm-session.md); FFI dylib
+  --which cactus   : a cactus checkout; FFI dylib
 Reports land in results/quality/ (GSM8K_REPORTS to override).
 
 Origin: developed across the 2026-07 Gemma-4-E2B campaign in hf-to-litertlm; this copy is

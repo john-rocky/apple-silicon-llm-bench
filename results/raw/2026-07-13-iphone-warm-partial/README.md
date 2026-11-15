@@ -1,7 +1,7 @@
 # iPhone warm re-capture — Tier 1 PARTIAL (2026-07-13, NOT publishable)
 
 Console-only (driver v1 did not copy device-jsonl back). Warm = median of runs 2-4.
-DO NOT cite until reproducibility + persistence + Core AI are fixed (see next-session brief).
+DO NOT cite until reproducibility + persistence + Core AI are fixed.
 
 ## Captured (console `tier1_console.txt`)
 | model | runtime | build | cold | warm (r2-4 med) | note |

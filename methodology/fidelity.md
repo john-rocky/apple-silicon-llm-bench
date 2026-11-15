@@ -8,8 +8,8 @@ Not quality, not reasoning. Copy fidelity only.
 digits while CPU is clean on the same bytes — #2814 (iOS/Metal, Gemma 4, digit
 sequences, 2026-07-11) and #3012 (Adreno 750, ~2k-token German prompts, corrupted
 numbers and words, 2026-07-27). Both are silent: the output stays fluent, so
-semantic evals miss it. No public mobile benchmark covers this class — AI Edge
-Portal and Pipette measure speed/memory only. The failure classes here (digit
+semantic evals miss it. No public mobile benchmark covers this class — Pipette, for
+one, measures speed/memory only. The failure classes here (digit
 corruption, prefill hangs, per-turn leaks) are exactly what separates
 "benchmarkable" from "shippable".
 

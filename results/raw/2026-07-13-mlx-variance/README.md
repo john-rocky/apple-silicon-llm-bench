@@ -1,6 +1,6 @@
 # MLX Qwen3-0.6B session-variance investigation — RESOLVED (2026-07-13)
 
-**Question** (next-session brief, blocker 2): June Release rows show 125.8-133.1 tok/s decode;
+**Question**: June Release rows show 125.8-133.1 tok/s decode;
 2026-07-13 sessions show 166-179 — 1.3-1.4x apart under apparently identical conditions
 (Release, initialThermalState=nominal, plugged, iOS "27.0", same model revision). Which is real?
 

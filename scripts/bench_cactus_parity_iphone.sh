@@ -15,7 +15,7 @@
 #
 # Signing: this Mac has no Xcode account, so a fresh App ID cannot be registered.
 # Both apps are built under existing MFN25KNUGJ App IDs whose cached profiles already
-# carry the memory entitlements. See methodology/next-session-brief.md.
+# carry the memory entitlements.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"

@@ -44,16 +44,14 @@ median / 734 MB peak. A caption built on it ("MLX pays 37–54× LiteRT's memory
    Some of what step 3 wanted is in it; some of what step 4 cut is back. The organising question
    is now "is this comparison like-for-like", which neither of the earlier framings asked.
 
-**What is already fixed in the report, and is not this campaign's work.** `~/Downloads/docs.docx`
-carries 27 corrections in red, machine-diffed against `docs-original-backup.docx` and listed in
-document order in `~/Downloads/meeting/docx-changes-inorder-2026-07-28.html`. Those include the
+**What is already fixed in the report, and is not this campaign's work.** The report
+carries 27 corrections. Those include the
 ④ column, the prefill column, the memory-inversion finding, footnotes ⓘ/ⓙ/ⓚ, Note 6's retired-value
 list, and the two-panel chart replacing the one built on 92 MB. **This campaign is about what
 those corrections could not fix**: comparisons that are unfair by construction.
 
 **Findings this session produced and then retracted.** Listed because the pattern matters more
-than the items — each was asserted before the raw was opened, and each was caught by the user
-asking a question rather than by the session checking itself:
+than the items — each was asserted before the raw was opened:
 
 | claimed | actual |
 |---|---|
@@ -69,38 +67,28 @@ asking a question rather than by the session checking itself:
 Two of those — the last two — are defects in this document's own earlier drafts. That is the
 reason for the verification table that follows.
 
-**Artifacts produced along the way**, usable independently of this campaign:
-
-- `~/Downloads/meeting/verify-mlx-prefill.py` — prints every stored MLX deep-context run and
-  re-derives the published cell from them, so the warm-up-ramp finding does not depend on anyone's
-  prose
-- `~/Downloads/meeting/AUDIT-REQUEST-docx-2026-07-28.md` — 18-item adversarial audit of the red
-  corrections, for a session that did not write them
-- `~/Downloads/meeting/docx-changes-inorder-2026-07-28.html` — the 27 corrections in document order
-
 ## Re-verify this document before acting on it
 
 Every claim below is either something this session **measured**, or something it **read in code
 or notes**, or something it **inferred**. The three are not equally reliable, and this session's
 record in particular does not earn the benefit of the doubt: several of its earlier findings
-dissolved on inspection, and every one of them was caught by the user asking a question rather
-than by the session checking itself.
+dissolved on inspection.
 
 | claim | basis | how to re-verify |
 |---|---|---|
-| MLX prefill 2,307 is the median of a warm-up ramp (764 / 2,307 / 3,111) | **measured** from stored JSON | `python3 ~/Downloads/meeting/verify-mlx-prefill.py` |
+| MLX prefill 2,307 is the median of a warm-up ramp (764 / 2,307 / 3,111) | **measured** from stored JSON | re-derive the median from the stored MLX deep-context runs |
 | Energy: two headline cells started `fair`; battery window 5% vs 10% | **measured** from stored JSON | re-aggregate `task == "energy"`, iOS, E2B, and print `initialThermalState` + `batteryDeltaPercent` |
 | Prefill is discarded because `capped == true`, not because LiteRT-LM cannot report it | **read in code**, `MediaPipeRuntime.swift:232` + `BenchmarkRunner.swift:315` | read both lines; then prove it by running the fix and seeing a non-zero `promptTokenCount` on a capped run |
 | Prefill counters are complete before decode is capped | **inferred** from where prefill sits in the turn | **not verified.** This is the load-bearing assumption of the fix. Test it: same prompt, capped vs EOS run, compare `lastPrefillTokenCount` and `lastPrefillTokensPerSecond`. If they differ, the fix is wrong |
-| Mac Core AI ran through Apple's `llm-benchmark` | **read in notes** + binary exists and runs | the 2026-07-17 Gemma-4-E2B bench handoff in `~/code/coreai/`, §2/§5; the bundle question below is open |
+| Mac Core AI ran through Apple's `llm-benchmark` | **read in notes** + binary exists and runs | the bundle question below is open |
 | n = 4 for MLX and Core AI; 10–12 for LiteRT-LM and llama.cpp | **measured** (README of the 07-27 capture) | `analyze_comparability.py` over that campaign |
 | MLX-OptiQ and Cactus were absent from this checkout | **measured** — they were, and were ported 07-28 | `git log` on `ModelCatalog.swift`, `RuntimeKind.swift` |
 | v0.15.0 does not exist | **checked 2026-07-28** on the releases page | re-check; it may have shipped since |
 
 Where a row says *inferred*, treat the corresponding work item as "test the assumption first".
 
-The previous handoff in this series (`NEXT-SESSION-gemma4-recapture.md`) had three premises that
-did not survive contact with the measurement and is marked SUPERSEDED. This document is the same
+An earlier plan in this series had three premises that
+did not survive contact with the measurement. This document is the same
 kind of artifact and deserves the same suspicion. **It is the spec, not the evidence.**
 
 ## The five defects
@@ -130,8 +118,8 @@ true of decode and not of prefill.** Prompt processing completes before the firs
 emitted; where decode is later stopped cannot change it. Discarding the prefill counters because
 the *decode* was capped is collateral damage.
 
-This was known and worked around rather than fixed. From the gapfill script in the `code/`
-checkout: *"the task that fixed decode-at-depth took prefill away for that one arm. The fix needs
+This was known and worked around rather than fixed. From the gapfill script:
+*"the task that fixed decode-at-depth took prefill away for that one arm. The fix needs
 no code change: the older `long-context-1024` task ends on EOS, so it still yields LiteRT's
 prefill counters."* Running a different task for one arm is exactly how the column stopped being
 one instrument.
@@ -151,7 +139,7 @@ It is a card-reconciliation instrument, not a cross-runtime one. Two rows, never
 
 ### 2. X post 4/6 ranks Mac arms in a way our own notes forbid
 
-The 2026-07-17 Gemma-4-E2B bench handoff in `~/code/coreai/`, §2, written when those numbers were taken:
+The 2026-07-17 notes, written when those numbers were taken:
 
 > MLX vs Core AI is the only true runtime comparison (same ckpt/recipe/block size) … **LiteRT is
 > a different product — do not rank it here.**
@@ -258,20 +246,14 @@ Verified by build, not by intention:
 
 ## The work
 
-**The operational document is `methodology/NEXT-SESSION-fairness-recapture.md`** — step order,
-commands, the block table, and the per-step gotchas live there and are not repeated here, so the
-two cannot drift apart. This file answers *why* each step exists; that one says *what to run*.
+This file answers *why* each step exists.
 
 In outline: fix `MediaPipeRuntime`'s capped-prefill discard and prove it with one launch (defect 1)
 → install and stage → iPhone blocks A1, A2, C, E with LiteRT-LM as the anchor in each (defects
 3, 4, 5) → Mac in parallel with the phone's cooldowns (defect 2) → answer the Mac Core AI bundle
 question before measuring it → analyse, import, then the doc.
 
-## Standing traps, and the definition of done
-
-Both live in `methodology/NEXT-SESSION-fairness-recapture.md` and are deliberately not repeated
-here — a trap list that exists in two files is a trap list that will disagree with itself. That
-file's version is a superset of what this one used to carry.
+## The definition of done
 
 The one-line form of *done*: **not "every cell shares a date", but "every ranking the report
 prints is between cells measured the same way."** Everything in this document is downstream of

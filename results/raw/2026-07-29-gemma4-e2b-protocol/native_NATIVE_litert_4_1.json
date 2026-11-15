@@ -29,7 +29,7 @@
     "entryPoint": "LiteRTLM.benchmark()",
     "importedBy": "scripts/import_native_benchmark.py",
     "note": "vendor force-prefill entry point; not comparable with task-prompt prefill",
-    "sourceFile": "/Users/majimadaisuke/downloads/ios-llm-benchmark/results/raw/2026-07-29-gemma4-e2b-protocol/console_NATIVE_litert_4.txt"
+    "sourceFile": "/Users/USER/downloads/ios-llm-benchmark/results/raw/2026-07-29-gemma4-e2b-protocol/console_NATIVE_litert_4.txt"
   },
   "runtime": "litert-lm",
   "task": "native-benchmark-1024x256"
