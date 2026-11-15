@@ -70,7 +70,7 @@ _VERSION_TAG = re.compile(r"^v?\d+(\.\d+)+$")
 
 def latest_session(rows):
     """Rows of the newest capture SESSION for one (device, runtime, model) cell —
-    cross-session pooling is invalid (iphone-session-variance). A session is a
+    cross-session pooling is invalid. A session is a
     campaign dir (one sitting), not a calendar date: two sittings on one day
     must not pool (2026-08-24, a fair-thermal morning + a nominal evening
     retake of MiniCPM produced a fictitious pooled warm median under the old

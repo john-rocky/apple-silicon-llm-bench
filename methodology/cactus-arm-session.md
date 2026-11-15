@@ -96,7 +96,7 @@ in-app captures (same-session re-run, cross-session pooling ban applies).
   declined outward contact in the prior session).
 - The `mlx-community/gemma-4-e2b-it-4bit` re-upload gotcha (2026-07-06, KV-shared
   layout): old-rev numbers and new-rev numbers are different artifacts.
-- Cross-session speed pooling ban (`iphone-session-variance`): the 2026-07-10 cactus
+- Cross-session speed pooling ban: the 2026-07-10 cactus
   speed numbers and this session's captures must not share a median; re-measure.
 - Device A6F3E849 is shared — announce before use; serialize devicectl. Background
   driver scripts get killed — `nohup` + DONE-marker pattern survives.

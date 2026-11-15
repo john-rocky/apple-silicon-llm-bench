@@ -80,5 +80,3 @@ OLMo-2 no repo). Export playbook for any future arch: `methodology/coreai-export
 - `results/raw/2026-06-24-coreai-iphone/extemb-isolation/SUMMARY.txt` — the full debugging trail (extemb refute →
   entitlement root cause → Phi quant).
 - `methodology/comprehensive-bench-runbook.md` · `coreai-export-todo.md` — the two detailed playbooks.
-- `~/Downloads/meeting/` — report text, the correction note, the retracted-bug note.
-- Memory: `litert-community-crossframework-bench.md` (status + the corrected findings).

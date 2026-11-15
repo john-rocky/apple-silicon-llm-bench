@@ -121,7 +121,7 @@ Same-session LiteRT control re-anchor (3 nominal colds, cross-session bridge for
 published 07-18 table — NOT imported to flat, pooling ban):
   decode 60.9 / 60.5 / 61.05 -> median 60.9  (ITL p50 16.5-16.6 ms, peak ~491 MB)
   vs the published 52.7 (07-18): TODAY'S SESSION RUNS LITERT 1.16x FASTER — the known
-  iphone-session-variance drift, now measured in-session. Consequences, applied:
+  cross-session drift, now measured in-session. Consequences, applied:
   * The cactus 50.6 vs litert 52.7 table adjacency is a CROSS-SESSION artifact.
     The honest same-session ratio is cactus = 50.6/60.9 = 0.83x LiteRT decode.
     README footnote + bullets state it; the absolute 50.6 stays as a dated cell.

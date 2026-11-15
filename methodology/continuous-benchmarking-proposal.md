@@ -40,8 +40,8 @@ Runner hardware: one Mac (self-hosted runner) per device pool, devices on Wi-Fi
 ## 2. Regression detection (institutionalize the anchor method)
 
 Session-to-session device drift is real and large: the same binary and pins measured
-LiteRT at 52.7 (07-18) and 60.9 (07-20) — 1.16× — and June→July drifted up to 25 %
-(`iphone-session-variance`). Naive time-series alerting on absolute tok/s would fire
+LiteRT at 52.7 (07-18) and 60.9 (07-20) — 1.16× — and June→July drifted up to 25 %.
+Naive time-series alerting on absolute tok/s would fire
 constantly and teach everyone to ignore it. Instead:
 
 - **Anchor-normalize**: report each cell as (cell ÷ same-session anchor). Alert when the

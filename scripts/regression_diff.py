@@ -10,8 +10,8 @@ fairness rules applied as code, not discipline:
   spread-rule        per-side trial spread is quoted; spread beyond --spread-limit makes the
            cell UNRELIABLE (throw the number out, don't average it away).
   session  device cells captured on different days are INFO-ONLY: same binary,
-           same pins measured 126-133 tok/s in June and 159-180 in July
-           (methodology: iphone-session-variance). Only same-session pairs
+           same pins measured 126-133 tok/s in June and 159-180 in July.
+           Only same-session pairs
            (e.g. the resident A/B design) earn a REGRESSION/OK verdict.
 
 Quality (GSM8K) pairs join on tag; device cells join on

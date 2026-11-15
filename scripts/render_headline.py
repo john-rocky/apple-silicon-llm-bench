@@ -32,7 +32,7 @@ Rules applied as code (slugs: methodology/fairness-rules.md):
                        every cell by its own gate file; it must not be the headline).
                        An arm with no nominal capture at all is listed under the
                        table, not in it (the leaderboard shows it flagged ⚠hot).
-  iphone-session-variance
+  cross-session drift
                        every cell carries its capture date; a row whose cells come
                        from different sessions gets an automatic note, and no ratio
                        is printed anywhere in the block.

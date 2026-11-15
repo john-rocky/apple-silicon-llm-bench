@@ -25,7 +25,7 @@ import argparse, json, os, re, subprocess, sys, tempfile, time, types
 from pathlib import Path
 
 # scipy stub prelude — ONLY when scipy is actually broken. On a healthy scipy (e.g. the
-# Accelerate-built scipy on Darwin 27, see darwin27-scipy-libomp-trap) stubbing is HARMFUL:
+# Accelerate-built scipy on Darwin 27) stubbing is HARMFUL:
 # the fake scipy.optimize lacks `milp`, which transformers' bf16 path pulls via
 # sklearn → scipy.stats → `from scipy.optimize import milp`. So skip the stub when real
 # scipy imports cleanly; only stub the broken-prebuilt case.

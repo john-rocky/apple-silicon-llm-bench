@@ -104,7 +104,7 @@ the energy branch (edit only after the driver is not running).
   was a missing `--raw-dir`, not a broken bundle.
 - iPhone 17 Pro currently shows `unavailable` in devicectl — reconnect before Step 2.
 
-## 7. CP1 audit result (supervisor session, 2026-07-28 09:3x) — Mac phase
+## 7. CP1 audit result (2026-07-28 09:3x) — Mac phase
 
 **PASS, spot-checked in raw:** chat/depth n=8 per arm (positional rule), all `nominal`, all
 `-r3`, ctx 2048, engine-vs-wall within ~1%, prefill fix live (`promptTok` 1106/1107/1098 at

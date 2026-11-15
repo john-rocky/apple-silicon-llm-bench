@@ -115,7 +115,7 @@ working-rule slug table); this file is only *how to run the machine*.
   protocol-identical (own timing, no context budget) and say so in provenance.
 - **GSM8K beyond the LiteRT arm still shells to external checkouts**
   (`environment.lock.json` → `external_instruments_not_yet_in_repo`).
-- **Cross-session device drift is 16-25%** (iphone-session-variance): never
+- **Cross-session device drift is 16-25%**: never
   compare absolute numbers across sittings without anchors; the differ
   enforces this (INFO-ONLY / anchor-normalized).
 - **litert cells can stall ~10 min at teardown** — the iPhone runner's

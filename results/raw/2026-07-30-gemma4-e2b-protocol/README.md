@@ -55,7 +55,7 @@ see the 07-29 README).
 
 Instrument: battery-TICK-WINDOW (`energySource: battery-tick-window`, harness `-r4`) —
 J/tok measured between 5%-step level transitions, immune to start/end quantization.
-Supervisor-audited probe (litert) adopted as its production cell; per-cell transition
+Audited probe (litert) adopted as its production cell; per-cell transition
 sequences recorded in the JSONs (below, seconds from generation start). All cells
 2 complete ticks, nominal-gated (the gate deferred 4 of 6 first attempts at `serious`
 after the preceding ~20-min sustain — each re-ran nominal after a 600 s cool).
@@ -76,7 +76,7 @@ ranks inside ±10% are UNRESOLVED. On that policy:
 **litert 0.147 < mlx 0.182 < { cactus-uncal 0.222 ≈ cactus-shipped 0.226 ≈ OptiQ 0.231 } < llama.cpp 0.260**
 (litert-vs-mlx 24% apart — resolved; the middle three are one unresolved cluster).
 
-Reading, for the write-up (subject to supervisor audit): on the trustworthy instrument
+Reading, for the write-up (subject to audit): on the trustworthy instrument
 **LiteRT-LM takes the iPhone energy crown back** — the retired fair-start row had the
 right ranking for the wrong reasons, and the r3 nominal rounds that inverted it were
 5%-quantization artifacts (this dir's table above). The Mac GPU-only column (MLX first)
