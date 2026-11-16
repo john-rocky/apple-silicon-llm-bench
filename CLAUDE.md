@@ -2,7 +2,7 @@
 
 **Launch your session in this directory.** Driving this repo from another root (e.g.
 `~/code/coreai`) is how a session ends up running `scripts/bootstrap.sh` from the wrong cwd and
-missing `methodology/next-session-brief.md` — both happened on 2026-07-17 and cost hours.
+missing a note under `methodology/` — both happened on 2026-07-17 and cost hours.
 
 ## What this repo is
 
@@ -15,9 +15,8 @@ continuous, automated competitive benchmarking:
 
 ## Read these first
 
-- `methodology/next-session-brief.md` — carries hard-won gotchas. **Read before building.**
+- `methodology/comprehensive-bench-runbook.md` — its Gotchas section carries hard-won lessons. **Read before building.**
 - `methodology/fairness-rules.md` — what makes a cell publishable.
-- The `GEMMA4_*_BENCH_HANDOFF.md` file under `~/code/coreai/` — current Gemma-4 campaign state (2026-07-17).
 
 ## Rules that produce wrong numbers when broken
 
